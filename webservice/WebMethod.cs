@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using com.pb.shippingapi.model;
 
 namespace com.pb.shippingapi
 {
@@ -46,7 +47,7 @@ namespace com.pb.shippingapi
     {
         public static explicit operator Response( ShippingAPIResponse<Response> r )
         {
-            return r.Res;
+            return r.APIResponse;
         }
         public class ErrorDetail
         {
@@ -58,7 +59,8 @@ namespace com.pb.shippingapi
         public HttpStatusCode HttpStatus;  
         public bool Success = false;   
         public List<ErrorDetail> Errors = new List<ErrorDetail>();
-        public Response Res = default(Response);
+        public Response APIResponse = default(Response);
+        public Token Token {get;set;}
     }
 
     internal class WebMethod
@@ -231,10 +233,10 @@ namespace com.pb.shippingapi
                     Type t = (Type)converter.ReadJson(apiReader,typeof(Type), null, deserializer);
                     resp = (Response)deserializer.Deserialize(apiReader, t);
                 }
-                return new ShippingAPIResponse<Response> { HttpStatus = httpResponseMessage.StatusCode,Res = resp };
+                return new ShippingAPIResponse<Response> { HttpStatus = httpResponseMessage.StatusCode,APIResponse = resp };
             }
             else
-                return new ShippingAPIResponse<Response>() { HttpStatus = httpResponseMessage.StatusCode, Res = default(Response) };
+                return new ShippingAPIResponse<Response>() { HttpStatus = httpResponseMessage.StatusCode, APIResponse = default(Response) };
         }
     }
 }
