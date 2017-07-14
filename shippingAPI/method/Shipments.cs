@@ -62,6 +62,7 @@ namespace com.pb.shippingapi
     {
         public async static Task<ShippingAPIResponse<Shipment>> CreateShipment(Token token, Shipment request )
         {
+
              return await WebMethod.Post<Shipment, Shipment>( request );
         }
         public async static Task<ShippingAPIResponse<CancelShipmentResponse>> CancelShipment(Token token, CancelShipmentRequest request)
