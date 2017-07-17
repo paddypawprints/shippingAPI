@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace com.pb.shippingapi.model
 {
@@ -11,7 +12,7 @@ namespace com.pb.shippingapi.model
         [JsonProperty("parcelType")]
         public USPSParcelType ParcelType { get; set;}
         [JsonProperty("specialServices")]
-        public SpecialServices[] specialServices { get; set;}
+        public IEnumerable<SpecialServices> specialServices { get; set;}
         [JsonProperty("inductionPostalCode")]
         public string InductionPostalCode { get; set;}
         [JsonProperty("dimensionalWeight")]

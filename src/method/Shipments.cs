@@ -60,19 +60,19 @@ namespace com.pb.shippingapi
 
     public static class ShipmentsMethods
     {
-        public async static Task<ShippingAPIResponse<Shipment>> CreateShipment(Token token, Shipment request )
+        public async static Task<ShippingAPIResponse<Shipment>> CreateShipment( Shipment request )
         {
 
-             return await WebMethod.Post<Shipment, Shipment>( request );
+             return await WebMethod.Post<Shipment, Shipment>( "/shippingservices/v1/shipments", request );
         }
-        public async static Task<ShippingAPIResponse<CancelShipmentResponse>> CancelShipment(Token token, CancelShipmentRequest request)
+        public async static Task<ShippingAPIResponse<CancelShipmentResponse>> CancelShipment( CancelShipmentRequest request)
         {
-             return await WebMethod.Delete<CancelShipmentResponse, CancelShipmentRequest>( request );
+             return await WebMethod.Delete<CancelShipmentResponse, CancelShipmentRequest>( "/shippingservices/v1/shipments", request );
         }
 
-        public async static Task<ShippingAPIResponse<Shipment>>  ReprintShipment(Token token, ReprintShipmentRequest request )
+        public async static Task<ShippingAPIResponse<Shipment>>  ReprintShipment(ReprintShipmentRequest request )
         {
-             return await WebMethod.Get<Shipment, ReprintShipmentRequest>( request );
+             return await WebMethod.Get<Shipment, ReprintShipmentRequest>( "/shippingservices/v1/shipments", request );
         }
 
     }
