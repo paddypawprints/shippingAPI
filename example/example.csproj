@@ -1,7 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-  </ItemGroup>
+        <PackageReference Include="shippingapi" Version="1.0.0" />
+</ItemGroup>
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>

@@ -7,34 +7,53 @@ using System.IO;
 
 namespace com.pb.shippingapi
 {
-    internal class ShippingAPIJsonReader : JsonTextReader
+    internal class UnixSecondsTimeConverter : Newtonsoft.Json.JsonConverter
     {
-        public class TokenAndValue
+        public override bool CanConvert(Type objectType)
         {
-            public JsonToken Token { get;set;}
-            public Object TokenValue{ get;set; }
-        }
-        private Stack<TokenAndValue> _pushedTokens = new Stack<TokenAndValue>();
-
-        public ShippingAPIJsonReader(TextReader reader) : base(reader)
-        {
+            return objectType == typeof(DateTime);
         }
 
-        public void Push( JsonToken token, Object value )
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            _pushedTokens.Push( new TokenAndValue() { Token = TokenType, TokenValue = Value});
-            SetToken(token, value);
+            long t;
+
+            if (reader.Value.GetType() != typeof (long))
+                t = long.Parse((string) reader.Value);
+            else
+                t = (long)reader.Value;
+            return new DateTimeOffset(1970, 1, 1, 0, 0, 0, new TimeSpan(0, 0, 0)).AddSeconds(t);
         }
-        public override bool Read()
+
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            if ( _pushedTokens.Count == 0 )
-                return base.Read();
-            var current = _pushedTokens.Pop();
-            SetToken(current.Token, current.TokenValue);
-            return true;
+            throw new NotImplementedException();
         }
     }
+    internal class UnixMillisecondsTimeConverter : Newtonsoft.Json.JsonConverter
+    {
+        public override bool CanConvert(Type objectType)
+        {
+            return objectType == typeof(DateTime);
+        }
 
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        {
+            long t;
+
+            if (reader.Value.GetType() != typeof (long))
+                t = long.Parse((string) reader.Value);
+            else
+                t = (long)reader.Value;
+            return new DateTimeOffset(1970, 1, 1, 0, 0, 0, new TimeSpan(0, 0, 0)).AddMilliseconds(t);
+        }
+
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+            throw new NotImplementedException();
+        }
+ 
+    }
     internal class ShippingAPIResponseTypeConverter<Response> : JsonConverter
     {
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
@@ -44,63 +63,47 @@ namespace com.pb.shippingapi
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            if ( ! (reader is ShippingAPIJsonReader) ) throw new Exception();// TODO:
-            var apiReader = (ShippingAPIJsonReader)reader;
-            var tokenQueue = new List<ShippingAPIJsonReader.TokenAndValue>();
-            try 
+           reader.Read();
+            switch( reader.TokenType )
             {
-                apiReader.Read();
-                tokenQueue.Add( new ShippingAPIJsonReader.TokenAndValue() { Token = apiReader.TokenType, TokenValue = apiReader.Value});
-                switch( apiReader.TokenType )
-                {
-                    case JsonToken.StartArray:
-                        apiReader.Read();
-                        tokenQueue.Add( new ShippingAPIJsonReader.TokenAndValue() { Token = apiReader.TokenType, TokenValue = apiReader.Value});
-                        if ( apiReader.TokenType != JsonToken.StartObject ) throw new Exception();//TODO:
-                        apiReader.Read();
-                        tokenQueue.Add( new ShippingAPIJsonReader.TokenAndValue() { Token = apiReader.TokenType, TokenValue = apiReader.Value});
-                        if ( apiReader.TokenType == JsonToken.String )
-                        {
-                            if (((string)apiReader.Value).Equals("errorCode"))
-                            {
-                                return typeof ( ErrorFormat1);
-                            }
-                            else if (((string)apiReader.Value).Equals("key"))
-                            {
-                                return typeof (ErrorFormat3);
-                            }
-
-                        }
-            
-                        throw new Exception(); //TODO:
-                    case JsonToken.StartObject:
-                        apiReader.Read();
-                        tokenQueue.Add( new ShippingAPIJsonReader.TokenAndValue() { Token = apiReader.TokenType, TokenValue = apiReader.Value});
-                        if ( apiReader.TokenType == JsonToken.String )
-                        {
-                            if (((string)apiReader.Value).Equals("errors"))
-                            {
-                                return typeof ( ErrorFormat2);
-                            }
-                            else 
-                            {
-                                return typeof (ShippingAPIResponse<Response>);
-                            }
-
-                        }
-            
-                        throw new Exception(); //TODO:
-                    default:
-                            throw new Exception(); //TODO: sort out exceptions
-                    }
-                }
-                finally
-                {
-                    foreach( var token in tokenQueue )
+                case JsonToken.StartArray:
+                    reader.Read();
+                    if ( reader.TokenType != JsonToken.StartObject ) throw new Exception();//TODO:
+                    reader.Read();
+                    if ( reader.TokenType == JsonToken.String )
                     {
-                        apiReader.Push( token.Token, token.TokenValue );
+                        if (((string)reader.Value).Equals("errorCode"))
+                        {
+                            return typeof ( ErrorFormat1);
+                        }
+                        else if (((string)reader.Value).Equals("key"))
+                        {
+                            return typeof (ErrorFormat3);
+                        }
+
                     }
+        
+                    throw new Exception(); //TODO:
+                case JsonToken.StartObject:
+                    reader.Read();
+                    if ( reader.TokenType == JsonToken.PropertyName )
+                    {
+                        if (((string)reader.Value).Equals("errors"))
+                        {
+                            return typeof ( ErrorFormat2);
+                        }
+                        else 
+                        {
+                            return typeof (Response);
+                        }
+
+                    }
+        
+                    throw new Exception(); //TODO:
+                default:
+                        throw new Exception(); //TODO: sort out exceptions
                 }
+
             }
 
         public override bool CanConvert(Type objectType)

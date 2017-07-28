@@ -12,7 +12,7 @@
         [JsonProperty(PropertyName="tokenType")]
         public string TokenType {get;set;}
         [JsonProperty(PropertyName="issuedAt")]
-        [JsonConverter(typeof(JavaScriptDateTimeConverter))] // TODO: probably need to write my own
+        [JsonConverter(typeof(UnixMillisecondsTimeConverter))] 
         public DateTimeOffset IssuedAt { get;set;}
         [JsonProperty(PropertyName="expiresIn")]
         public long ExpiresIn {get;set;}

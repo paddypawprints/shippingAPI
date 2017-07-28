@@ -11,32 +11,36 @@ using System.Text;
 
 namespace com.pb.shippingapi
 {
-    public class ShippingAPIHeaderAttribute : Attribute
+    public class ShippingAPIAttribute : Attribute
     {
         public string Name { get;set; }
-        public ShippingAPIHeaderAttribute(string name)
-        {
-            Name = name;
-        }
-
-    }
-    public class ShippingAPIQueryAttribute : Attribute
-    {
-        public string Name { get;set; }
-        public ShippingAPIQueryAttribute(string name)
+        public ShippingAPIAttribute(string name)
         {
             Name = name;
         }
 
     }
 
-    public class ShippingAPIResourceAttribute : Attribute
+    public class ShippingAPIHeaderAttribute : ShippingAPIAttribute
     {
-        public string Name { get;set; }
+        public ShippingAPIHeaderAttribute(string name) : base(name)
+        {
+        }
+
+    }
+    public class ShippingAPIQueryAttribute : ShippingAPIAttribute
+    {
+        public ShippingAPIQueryAttribute(string name) :base(name)
+        {
+        }
+
+    }
+
+    public class ShippingAPIResourceAttribute : ShippingAPIAttribute
+    {
         public bool AddId { get;set; }
-        public ShippingAPIResourceAttribute(string name, bool addId = true)
+        public ShippingAPIResourceAttribute(string name, bool addId = true) : base(name)
         {
-            Name = name;
             AddId = addId;
         }
 
@@ -62,60 +66,116 @@ namespace com.pb.shippingapi
 
     }
 
+    public interface IShippingApiRequest
+    {
+        string ContentType {get;set;}
+        StringBuilder Authorization {get;set;}
+    }
     internal class WebMethod
     {
-        internal static void AddRequestHeaders<RequestHeader>( HttpClient client, RequestHeader request)
+
+        private static string SerializeBody<Request>( Request request ) where Request : IShippingApiRequest
+        {
+            switch(request.ContentType)
+            {
+                case "application/json":
+                    return JsonConvert.SerializeObject(request);
+                case "application/x-www-form-urlencoded":
+                    return SerializeAsFormPost<Request>(request);
+                default:
+                    throw new Exception(); //TODO:
+            }
+        }
+
+        private static string SerializeAsFormPost<Request>( Request request ) 
+        {
+            // assume JSON serializer opt in is set
+            if (request == null ) throw new Exception(); //TODO:
+
+            var body = new StringBuilder();
+            bool isFirst = true;
+                
+            foreach( var propertyInfo in typeof(Request).GetProperties())
+            {
+                foreach (object attribute in propertyInfo.GetCustomAttributes(true))
+                {
+                    if (attribute is JsonPropertyAttribute )
+                    {
+                        if (!isFirst) { body.AppendLine(); isFirst = false; }
+                        string name = ((JsonPropertyAttribute)attribute).PropertyName;
+                        string value = (string) propertyInfo.GetValue(request);
+                        body.Append( name).Append("=");
+                        UrlHelper.URLAdd(body, value);
+                    }
+                }
+            }
+            return body.ToString();
+        }
+
+        private static void ProcessRequestAttributes<RequestHeader,Attribute>( RequestHeader request, Action<Attribute, string, string, string> propAction  ) where Attribute : ShippingAPIAttribute
         {
             if (request == null ) return;
                 
-            foreach( var fieldInfo in typeof(RequestHeader).GetFields())
+            foreach( var propertyInfo in typeof(RequestHeader).GetProperties())
             {
  
-                foreach (object attribute in fieldInfo.GetCustomAttributes(true))
+                foreach (object attribute in propertyInfo.GetCustomAttributes(true))
                 {
-                    if (attribute is ShippingAPIHeaderAttribute )
+                    if (attribute is Attribute )
                     {
-                        client.DefaultRequestHeaders.Add(((ShippingAPIHeaderAttribute)attribute).Name, fieldInfo.GetValue(request).ToString());
+                        string v;
+                        if (propertyInfo.GetValue(request) is StringBuilder)
+                        {
+                            v = ((StringBuilder)propertyInfo.GetValue(request)).ToString();
+                        }
+                        else
+                        {
+                            v = (string)propertyInfo.GetValue(request);
+                        }
+                        propAction( (Attribute)attribute, ((Attribute)attribute).Name, v, propertyInfo.Name);
                     }
                 }
             }
         }
 
-
-        internal static void AddRequestResource<RequestQuery>( StringBuilder uri, RequestQuery request)
+        internal static void AddRequestHeaders<RequestHeader>( HttpClient client, RequestHeader request)
         {
-            if (request == null) return;
- 
-            foreach( var fieldInfo in typeof(RequestQuery).GetFields())
-            {
-                foreach (object attribute in fieldInfo.GetCustomAttributes(true))
-                {
-                    if (attribute is ShippingAPIResourceAttribute )
-                    {
-                            uri.Append('/');
+            ProcessRequestAttributes<RequestHeader,ShippingAPIHeaderAttribute>(request, 
+                (a,s,v,p)=> {
 
-                        UrlHelper.URLAdd( uri, ((ShippingAPIResourceAttribute)attribute).Name);
-                        if (!((ShippingAPIResourceAttribute)attribute).AddId ) return;
-                        uri.Append('/');
-                        UrlHelper.URLAdd( uri, fieldInfo.GetValue(request).ToString());
+                    switch(p)
+                    {
+                        case "Authorization": 
+                            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(s, v);
+                            break;
+                        default:
+                            client.DefaultRequestHeaders.Add(s, v );
+                            break; 
                     }
                 }
-            }
-            return;
+            );
         }
+        internal static void AddRequestResource<RequestQuery>( StringBuilder uri, RequestQuery request)
+        { 
+             ProcessRequestAttributes<RequestQuery,ShippingAPIResourceAttribute>(request, 
+                (a,s,v, p)=> {
+
+                        uri.Append('/');
+                        UrlHelper.URLAdd( uri, s);
+                        if (!((ShippingAPIResourceAttribute)a).AddId ) return;
+                        uri.Append('/');
+                        UrlHelper.URLAdd( uri, (string)v);
+                }
+            );   
+         }
         internal static void AddRequestQuery<RequestQuery>( StringBuilder uri, RequestQuery request)
         {
             if (request == null) return;
 
             bool hasQuery = false;
  
-            foreach( var fieldInfo in typeof(RequestQuery).GetFields())
-            {
- 
-                foreach (object attribute in fieldInfo.GetCustomAttributes(true))
-                {
-                    if (attribute is ShippingAPIQueryAttribute )
-                    {
+             ProcessRequestAttributes<RequestQuery,ShippingAPIResourceAttribute>(request, 
+                (a,s,v, p)=> {
                         if ( !hasQuery )
                         {
                             uri.Append('?');
@@ -125,48 +185,46 @@ namespace com.pb.shippingapi
                         {
                             uri.Append(',');
                         }
-                        UrlHelper.URLAdd( uri, ((ShippingAPIQueryAttribute)attribute).Name);
+                        UrlHelper.URLAdd( uri, s);
                         uri.Append('=');
-                        UrlHelper.URLAdd( uri, fieldInfo.GetValue(request).ToString());
-                    }
+                        UrlHelper.URLAdd( uri, v);
                 }
-            }
-            return;
+            );   
         }
 
         private enum HttpVerb
         {
             POST, PUT, GET, DELETE
         }
-        internal async static Task<ShippingAPIResponse<Response>>  Post<Response, Request>(string uri, Request request, ShippingApi.Session session = null)
+        internal async static Task<ShippingAPIResponse<Response>>  Post<Response, Request>(string uri, Request request, ShippingApi.Session session = null) where Request : IShippingApiRequest
         {
             return await HttpRequest<Response, Request>( uri, HttpVerb.POST, request, session);
         }
-        internal async static Task<ShippingAPIResponse<Response>>  Put<Response, Request>(string uri, Request request, ShippingApi.Session session = null)
+        internal async static Task<ShippingAPIResponse<Response>>  Put<Response, Request>(string uri, Request request, ShippingApi.Session session = null) where Request : IShippingApiRequest
         {
            return await HttpRequest<Response, Request>( uri, HttpVerb.PUT, request, session);
  
         }
-        internal async static Task<ShippingAPIResponse<Response>>  Get<Response, Request>(string uri, Request request, ShippingApi.Session session = null)
+        internal async static Task<ShippingAPIResponse<Response>>  Get<Response, Request>(string uri, Request request, ShippingApi.Session session = null) where Request : IShippingApiRequest
         {
            return await HttpRequest<Response, Request>( uri, HttpVerb.GET, request, session);
  
         }
-        internal async static Task<ShippingAPIResponse<Response>> Delete<Response, Request>(string uri, Request request, ShippingApi.Session session = null)
+        internal async static Task<ShippingAPIResponse<Response>> Delete<Response, Request>(string uri, Request request, ShippingApi.Session session = null) where Request : IShippingApiRequest
         {
            return await HttpRequest<Response, Request>( uri, HttpVerb.DELETE, request, session);
         }
 
-        private async static Task<ShippingAPIResponse<Response>> HttpRequest<Response, Request>(string uri, HttpVerb verb, Request request, ShippingApi.Session session = null)
+        private async static Task<ShippingAPIResponse<Response>> HttpRequest<Response, Request>(string resource, HttpVerb verb, Request request, ShippingApi.Session session = null) where Request : IShippingApiRequest
         {
             if ( session == null ) session = ShippingApi.DefaultSession;
-            session.Client.BaseAddress = new Uri(session.EndPoint + uri );
-            session.Client.DefaultRequestHeaders.Accept.Clear();
-            session.Client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            session.Client.DefaultRequestHeaders.Add("User-Agent", "Ps API Client Proxy");
+            var client = session.Client(session.EndPoint );
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(request.ContentType));
+            client.DefaultRequestHeaders.Add("User-Agent", "Ps API Client Proxy");
+            AddRequestHeaders<Request>(client, request);
 
-            AddRequestHeaders<Request>(session.Client, request);
-            StringBuilder uriBuilder = new StringBuilder(session.EndPoint + uri);
+            StringBuilder uriBuilder = new StringBuilder(session.EndPoint + resource);
             AddRequestQuery<Request>(uriBuilder, request);
             
             HttpResponseMessage httpResponseMessage;
@@ -174,22 +232,22 @@ namespace com.pb.shippingapi
             switch( verb )
             {
                 case HttpVerb.PUT:
-                    using ( var reqContent = new StringContent(JsonConvert.SerializeObject(request)) )
+                    using ( var reqContent = new StringContent(SerializeBody<Request>(request), Encoding.UTF8, request.ContentType) )
                     {
-                        httpResponseMessage =  await session.Client.PutAsync(uri.ToString(),reqContent);
+                        httpResponseMessage =  await client.PutAsync(resource.ToString(),reqContent);
                     }
                 break;
                  case HttpVerb.POST:
-                    using ( var reqContent = new StringContent(JsonConvert.SerializeObject(request)) )
+                    using ( var reqContent = new StringContent(SerializeBody<Request>(request), Encoding.UTF8, request.ContentType) )
                     {
-                        httpResponseMessage = await session.Client.PostAsync(uri.ToString(),reqContent);
+                        httpResponseMessage = await client.PostAsync(resource.ToString(),reqContent);
                     }
                 break;
                 case HttpVerb.DELETE:
-                    httpResponseMessage = await session.Client.DeleteAsync(uri.ToString()); 
+                    httpResponseMessage = await client.DeleteAsync(resource.ToString()); 
                     break;
                 case HttpVerb.GET:
-                    httpResponseMessage = await session.Client.GetAsync(uri.ToString());  
+                    httpResponseMessage = await client.GetAsync(resource.ToString());  
                     break;   
                 default:
                     throw new ArgumentException(); //TODO
@@ -201,10 +259,10 @@ namespace com.pb.shippingapi
                 using ( var respStream =  await httpResponseMessage.Content.ReadAsStreamAsync())
                 {
                     var deserializer = new JsonSerializer();
-                    var apiReader = new ShippingAPIJsonReader(new StreamReader(respStream));
                     JsonConverter converter = new ShippingAPIResponseTypeConverter<Response>();
-                    Type t = (Type)converter.ReadJson(apiReader,typeof(Type), null, deserializer);
-                    resp = (Response)deserializer.Deserialize(apiReader, t);
+                    Type t = (Type)converter.ReadJson(new JsonTextReader(new StreamReader(respStream)),typeof(Type), null, deserializer);
+                    respStream.Seek(0,SeekOrigin.Begin);
+                    resp = (Response)deserializer.Deserialize(new StreamReader(respStream), t);
                 }
                 return new ShippingAPIResponse<Response> { HttpStatus = httpResponseMessage.StatusCode,APIResponse = resp };
             }
