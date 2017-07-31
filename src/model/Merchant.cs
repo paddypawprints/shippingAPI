@@ -27,6 +27,7 @@ namespace com.pb.shippingapi.model
         [JsonProperty("merchantStatusReason")]
         public string MerchantStatusReason {get;set;}
         [JsonProperty("deactivatedDate")]
+        [JsonConverter(typeof(JavaScriptDateTimeConverter))]
         public DateTimeOffset DeactivatedDate {get;set;}
         
     }

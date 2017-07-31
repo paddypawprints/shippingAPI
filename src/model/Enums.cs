@@ -115,8 +115,8 @@ namespace com.pb.shippingapi.model
     }
     public enum Size
     {
-        DOC_4x6,
-        DOC_8x11
+        DOC_4X6,
+        DOC_8X11
     }
     public enum USPSServices
     {
@@ -142,7 +142,8 @@ namespace com.pb.shippingapi.model
         PRINT_CUSTOM_MESSAGE_2,
         ADD_TO_MANIFEST,
         FUTURE_SHIPMENT_DATE,
-        SHIPPING_LABEL_SENDER_SIGNATURE
+        SHIPPING_LABEL_SENDER_SIGNATURE,
+        SHIPPING_LABEL_RECEIPT
     }
 
     public enum USPSSpecialServiceCodes

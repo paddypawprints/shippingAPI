@@ -1,5 +1,6 @@
 
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace com.pb.shippingapi.model
 {
@@ -8,6 +9,6 @@ namespace com.pb.shippingapi.model
         [JsonProperty("customsInfo")]
         public CustomsInfo CustomsInfo { get;set;}
         [JsonProperty("customsItems")]
-        public CustomsItems[] CustomsItems {get;set;}
+        public IEnumerable<CustomsItems> CustomsItems {get;set;}
     }
 }

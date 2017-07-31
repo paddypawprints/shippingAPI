@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace com.pb.shippingapi.model
 {
@@ -13,11 +14,11 @@ namespace com.pb.shippingapi.model
         [JsonProperty("parcel")]
         public Parcel Parcel { get; set;}
         [JsonProperty("rates")]
-        public Rates Rates { get; set;}
+        public IEnumerable<Rates> Rates { get; set;}
         [JsonProperty("documents")]
-        public Document[] Documents { get; set;}
+        public IEnumerable<Document> Documents { get; set;}
         [JsonProperty("shipmentOptions")]
-        public ShipmentOptions[] ShipmentOptions { get; set;}
+        public IEnumerable<ShipmentOptions> ShipmentOptions { get; set;}
         [JsonProperty("customs")]
         public Customs Customs {get;set;}
         [JsonProperty("shipmentId")]

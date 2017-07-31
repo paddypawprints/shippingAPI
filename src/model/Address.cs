@@ -1,5 +1,6 @@
 
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System.Collections.Generic;
 
 
@@ -31,6 +32,7 @@ namespace com.pb.shippingapi.model
         [JsonProperty("residential")]
         public bool Residential {get;set;}
         [JsonProperty("status")]
+        [JsonConverter(typeof(StringEnumConverter))]
         public AddressStatus Status { get;set;}
 
     }

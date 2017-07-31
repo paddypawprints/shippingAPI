@@ -1,11 +1,13 @@
 
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace com.pb.shippingapi.model
 {
     public class CustomsInfo
     {
         [JsonProperty("reasonForExport")]
+        [JsonConverter(typeof(StringEnumConverter))]
         public ReasonForExport ReasonForExport { get; set;}
         [JsonProperty("reasonForExportExplanation")]
         public string reasonForExportExplanation { get; set;}

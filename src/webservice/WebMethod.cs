@@ -23,15 +23,20 @@ namespace com.pb.shippingapi
 
     public class ShippingAPIHeaderAttribute : ShippingAPIAttribute
     {
-        public ShippingAPIHeaderAttribute(string name) : base(name)
+        public bool OmitIfEmpty { get; set; }
+
+        public ShippingAPIHeaderAttribute(string name, bool omitIfEmpty = true) : base(name)
         {
+            OmitIfEmpty = omitIfEmpty;
         }
 
     }
     public class ShippingAPIQueryAttribute : ShippingAPIAttribute
     {
-        public ShippingAPIQueryAttribute(string name) :base(name)
+        public bool OmitIfEmpty { get; set; }
+        public ShippingAPIQueryAttribute(string name, bool omitIfEmpty = true ) :base(name)
         {
+            OmitIfEmpty = omitIfEmpty;
         }
 
     }
@@ -79,7 +84,7 @@ namespace com.pb.shippingapi
             switch(request.ContentType)
             {
                 case "application/json":
-                    return JsonConvert.SerializeObject(request);
+                    return JsonConvert.SerializeObject(request,Formatting.Indented,new JsonSerializerSettings (){NullValueHandling = NullValueHandling.Ignore });
                 case "application/x-www-form-urlencoded":
                     return SerializeAsFormPost<Request>(request);
                 default:
@@ -130,7 +135,15 @@ namespace com.pb.shippingapi
                         }
                         else
                         {
-                            v = (string)propertyInfo.GetValue(request);
+                            if (propertyInfo.GetValue(request)==null)
+                            {
+                                v = null;
+                            }
+                            else
+                            {
+                                var val = propertyInfo.GetValue(request) as string;
+                                v = val == null ? propertyInfo.GetValue(request).ToString(): val;
+                            }
                         }
                         propAction( (Attribute)attribute, ((Attribute)attribute).Name, v, propertyInfo.Name);
                     }
@@ -142,13 +155,14 @@ namespace com.pb.shippingapi
         {
             ProcessRequestAttributes<RequestHeader,ShippingAPIHeaderAttribute>(request, 
                 (a,s,v,p)=> {
-
-                    switch(p)
+                    if (a.OmitIfEmpty && (v == null || v.Equals(String.Empty))) return;
+                    switch (p)
                     {
                         case "Authorization": 
                             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(s, v);
                             break;
                         default:
+                            client.DefaultRequestHeaders.Remove(s);
                             client.DefaultRequestHeaders.Add(s, v );
                             break; 
                     }
@@ -160,11 +174,11 @@ namespace com.pb.shippingapi
              ProcessRequestAttributes<RequestQuery,ShippingAPIResourceAttribute>(request, 
                 (a,s,v, p)=> {
 
-                        uri.Append('/');
-                        UrlHelper.URLAdd( uri, s);
-                        if (!((ShippingAPIResourceAttribute)a).AddId ) return;
-                        uri.Append('/');
-                        UrlHelper.URLAdd( uri, (string)v);
+                    uri.Append('/');
+                    UrlHelper.URLAdd( uri, s);
+                    if (!a.AddId ) return;
+                    uri.Append('/');
+                    UrlHelper.URLAdd( uri, (string)v);
                 }
             );   
          }
@@ -174,9 +188,10 @@ namespace com.pb.shippingapi
 
             bool hasQuery = false;
  
-             ProcessRequestAttributes<RequestQuery,ShippingAPIResourceAttribute>(request, 
+             ProcessRequestAttributes<RequestQuery, ShippingAPIQueryAttribute>(request, 
                 (a,s,v, p)=> {
-                        if ( !hasQuery )
+                    if (a.OmitIfEmpty && v.Equals(String.Empty)) return;
+                    if ( !hasQuery )
                         {
                             uri.Append('?');
                             hasQuery = true;
@@ -253,12 +268,14 @@ namespace com.pb.shippingapi
                     throw new ArgumentException(); //TODO
             }
 
-            if ( httpResponseMessage.StatusCode == HttpStatusCode.OK )
+            if ( httpResponseMessage.IsSuccessStatusCode )
             {
                 Response resp;
                 using ( var respStream =  await httpResponseMessage.Content.ReadAsStreamAsync())
                 {
                     var deserializer = new JsonSerializer();
+                    deserializer.Error += DeserializationError;
+
                     JsonConverter converter = new ShippingAPIResponseTypeConverter<Response>();
                     Type t = (Type)converter.ReadJson(new JsonTextReader(new StreamReader(respStream)),typeof(Type), null, deserializer);
                     respStream.Seek(0,SeekOrigin.Begin);
@@ -269,5 +286,11 @@ namespace com.pb.shippingapi
             else
                 return new ShippingAPIResponse<Response>() { HttpStatus = httpResponseMessage.StatusCode, APIResponse = default(Response) };
         }
+
+        static void DeserializationError(object sender, Newtonsoft.Json.Serialization.ErrorEventArgs e)
+        {
+            throw e.ErrorContext.Error; //TODO:
+        }
+
     }
 }

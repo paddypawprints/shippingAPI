@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System.Collections.Generic;
 
 namespace com.pb.shippingapi.model
@@ -6,10 +7,13 @@ namespace com.pb.shippingapi.model
     public class Rates
     {
         [JsonProperty("carrier")]
+        [JsonConverter(typeof(StringEnumConverter))]
         public Carrier Carrier { get; set;}
         [JsonProperty("serviceId")]
+        [JsonConverter(typeof(StringEnumConverter))]
         public USPSServices serviceId { get;set;}
         [JsonProperty("parcelType")]
+        [JsonConverter(typeof(StringEnumConverter))]
         public USPSParcelType ParcelType { get; set;}
         [JsonProperty("specialServices")]
         public IEnumerable<SpecialServices> specialServices { get; set;}

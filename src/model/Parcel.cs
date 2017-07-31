@@ -5,7 +5,8 @@ namespace com.pb.shippingapi.model
     public class Parcel
     {
         [JsonProperty("dimension")]
-        public ParcelDimension dimension {get;set;}
+        public ParcelDimension Dimension {get;set;}
+        [JsonProperty("weight")]
         public ParcelWeight Weight {get;set;}
         [JsonProperty("valueOfGoods")]
         public decimal ValueOfGoods { get;set;}

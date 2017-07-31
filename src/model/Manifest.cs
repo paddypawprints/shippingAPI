@@ -1,12 +1,14 @@
 using System;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using System.Collections.Generic;
 
 namespace com.pb.shippingapi.model
 {
     public class Manifest
     {
         [JsonProperty("carrier")]
+        [JsonConverter(typeof(StringEnumConverter))]
         public Carrier Carrier { get;set;}
         [JsonProperty("submissionDate")]
         [JsonConverter(typeof(IsoDateTimeConverter))]
@@ -16,15 +18,15 @@ namespace com.pb.shippingapi.model
         [JsonProperty("inductionPostalCode")]
         public string InductionPostalCode {get;set;}
         [JsonProperty("parcelTrackingNumbers")]
-        public string[] ParcelTrackingNumbers {get;set;}
+        public IEnumerable<string> ParcelTrackingNumbers {get;set;}
         [JsonProperty("parameters")]
-        public Parameter[] Parameters;
+        public IEnumerable<Parameter> Parameters;
         [JsonProperty("ManifestId")]
         public string ManifestId {get;set;}
         [JsonProperty("manifestTrackingNumber")]
         public string ManifestTrackingNumber {get;set;}
         [JsonProperty("documents")]
-        public Document[] Documents {get;set;}
+        public IEnumerable<Document> Documents {get;set;}
 
     }
 }
