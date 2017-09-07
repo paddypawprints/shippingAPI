@@ -1,31 +1,21 @@
 
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using System.Collections.Generic;
 
-namespace com.pb.shippingapi.model
+namespace PitneyBowes.Developer.ShippingApi.Model
 {
-    public class Document
+    public class Document : IDocument
     {
-        [JsonConverter(typeof(StringEnumConverter))]
-        [JsonProperty("type")]
-        public DocumentType Type { get; set;}
-        [JsonProperty("size")]
-        [JsonConverter(typeof(StringEnumConverter))]
-        public Size Size { get; set;}
-        [JsonProperty("fileFormat")]
-        [JsonConverter(typeof(StringEnumConverter))]
-        public FileFormat FileFormat { get;set;}
-        [JsonProperty("contentType")]
-        [JsonConverter(typeof(StringEnumConverter))]
-        public ContentType ContentType {get;set;}
-        [JsonProperty("printDialogOption")]
-        [JsonConverter(typeof(StringEnumConverter))]
-        public PrintDialogOption printDialogOption {get;set;}
-        [JsonProperty("contents")]
-        public string Contents {get;set;}
-        [JsonProperty("pages")]
-        public IEnumerable<string> Pages {get;set;}
-        
+        virtual public DocumentType Type { get; set;}
+        virtual public Size Size { get; set;}
+        virtual public FileFormat FileFormat { get;set;}
+        virtual public ContentType ContentType {get;set;}
+        virtual public PrintDialogOption PrintDialogOption {get;set;}
+        virtual public string Contents {get;set;}
+        virtual public IEnumerable<string> Pages { get; set; }
+        virtual public void AddPage(string s)
+        {
+            ModelHelper.AddToEnumerable<string, string>(s, () => Pages, (x) => Pages = x);
+        }
     }
+
 }

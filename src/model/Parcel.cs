@@ -1,17 +1,16 @@
-using Newtonsoft.Json;
 
-namespace com.pb.shippingapi.model
+namespace PitneyBowes.Developer.ShippingApi.Model
 {
-    public class Parcel
+    public class Parcel : IParcel
     {
-        [JsonProperty("dimension")]
-        public ParcelDimension Dimension {get;set;}
-        [JsonProperty("weight")]
-        public ParcelWeight Weight {get;set;}
-        [JsonProperty("valueOfGoods")]
-        public decimal ValueOfGoods { get;set;}
-        [JsonProperty("currencyCode")]
-        public string CurrencyCode {get;set;}
-        
+        virtual public IParcelDimension Dimension { get; set; }
+
+        virtual public IParcelWeight Weight { get; set; }
+
+        virtual public decimal ValueOfGoods { get;set;}
+
+        virtual public string CurrencyCode {get;set;}
     }
+
+
 }

@@ -1,39 +1,94 @@
 using System.Threading.Tasks;
-using System.Collections.Generic;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using Newtonsoft.Json;
-using com.pb.shippingapi.model;
-using System;
+using PitneyBowes.Developer.ShippingApi.Json;
 using System.Text;
+using System.Collections.Generic;
 
-namespace com.pb.shippingapi
+namespace PitneyBowes.Developer.ShippingApi
 {
-
     [JsonObject(MemberSerialization.OptIn)]
-    public class CreateShipmentRequest : Shipment, IShippingApiRequest
+    public class CreateShipmentRequest<T> : JsonWrapper<T>, IShippingApiRequest where T:IShipment, new()
     {
-        [ShippingAPIHeader("ContentType")]
-        public string ContentType { get; set; }
-        [ShippingAPIHeader("Bearer")]
-        public StringBuilder Authorization { get; set; }
-        [ShippingAPIHeader("X-PB-TransactionId")]
-        public string TransactionId {get;set;}
-        [ShippingAPIHeader("X-PB-Shipper-Rate-Plan")]
-        public string ShipperRatePlan {get;set;}
- 
-        [ShippingAPIQuery("includeDeliveryCommitment")]
-        public bool includeDeliveryCommitment {get;set;}
 
-        public CreateShipmentRequest(ShippingApi.Session session = null) : base()
+        [ShippingAPIHeader("X-PB-TransactionId", true)]
+        public string TransactionId { get; set; }
+
+        [ShippingAPIHeader("ContentType", true)]
+        public string ContentType { get; set; }
+
+        [ShippingAPIHeader("Bearer", true)]
+        public StringBuilder Authorization { get; set; }
+
+        [JsonProperty("fromAddress")]
+        public IAddress FromAddress
         {
-            if (session == null ) session = ShippingApi.DefaultSession;
-            Authorization = new StringBuilder(session.AuthToken.AccessToken);
-            ContentType="application/json";
+            get => Wrapped.FromAddress;
+            set { Wrapped.FromAddress = value; }
+        }
+        [JsonProperty("toAddress")]
+        public IAddress ToAddress
+        {
+            get => Wrapped.ToAddress;
+            set { Wrapped.ToAddress = value; }
+        }
+        [JsonProperty("altReturnAddress")]
+        public IAddress AltReturnAddress
+        {
+            get => Wrapped.AltReturnAddress;
+            set { Wrapped.AltReturnAddress = value; }
+        }
+        [JsonProperty("parcel")]
+        public IParcel Parcel
+        {
+            get => Wrapped.Parcel;
+            set { Wrapped.Parcel = value; }
+        }
+        [JsonProperty("rates")]
+        public IEnumerable<IRates> Rates
+        {
+            get => Wrapped.Rates;
+            set { Wrapped.Rates = value; }
+        }
+        public IRates AddRates(IRates r)
+        {
+            return Wrapped.AddRates(r);
+        }
+        [JsonProperty("documents")]
+        public IEnumerable<IDocument> Documents
+        {
+            get => Wrapped.Documents;
+            set { Wrapped.Documents = value; }
+        }
+        public IDocument AddDocument(IDocument d)
+        {
+            return Wrapped.AddDocument(d);
         }
 
+        [JsonProperty("shipmentOptions")]
+        public IEnumerable<IShipmentOptions> ShipmentOptions
+        {
+            get => Wrapped.ShipmentOptions;
+            set { Wrapped.ShipmentOptions = value; }
+        }
+        public IShipmentOptions AddShipmentOptions(IShipmentOptions s)
+        {
+            return Wrapped.AddShipmentOptions(s);
+        }
+        [JsonProperty("customs")]
+        public ICustoms Customs
+        {
+            get => Wrapped.Customs;
+            set { Wrapped.Customs = value; }
+        }
+
+        public CreateShipmentRequest(ShippingApi.Session session = null)
+        {
+            if (session == null) session = ShippingApi.DefaultSession;
+            Authorization = new StringBuilder(session.AuthToken.AccessToken);
+            ContentType = "application/json";
+        }
     }
+
     [JsonObject(MemberSerialization.OptIn)]
     public class CancelShipmentRequest : IShippingApiRequest
     {
@@ -97,19 +152,22 @@ namespace com.pb.shippingapi
 
     public static class ShipmentsMethods
     {
-        public async static Task<ShippingAPIResponse<Shipment>> CreateShipment( CreateShipmentRequest request )
-        {
 
-            return await WebMethod.Post<Shipment, CreateShipmentRequest>( "/shippingservices/v1/shipments", request );
-        }
-        public async static Task<ShippingAPIResponse<CancelShipmentResponse>> CancelShipment( CancelShipmentRequest request)
+        public async static Task<ShippingAPIResponse<T>> CreateShipment<T>(CreateShipmentRequest<T> request, ShippingApi.Session session = null) where T:IShipment, new()
         {
-             return await WebMethod.Delete<CancelShipmentResponse, CancelShipmentRequest>( "/shippingservices/v1/shipments", request );
+            if (session == null) session = ShippingApi.DefaultSession;
+            return await WebMethod.Post< T, CreateShipmentRequest<T>>( "/shippingservices/v1/shipments", request, session );
+        }
+        public async static Task<ShippingAPIResponse<CancelShipmentResponse>> CancelShipment( CancelShipmentRequest request, ShippingApi.Session session = null)
+        {
+            if (session == null) session = ShippingApi.DefaultSession;
+            return await WebMethod.Delete<CancelShipmentResponse, CancelShipmentRequest>( "/shippingservices/v1/shipments", request, session );
         }
 
-        public async static Task<ShippingAPIResponse<Shipment>>  ReprintShipment(ReprintShipmentRequest request )
+        public async static Task<ShippingAPIResponse<T>>  ReprintShipment<T>(ReprintShipmentRequest request, ShippingApi.Session session = null) where T : IShipment, new()
         {
-             return await WebMethod.Get<Shipment, ReprintShipmentRequest>( "/shippingservices/v1/shipments", request );
+            if (session == null) session = ShippingApi.DefaultSession;
+            return  await WebMethod.Get<T, ReprintShipmentRequest>( "/shippingservices/v1/shipments", request, session );
         }
 
     }

@@ -1,40 +1,26 @@
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
+using System;
 using System.Collections.Generic;
 
-namespace com.pb.shippingapi.model
+namespace PitneyBowes.Developer.ShippingApi.Model
 {
-    public class Rates
+    public class Rates : IRates
     {
-        [JsonProperty("carrier")]
-        [JsonConverter(typeof(StringEnumConverter))]
-        public Carrier Carrier { get; set;}
-        [JsonProperty("serviceId")]
-        [JsonConverter(typeof(StringEnumConverter))]
-        public USPSServices serviceId { get;set;}
-        [JsonProperty("parcelType")]
-        [JsonConverter(typeof(StringEnumConverter))]
-        public USPSParcelType ParcelType { get; set;}
-        [JsonProperty("specialServices")]
-        public IEnumerable<SpecialServices> specialServices { get; set;}
-        [JsonProperty("inductionPostalCode")]
-        public string InductionPostalCode { get; set;}
-        [JsonProperty("dimensionalWeight")]
-        public ParcelWeight DimensionalWeight { get; set;}
-        [JsonProperty("baseCharge")]
-        public decimal BaseCharge { get; set;}
-        [JsonProperty("totalCarrierCharge")]
-        public decimal TotalCarrierCharge { get; set;}
-        [JsonProperty("alternateBaseCharge")]
-        public decimal AlternateBaseCharge { get; set;}
-        [JsonProperty("alternateTotalCharge")]
-        public decimal AlternateTotalCharge { get; set;}
-        [JsonProperty("deliveryCommitment")]
-        public DeliveryCommitment DeliveryCommitment { get; set;}
-        [JsonProperty("currencyCode")]
-        public string CurrencyCode { get; set;}
-        [JsonProperty("destinationZone")]
-        public int DestinationZone { get; set;}
-
+        virtual public Carrier Carrier { get; set;}
+        virtual public USPSServices ServiceId { get;set;}
+        virtual public USPSParcelType ParcelType { get; set;}
+        virtual public IEnumerable<ISpecialServices> SpecialServices { get; set; }
+        virtual public ISpecialServices AddSpecialservices( ISpecialServices s)
+        {
+            return ModelHelper.AddToEnumerable<ISpecialServices, SpecialServices>(s, () => SpecialServices, (x) => SpecialServices = x);
+        }
+        virtual public string InductionPostalCode { get; set;}
+        virtual public IParcelWeight DimensionalWeight { get; set; }
+        virtual public decimal BaseCharge { get; set;}
+        virtual public decimal TotalCarrierCharge { get; set;}
+        virtual public decimal AlternateBaseCharge { get; set;}
+        virtual public decimal AlternateTotalCharge { get; set;}
+        virtual public IDeliveryCommitment DeliveryCommitment { get; set; }
+        virtual public string CurrencyCode { get; set;}
+        virtual public int DestinationZone { get; set;}
     }
 }

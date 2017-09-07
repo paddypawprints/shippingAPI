@@ -1,31 +1,33 @@
 using Newtonsoft.Json;
 using System.Collections.Generic;
-using com.pb.shippingapi.model;
+using PitneyBowes.Developer.ShippingApi.Model;
 
-namespace com.pb.shippingapi.fluent
+namespace PitneyBowes.Developer.ShippingApi.Fluent
 {
-    public class RatesArrayFluent : List<Rates>
+    public class RatesArrayFluent<T> : List<T> where T : class, IRates, new()
     {
-        public static RatesArrayFluent Create()
-        {
-            return new RatesArrayFluent();
-        }
-        protected Rates _current = null;
 
-        public RatesArrayFluent Add()
+        protected T _current = null;
+
+        public static RatesArrayFluent<T> Create()
         {
-            Add(new Rates());
+            return new RatesArrayFluent<T>();
+        }
+
+        public RatesArrayFluent<T> Add() 
+        {
+            Add(new T());
             _current = FindLast((x) => true);
             return this;
         }
 
-        public RatesArrayFluent First()
+        public RatesArrayFluent<T> First()
         {
             _current = Find((x) => true);
             return this;
         }
 
-        public RatesArrayFluent Next()
+        public RatesArrayFluent<T> Next()
         {
             var i = IndexOf(_current);
             _current = this[i + 1];
@@ -38,55 +40,53 @@ namespace com.pb.shippingapi.fluent
             return (i == Count - 1);
         }
 
-        public RatesArrayFluent Carrier(Carrier c) 
+        public RatesArrayFluent<T> Carrier(Carrier c) 
         {
             _current.Carrier = c;
             return this;
         }
 
-        public RatesArrayFluent Service(USPSServices s) 
+        public RatesArrayFluent<T> Service(USPSServices s) 
         {
-            _current.serviceId = s;
+            _current.ServiceId = s;
             return this;
         }
-        public RatesArrayFluent ParcelType(USPSParcelType t) 
+        public RatesArrayFluent<T> ParcelType(USPSParcelType t) 
         {
             _current.ParcelType = t;
             return this;
         }
 
-        public RatesArrayFluent specialService(USPSSpecialServiceCodes c, decimal f, params Parameter[] p)
+        public RatesArrayFluent<T> SpecialService<S>(USPSSpecialServiceCodes c, decimal f, params IParameter[] parameters) where S:ISpecialServices, new()
         {
-            if (_current.specialServices == null ) _current.specialServices = new List<SpecialServices>();
-            var l = (List<SpecialServices> )_current.specialServices;
-            var s = new SpecialServices() {SpecialServiceId = c, Fee = f};
-            if ( s.InputParameters == null ) s.InputParameters = new List<Parameter>();
-            foreach( var i in p )
+            var s = new S() { SpecialServiceId = c, Fee = f };
+
+            foreach( var p in parameters )
             {
-                ((List<Parameter>)s.InputParameters).Add( i );
+                s.AddParameter(p);
             }
-            l.Add( s ); 
+            _current.AddSpecialservices(s);
             return this;
         }
 
-        public RatesArrayFluent InductionPostalCode(string s) 
+        public RatesArrayFluent<T> InductionPostalCode(string s) 
         {
             _current.InductionPostalCode = s;
             return this;
         }
 
-        public RatesArrayFluent DimensionalWeight(decimal w, UnitOfWeight u) 
+        public RatesArrayFluent<T> DimensionalWeight<S>(decimal w, UnitOfWeight u) where S: IParcelWeight, new()
         {
-            _current.DimensionalWeight = new ParcelWeight(){Weight = w, UnitOfMeasurement = u};
+            _current.DimensionalWeight = new S(){Weight = w, UnitOfMeasurement = u};
             return this;
         }
-         public RatesArrayFluent DeliveryCommitment(DeliveryCommitment c) 
+         public RatesArrayFluent<T> DeliveryCommitment(IDeliveryCommitment c) 
          {
             _current.DeliveryCommitment = c;
              return this;
          }
 
-        public RatesArrayFluent CurrencyCode(string s) 
+        public RatesArrayFluent<T> CurrencyCode(string s) 
         {
             _current.CurrencyCode = s;
             return this;

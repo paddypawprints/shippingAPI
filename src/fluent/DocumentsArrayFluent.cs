@@ -1,32 +1,32 @@
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System;
-using com.pb.shippingapi.model;
+using PitneyBowes.Developer.ShippingApi.Model;
 
-namespace com.pb.shippingapi.fluent
+namespace PitneyBowes.Developer.ShippingApi.Fluent
 {
-    public class DocumentsArrayFluent : List<Document>
+    public class DocumentsArrayFluent<T> : List<IDocument> where T : IDocument, new()
     {
-        public static DocumentsArrayFluent Create()
+        public static DocumentsArrayFluent<T> Create()
         {
-            return new DocumentsArrayFluent();
+            return new DocumentsArrayFluent<T>();
         }
-        protected Document _current = null;
+        protected IDocument _current = null;
 
-        public DocumentsArrayFluent Add()
+        public DocumentsArrayFluent<T> Add() 
         {
-            Add(new Document());
+            Add(new T());
             _current = FindLast((x) => true);
             return this;
         }
 
-        public DocumentsArrayFluent First()
+        public DocumentsArrayFluent<T> First()
         {
             _current = Find((x) => true);
             return this;
         }
 
-        public DocumentsArrayFluent Next()
+        public DocumentsArrayFluent<T> Next()
         {
             var i = IndexOf(_current);
             _current = this[i + 1];
@@ -39,33 +39,33 @@ namespace com.pb.shippingapi.fluent
             return (i == Count - 1);
         }
 
-        public DocumentsArrayFluent DocumentType(DocumentType type ) 
+        public DocumentsArrayFluent<T> DocumentType(DocumentType type ) 
         {
             _current.Type = type;
             return this;
         }
 
-        public DocumentsArrayFluent Size( Size size)
+        public DocumentsArrayFluent<T> Size( Size size)
         {
             _current.Size = size;
             return this;
         }
 
-        public DocumentsArrayFluent FileFormat(FileFormat format )
+        public DocumentsArrayFluent<T> FileFormat(FileFormat format )
         {
             _current.FileFormat = format;
             return this;
         }
 
-        public DocumentsArrayFluent ContentType(ContentType content)
+        public DocumentsArrayFluent<T> ContentType(ContentType content)
         {
             _current.ContentType = content;
             return this;
         }
 
-        public DocumentsArrayFluent PrintDialogOption(PrintDialogOption option)
+        public DocumentsArrayFluent<T> PrintDialogOption(PrintDialogOption option)
         {
-            _current.printDialogOption = option;
+            _current.PrintDialogOption = option;
             return this;
         }
     }

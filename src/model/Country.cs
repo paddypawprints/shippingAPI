@@ -1,13 +1,14 @@
 
-using Newtonsoft.Json;
 
-namespace com.pb.shippingapi.model
+
+namespace PitneyBowes.Developer.ShippingApi.Model
 {
-    public class Country
+    public class Country : ICountry
     {
-        [JsonProperty("countryCode")]
-        public string CountryCode { get; set;}
-        [JsonProperty("countryName")]
-        public string CountryName { get; set;}
+        virtual public string CountryCode { get; set;}
+
+        virtual public string CountryName { get; set;}
     }
+
+
 }

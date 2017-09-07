@@ -1,39 +1,31 @@
-
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
+using System;
 using System.Collections.Generic;
 
-
-namespace com.pb.shippingapi.model
+namespace PitneyBowes.Developer.ShippingApi.Model
 {
     /// <summary>
     /// Street address and/or apartment and/or P.O. Box. You can specify up to three address lines.
     /// </summary>
-    public class Address
+    public class  Address : IAddress
     {
-        [JsonProperty("addressLines")]
-        public IEnumerable<string> AddressLines { get; set;}
-        [JsonProperty("cityTown")]
-        public string CityTown { get; set;}
-        [JsonProperty("stateProvince")]
-        public string StateProvince { get;set;}
-        [JsonProperty("postalCode")]
-        public string PostalCode {get;set;}
-        [JsonProperty("countryCode")]
-        public string CountryCode {get;set;}
-        [JsonProperty("company")]
-        public string Company {get;set;}
-        [JsonProperty("name")]
-        public string Name {get;set;}
-        [JsonProperty("phone")]
-        public string Phone { get;set;}
-        [JsonProperty("email")]
-        public string Email {get;set;}
-        [JsonProperty("residential")]
-        public bool Residential {get;set;}
-        [JsonProperty("status")]
-        [JsonConverter(typeof(StringEnumConverter))]
-        public AddressStatus Status { get;set;}
-
+        virtual public IEnumerable<string> AddressLines { get; set; }
+        virtual public void AddAddressLine(string s)
+        {
+            if (AddressLines as List<string> != null )
+            {
+                if ((AddressLines as List<string>).Count == 3) throw new Exception();
+            }
+            ModelHelper.AddToEnumerable<string, string>(s,()=>AddressLines, (x)=>AddressLines = x);
+        }
+        virtual public string CityTown { get; set;}
+        virtual public string StateProvince { get;set;}
+        virtual public string PostalCode {get;set;}
+        virtual public string CountryCode {get;set;}
+        virtual public string Company {get;set;}
+        virtual public string Name {get;set;}
+        virtual public string Phone { get;set;}
+        virtual public string Email {get;set;}
+        virtual public bool Residential {get;set;}
+        virtual public AddressStatus Status { get;set;}
     }
 }

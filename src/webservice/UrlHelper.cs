@@ -9,7 +9,7 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 
-namespace com.pb.shippingapi
+namespace PitneyBowes.Developer.ShippingApi
 { 
     public static class UrlHelper
     {
@@ -17,6 +17,7 @@ namespace com.pb.shippingapi
         {
             // This is a cheerful encoder. Replace when the .net core framework URL Encoder is available.
             var bytes = Encoding.UTF8.GetBytes(s);
+            
 
             foreach( var b in bytes )
             {
@@ -28,7 +29,7 @@ namespace com.pb.shippingapi
                     case '$': url.Append("%24");break;
                     case '%': url.Append("%25");break;
                     case '&': url.Append("%26");break;
-                    case '\'': url.Append("%27");break;
+                    case '\'':url.Append("%27");break;
                     case '(': url.Append("%28");break;
                     case ')': url.Append("%29");break;
                     case '*': url.Append("%2A");break;

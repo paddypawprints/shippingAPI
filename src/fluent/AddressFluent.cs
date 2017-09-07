@@ -1,93 +1,93 @@
 
-using Newtonsoft.Json;
-using System.Collections.Generic;
-using com.pb.shippingapi.model;
 
 
-namespace com.pb.shippingapi.fluent
+namespace PitneyBowes.Developer.ShippingApi.Fluent
 {
     /// <summary>
     /// Street address and/or apartment and/or P.O. Box. You can specify up to three address lines.
     /// </summary>
-    public class AddressFluent 
+    public class AddressFluent<T> where T : IAddress, new()
     {
-        private Address _address;
+        private T _address;
 
-        public static implicit operator Address( AddressFluent a)
+        public static implicit operator T( AddressFluent<T> a)
         {
             return a._address;
         }
 
-        public static AddressFluent Create()
+        public static AddressFluent<T> Create()
         {
-            return new AddressFluent();
+            var a = new AddressFluent<T>()
+            {
+                _address = new T()
+            };
+            return a;
         }
-        public AddressFluent()
+
+        private AddressFluent()
         {
-            _address = new Address();
+            
         }
-        public AddressFluent AddressLines(string a1, string a2 = null, string a3 = null)
+        public AddressFluent<T> AddressLines(string a1, string a2 = null, string a3 = null)
         {
-            var addressLines = new List<string>();
-            addressLines.Add(a1);
-            if (a2 != null) addressLines.Add(a2);
-            if (a3 != null) addressLines.Add(a3);
-            _address.AddressLines = addressLines;
+            _address.AddAddressLine(a1);
+            if (a2 != null) _address.AddAddressLine(a2);
+            if (a3 != null) _address.AddAddressLine(a3);
             return this;
         }
 
-        public AddressFluent CityTown(string c) 
+        public AddressFluent<T> CityTown(string c) 
         {
             _address.CityTown = c;
             return this;
         }
-        public AddressFluent StateProvince(string s) 
+        public AddressFluent<T> StateProvince(string s) 
         { 
             _address.StateProvince = s;
             return this;
         }
 
-        public AddressFluent PostalCode( string s) 
+        public AddressFluent<T> PostalCode( string s) 
         {
             _address.PostalCode = s;
             return this;
         }
-        public AddressFluent CountryCode(string s) 
+        public AddressFluent<T> CountryCode(string s) 
         {
             _address.CountryCode = s;
             return this;
         }
-        public AddressFluent Company(string s) 
+        public AddressFluent<T> Company(string s) 
         {
             _address.Company = s;
             return this;
         }
 
-        public AddressFluent Name(string s) 
+        public AddressFluent<T> Name(string s) 
         {
             _address.Name=s;
             return this;
         }
 
-        public AddressFluent Phone(string s) 
+        public AddressFluent<T> Phone(string s) 
         { 
             _address.Phone = s;
             return this;
         }
 
-        public AddressFluent Email(string s) 
+        public AddressFluent<T> Email(string s) 
         {
             _address.Email = s;
             return this;
         }
 
-        public AddressFluent Residential(bool b) 
+        public AddressFluent<T> Residential(bool b) 
         {
             _address.Residential = b;
             return this;
         }
 
-        public  AddressFluent Status(AddressStatus s) 
+        public  AddressFluent<T> Status(AddressStatus s) 
         { 
             _address.Status = s;
             return this;

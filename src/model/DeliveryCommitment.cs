@@ -1,20 +1,19 @@
 
-using Newtonsoft.Json;
-
-namespace com.pb.shippingapi.model
+namespace PitneyBowes.Developer.ShippingApi.Model
 {
-    public class DeliveryCommitment
+    public class DeliveryCommitment : IDeliveryCommitment
     {
-        [JsonProperty("minEstimatedNumberOfDays")]
-        public string MinEstimatedNumberOfDays { get; set;}
-        [JsonProperty("maxEstimatedNumberOfDays")]
-        public string MaxEstimatedNumberOfDays { get; set;}
-        [JsonProperty("estimatedDeliveryDateTime")]
-        public string EstimatedDeliveryDateTime { get;set;}
-        [JsonProperty("guarantee")]
-        public string Guarantee {get;set;}
-        [JsonProperty("additionalDetails")]
-        public string AdditionalDetails {get;set;}
+
+        virtual public string MinEstimatedNumberOfDays { get; set;}
+
+        virtual public string MaxEstimatedNumberOfDays { get; set;}
+
+        virtual public string EstimatedDeliveryDateTime { get;set;}
+
+        virtual public string Guarantee {get;set;}
+
+        virtual public string AdditionalDetails {get;set;}
         
     }
+
 }

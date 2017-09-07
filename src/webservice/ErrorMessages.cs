@@ -1,36 +1,36 @@
 using System;
 using Newtonsoft.Json;
 
-namespace com.pb.shippingapi
+namespace PitneyBowes.Developer.ShippingApi
 {
     class ErrorFormat1
     {
         [JsonProperty("errorCode")]
-        string ErrorCode {get;set;}
+        public string ErrorCode {get;set;}
         [JsonProperty("message")]
-        string Message {get;set;}
+        public string Message {get;set;}
         [JsonProperty("addionalInfo")]
-       string AdditionalInfo { get; set;}
+        public string AdditionalInfo { get; set;}
     }
 
     class ErrorFormat2
     {
-        class ErrorDetail
+        public class ErrorDetail
         {
             [JsonProperty("errorCode")]
-            string ErrorCode {get;set;}
+            public string ErrorCode {get;set;}
             [JsonProperty("errorDescription")]
-            string ErrorDescription {get;set;}
+            public string ErrorDescription {get;set;}
         }
         [JsonProperty("errors")]
-        ErrorDetail[] Errors {get;set;}
+        public ErrorDetail[] Errors {get;set;}
     }
     class ErrorFormat3
     {
         [JsonProperty("key")]
-        string Key {get;set;}
+        public string Key {get;set;}
         [JsonProperty("message")]
-        string Message {get;set;}
+        public string Message {get;set;}
 
     }
 

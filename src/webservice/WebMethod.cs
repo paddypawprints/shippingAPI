@@ -9,45 +9,13 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 
-namespace com.pb.shippingapi
+namespace PitneyBowes.Developer.ShippingApi
 {
-    public class ShippingAPIAttribute : Attribute
+    public class ErrorDetail
     {
-        public string Name { get;set; }
-        public ShippingAPIAttribute(string name)
-        {
-            Name = name;
-        }
-
-    }
-
-    public class ShippingAPIHeaderAttribute : ShippingAPIAttribute
-    {
-        public bool OmitIfEmpty { get; set; }
-
-        public ShippingAPIHeaderAttribute(string name, bool omitIfEmpty = true) : base(name)
-        {
-            OmitIfEmpty = omitIfEmpty;
-        }
-
-    }
-    public class ShippingAPIQueryAttribute : ShippingAPIAttribute
-    {
-        public bool OmitIfEmpty { get; set; }
-        public ShippingAPIQueryAttribute(string name, bool omitIfEmpty = true ) :base(name)
-        {
-            OmitIfEmpty = omitIfEmpty;
-        }
-
-    }
-
-    public class ShippingAPIResourceAttribute : ShippingAPIAttribute
-    {
-        public bool AddId { get;set; }
-        public ShippingAPIResourceAttribute(string name, bool addId = true) : base(name)
-        {
-            AddId = addId;
-        }
+        public string ErrorCode { get; set; }
+        public string Message { get; set; }
+        public string AdditionalInfo { get; set; }
 
     }
 
@@ -57,13 +25,6 @@ namespace com.pb.shippingapi
         {
             return r.APIResponse;
         }
-        public class ErrorDetail
-        {
-                public string ErrorCode {get;set;}
-                public string Message {get;set;}
-                public string AdditionalInfo {get;set;}
-
-        }   
         public HttpStatusCode HttpStatus;  
         public bool Success = false;   
         public List<ErrorDetail> Errors = new List<ErrorDetail>();
@@ -79,25 +40,32 @@ namespace com.pb.shippingapi
     internal class WebMethod
     {
 
-        private static string SerializeBody<Request>( Request request ) where Request : IShippingApiRequest
+        private static void SerializeBody<Request>( StreamWriter writer, Request request, ShippingApi.Session session ) where Request : IShippingApiRequest
         {
-            switch(request.ContentType)
+            switch (request.ContentType)
             {
                 case "application/json":
-                    return JsonConvert.SerializeObject(request,Formatting.Indented,new JsonSerializerSettings (){NullValueHandling = NullValueHandling.Ignore });
+                    var serializer = new JsonSerializer(){ ContractResolver = new ShippingAPIContractResolver() };
+                    ((ShippingAPIContractResolver)serializer.ContractResolver).Session = session;
+                    serializer.NullValueHandling = NullValueHandling.Ignore;
+                    serializer.Formatting = Formatting.Indented;
+                    if (session.TraceSerialization) serializer.TraceWriter = session.NewtonSoftTrace;
+                    serializer.Serialize(writer, request);
+                    writer.Flush();
+                    return;
+
                 case "application/x-www-form-urlencoded":
-                    return SerializeAsFormPost<Request>(request);
+                    SerializeAsFormPost<Request>(writer, request);
+                    return;
                 default:
                     throw new Exception(); //TODO:
             }
         }
 
-        private static string SerializeAsFormPost<Request>( Request request ) 
+        private static void SerializeAsFormPost<Request>( StreamWriter writer, Request request ) 
         {
-            // assume JSON serializer opt in is set
             if (request == null ) throw new Exception(); //TODO:
 
-            var body = new StringBuilder();
             bool isFirst = true;
                 
             foreach( var propertyInfo in typeof(Request).GetProperties())
@@ -106,15 +74,14 @@ namespace com.pb.shippingapi
                 {
                     if (attribute is JsonPropertyAttribute )
                     {
-                        if (!isFirst) { body.AppendLine(); isFirst = false; }
-                        string name = ((JsonPropertyAttribute)attribute).PropertyName;
-                        string value = (string) propertyInfo.GetValue(request);
-                        body.Append( name).Append("=");
-                        UrlHelper.URLAdd(body, value);
+                        if (!isFirst) { writer.WriteLine(); isFirst = false; }
+                        writer.Write(((JsonPropertyAttribute)attribute).PropertyName);
+                        writer.Write('=');
+                        writer.Write((string) propertyInfo.GetValue(request));
                     }
                 }
             }
-            return body.ToString();
+            writer.Flush();
         }
 
         private static void ProcessRequestAttributes<RequestHeader,Attribute>( RequestHeader request, Action<Attribute, string, string, string> propAction  ) where Attribute : ShippingAPIAttribute
@@ -142,10 +109,34 @@ namespace com.pb.shippingapi
                             else
                             {
                                 var val = propertyInfo.GetValue(request) as string;
-                                v = val == null ? propertyInfo.GetValue(request).ToString(): val;
+                                v = val ?? propertyInfo.GetValue(request).ToString();
                             }
                         }
                         propAction( (Attribute)attribute, ((Attribute)attribute).Name, v, propertyInfo.Name);
+                    }
+                }
+            }
+        }
+        private static void ProcessResponseAttributes<Response>(Response response, HttpHeaders headers) 
+        {
+            if (response == null) return;
+
+            foreach (var propertyInfo in typeof(Response).GetProperties())
+            {
+
+                foreach (object attribute in propertyInfo.GetCustomAttributes(true))
+                {
+                    if (attribute is ShippingAPIHeaderAttribute)
+                    {
+                        var sa = attribute as ShippingAPIHeaderAttribute;
+                        var v = new StringBuilder();
+                        bool firstValue = true;
+                        foreach( var value in headers.GetValues(sa.Name))
+                        {
+                            if (!firstValue) { firstValue = false; v.Append(','); }
+                            v.Append(value);
+                        }
+                        propertyInfo.SetValue(response, v.ToString());
                     }
                 }
             }
@@ -176,9 +167,15 @@ namespace com.pb.shippingapi
 
                     uri.Append('/');
                     UrlHelper.URLAdd( uri, s);
-                    if (!a.AddId ) return;
-                    uri.Append('/');
-                    UrlHelper.URLAdd( uri, (string)v);
+                    if (a.AddId)
+                    {
+                        uri.Append('/');
+                        UrlHelper.URLAdd(uri, (string)v);
+                    }
+                    if ( a.PathSuffix != null )
+                    {
+                        UrlHelper.URLAdd(uri, (string)v);
+                    }
                 }
             );   
          }
@@ -247,15 +244,27 @@ namespace com.pb.shippingapi
             switch( verb )
             {
                 case HttpVerb.PUT:
-                    using ( var reqContent = new StringContent(SerializeBody<Request>(request), Encoding.UTF8, request.ContentType) )
+                    using (var stream = new MemoryStream())
+                    using (var writer = new StreamWriter(stream))
                     {
-                        httpResponseMessage =  await client.PutAsync(resource.ToString(),reqContent);
+                        SerializeBody<Request>(writer, request, session);
+                        stream.Seek(0, SeekOrigin.Begin);
+                        using (var reqContent = new StreamContent(stream))
+                        {
+                            httpResponseMessage = await client.PutAsync(resource.ToString(), reqContent);
+                        }
                     }
                 break;
                  case HttpVerb.POST:
-                    using ( var reqContent = new StringContent(SerializeBody<Request>(request), Encoding.UTF8, request.ContentType) )
+                    using (var stream = new MemoryStream())
+                    using (var writer = new StreamWriter(stream))
                     {
-                        httpResponseMessage = await client.PostAsync(resource.ToString(),reqContent);
+                        SerializeBody<Request>(writer, request, session);
+                        stream.Seek(0, SeekOrigin.Begin);
+                        using (var reqContent = new StreamContent(stream))
+                        {
+                            httpResponseMessage = await client.PostAsync(resource.ToString(), reqContent);
+                        }
                     }
                 break;
                 case HttpVerb.DELETE:
@@ -268,23 +277,59 @@ namespace com.pb.shippingapi
                     throw new ArgumentException(); //TODO
             }
 
-            if ( httpResponseMessage.IsSuccessStatusCode )
+            var apiResponse = new ShippingAPIResponse<Response> { HttpStatus = httpResponseMessage.StatusCode, Success = httpResponseMessage.IsSuccessStatusCode };
+            if (httpResponseMessage.IsSuccessStatusCode)
             {
-                Response resp;
-                using ( var respStream =  await httpResponseMessage.Content.ReadAsStreamAsync())
+                using (var respStream = await httpResponseMessage.Content.ReadAsStreamAsync())
                 {
                     var deserializer = new JsonSerializer();
                     deserializer.Error += DeserializationError;
+                    deserializer.ContractResolver = new ShippingAPIContractResolver();
+                    ((ShippingAPIContractResolver)deserializer.ContractResolver).Session = session;
 
                     JsonConverter converter = new ShippingAPIResponseTypeConverter<Response>();
-                    Type t = (Type)converter.ReadJson(new JsonTextReader(new StreamReader(respStream)),typeof(Type), null, deserializer);
-                    respStream.Seek(0,SeekOrigin.Begin);
-                    resp = (Response)deserializer.Deserialize(new StreamReader(respStream), t);
+                    Type t = (Type)converter.ReadJson(new JsonTextReader(new StreamReader(respStream)), typeof(Type), null, deserializer);
+                    respStream.Seek(0, SeekOrigin.Begin);
+                    if (t == typeof(ErrorFormat1))
+                    {
+                        var error = (ErrorFormat1[])deserializer.Deserialize(new StreamReader(respStream), typeof(ErrorFormat1[]));
+                        foreach( var e in error )
+                        {
+                            apiResponse.Errors.Add(new ErrorDetail() { ErrorCode = e.ErrorCode, Message = e.Message, AdditionalInfo = e.AdditionalInfo });
+                        }
+                        apiResponse.APIResponse = default(Response);
+                    }
+                    else if (t == typeof(ErrorFormat2))
+                    {
+                        var error = (ErrorFormat2)deserializer.Deserialize(new StreamReader(respStream), typeof(ErrorFormat2));
+                        foreach (var e in error.Errors)
+                        {
+                            apiResponse.Errors.Add(new ErrorDetail() { ErrorCode = e.ErrorCode, Message = e.ErrorDescription, AdditionalInfo = string.Empty });
+                        }
+                        apiResponse.APIResponse = default(Response);
+                    }
+                    else if (t == typeof(ErrorFormat3))
+                    {
+                        var error = (ErrorFormat3[])deserializer.Deserialize(new StreamReader(respStream), typeof(ErrorFormat3[]));
+                        foreach (var e in error)
+                        {
+                            apiResponse.Errors.Add(new ErrorDetail() { ErrorCode = e.Key, Message = e.Message, AdditionalInfo = string.Empty });
+                        }
+                        apiResponse.APIResponse = default(Response);
+                    }
+                    else
+                    {
+                        if (session.TraceSerialization) deserializer.TraceWriter = session.NewtonSoftTrace;
+                        apiResponse.APIResponse = (Response)deserializer.Deserialize(new StreamReader(respStream), t);
+                    }
                 }
-                return new ShippingAPIResponse<Response> { HttpStatus = httpResponseMessage.StatusCode,APIResponse = resp };
+                ProcessResponseAttributes<Response>(apiResponse.APIResponse, httpResponseMessage.Headers);
             }
             else
-                return new ShippingAPIResponse<Response>() { HttpStatus = httpResponseMessage.StatusCode, APIResponse = default(Response) };
+            {
+                apiResponse.Errors.Add(new ErrorDetail() { ErrorCode = "HTTP " + httpResponseMessage.Version + " " + httpResponseMessage.StatusCode.ToString(), Message = httpResponseMessage.ReasonPhrase });
+            }
+            return apiResponse;
         }
 
         static void DeserializationError(object sender, Newtonsoft.Json.Serialization.ErrorEventArgs e)

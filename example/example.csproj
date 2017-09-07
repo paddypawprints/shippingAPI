@@ -2,11 +2,21 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp1.1</TargetFramework>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>TRACE;DEBUG;NETCOREAPP2_0,NETCORE</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\shippingapi.csproj" />
+    <ProjectReference Include="..\src\shippingapi.core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="AddressParser.Core">
+      <HintPath>..\..\..\Users\patrick\Documents\Visual Studio 2017\Projects\AddressParser.Core\AddressParser.Core\bin\Debug\netcoreapp2.0\AddressParser.Core.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

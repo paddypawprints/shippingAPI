@@ -1,15 +1,11 @@
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 
-namespace com.pb.shippingapi.model
+
+namespace PitneyBowes.Developer.ShippingApi.Model
 {
-    public class ShipmentOptions
+    public class ShipmentOptions : IShipmentOptions
     {
-        [JsonProperty("name")]
-        [JsonConverter(typeof(StringEnumConverter))]
-        public ShipmentOption ShipmentOption { get; set;}
-        [JsonProperty("value")]
-        public string Value { get;set;}
-
+        virtual public ShipmentOption ShipmentOption { get; set;}
+        virtual public string Value { get;set;}
     }
+
 }

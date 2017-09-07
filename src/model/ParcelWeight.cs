@@ -1,16 +1,10 @@
 
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 
-namespace com.pb.shippingapi.model
+namespace PitneyBowes.Developer.ShippingApi.Model
 {
-    public class ParcelWeight
+    public class ParcelWeight : IParcelWeight
     {
-        [JsonProperty("weight")]
-        public decimal Weight { get; set;}
-        [JsonProperty("unitOfMeasurement")]
-        [JsonConverter(typeof(StringEnumConverter))]
-        public UnitOfWeight UnitOfMeasurement { get; set;}
-
+        virtual public decimal Weight { get; set;}
+        virtual public UnitOfWeight UnitOfMeasurement { get; set;}
     }
 }

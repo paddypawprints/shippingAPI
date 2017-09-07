@@ -1,24 +1,22 @@
  using System;
- using Newtonsoft.Json;
- using Newtonsoft.Json.Converters; 
+
+
  
- 
- namespace com.pb.shippingapi.model
+ namespace PitneyBowes.Developer.ShippingApi.Model
  {
-    public class Token
+    public class Token : IToken
     {
-        [JsonProperty(PropertyName="access_token")]
-        public string AccessToken {get;set;}
-        [JsonProperty(PropertyName="tokenType")]
-        public string TokenType {get;set;}
-        [JsonProperty(PropertyName="issuedAt")]
-        [JsonConverter(typeof(UnixMillisecondsTimeConverter))] 
-        public DateTimeOffset IssuedAt { get;set;}
-        [JsonProperty(PropertyName="expiresIn")]
-        public long ExpiresIn {get;set;}
-        [JsonProperty(PropertyName="clientID")]
-        public string ClientID { get;set;}
-        [JsonProperty(PropertyName="org")]
-        public string Org { get;set;}
+
+        virtual public string AccessToken {get;set;}
+
+        virtual public string TokenType {get;set;}
+
+        virtual public DateTimeOffset IssuedAt { get;set;}
+
+        virtual public long ExpiresIn {get;set;}
+
+        virtual public string ClientID { get;set;}
+
+        virtual public string Org { get;set;}
     }
  }

@@ -1,33 +1,32 @@
-using Newtonsoft.Json;
+
 using System.Collections.Generic;
-using System;
-using com.pb.shippingapi.model;
+using PitneyBowes.Developer.ShippingApi.Model;
 
 
-namespace com.pb.shippingapi.fluent
+namespace PitneyBowes.Developer.ShippingApi.Fluent
 {
-    public class ShipmentOptionsArrayFluent : List<ShipmentOptions>
+    public class ShipmentOptionsArrayFluent<T> : List<T> where T : class, IShipmentOptions, new()
     {
-        public static ShipmentOptionsArrayFluent Create()
+        public static ShipmentOptionsArrayFluent<T> Create()
         {
-            return new ShipmentOptionsArrayFluent();
+            return new ShipmentOptionsArrayFluent<T>();
         }
-        protected ShipmentOptions _current = null;
+        protected T _current = null;
 
-        public ShipmentOptionsArrayFluent Add()
+        public ShipmentOptionsArrayFluent<T> Add() 
         {
-            Add(new ShipmentOptions());
+            Add(new T());
             _current = FindLast((x) => true);
             return this;
         }
 
-        public ShipmentOptionsArrayFluent First()
+        public ShipmentOptionsArrayFluent<T> First()
         {
             _current = Find((x) => true);
             return this;
         }
 
-        public ShipmentOptionsArrayFluent Next()
+        public ShipmentOptionsArrayFluent<T> Next()
         {
             var i = IndexOf(_current);
             _current = this[i + 1];
@@ -39,7 +38,7 @@ namespace com.pb.shippingapi.fluent
             var i = IndexOf(_current);
             return (i == Count - 1);
         }
-        public ShipmentOptionsArrayFluent Option(ShipmentOption option, string value ) 
+        public ShipmentOptionsArrayFluent<T> Option(ShipmentOption option, string value ) 
         {
             _current.ShipmentOption = option;
             _current.Value = value;

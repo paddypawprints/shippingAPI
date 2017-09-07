@@ -1,12 +1,21 @@
-using Newtonsoft.Json;
 
-namespace com.pb.shippingapi.model
+namespace PitneyBowes.Developer.ShippingApi.Model
 {
-    public class Parameter
+    public class Parameter : IParameter
     {
-        [JsonProperty("name")]
-        public string Name {get;set;}
-        [JsonProperty("value")]
-        public string Value {get;set;}
+        public Parameter()
+        {
+        }
+
+        public Parameter( string name, string value)
+        {
+            Name = name;
+            Value = value;
+        }
+
+        virtual public string Name {get;set;}
+
+        virtual public string Value {get;set;}
     }
+
 }

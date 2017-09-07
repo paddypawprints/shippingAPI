@@ -1,16 +1,16 @@
 using System;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using com.pb.shippingapi.model;
+using PitneyBowes.Developer.ShippingApi.Json;
 using System.Text;
 using System.Net;
 
 
-namespace com.pb.shippingapi
+namespace PitneyBowes.Developer.ShippingApi
 {
 
     [JsonObject(MemberSerialization.OptIn)]
-    internal class TokenRequest : IShippingApiRequest
+    internal class TokenRequest : IShippingApiRequest, IDisposable
     {
         [JsonProperty(PropertyName="grant_type")]
         public string GrantType {get;set;}
@@ -36,10 +36,16 @@ namespace com.pb.shippingapi
             UrlHelper.Encode( Authorization, buffer );
             buffer.Initialize();
         }
+
+        public void Dispose()
+        {
+            Authorization.Clear();
+        }
+
     }
     public static class TokenExtensions
     {
-        public static bool Expired(this Token t)
+        public static bool Expired(this Model.Token t)
         {
             return DateTimeOffset.Now >= t.IssuedAt.AddSeconds(t.ExpiresIn);
         }
@@ -47,23 +53,21 @@ namespace com.pb.shippingapi
 
     public static class TokenMethods
     {
-        public static async Task<ShippingAPIResponse<Token>> token(ShippingApi.Session session = null )
+#pragma warning disable IDE1006 // Naming Styles
+        public static async Task<ShippingAPIResponse<T>> token<T>(ShippingApi.Session session = null) where T : IToken, new()
+
+#pragma warning restore IDE1006 // Naming Styles
         {
-            var request = new TokenRequest();
-             try
+            using (var request = new TokenRequest())
             {
                 if (session == null) session = ShippingApi.DefaultSession;
                 request.BasicAuth(session.GetConfigItem("ApiKey"), session.GetAPISecret());
-                var response =  await WebMethod.Post<Token, TokenRequest>("/oauth/token", request, session );
-                if (response.HttpStatus == HttpStatusCode.OK)
+                var jsonResponse = await WebMethod.Post<PitneyBowes.Developer.ShippingApi.Json.JsonToken<T>, TokenRequest>("/oauth/token", request, session);
+                if (jsonResponse.HttpStatus == HttpStatusCode.OK)
                 {
-                    session.AuthToken = response.APIResponse;
+                    session.AuthToken = jsonResponse.APIResponse;
                 }
-                return response;
-            }
-            finally
-            {
-                request.Authorization.Clear();
+                return new ShippingAPIResponse<T>() { APIResponse = jsonResponse.APIResponse.Wrapped, Errors = jsonResponse.Errors, HttpStatus = jsonResponse.HttpStatus, Success = jsonResponse.Success };
             }
         }
     }

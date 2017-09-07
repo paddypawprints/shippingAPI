@@ -1,63 +1,50 @@
-using Newtonsoft.Json;
-using com.pb.shippingapi.model;
+using System;
+using PitneyBowes.Developer.ShippingApi.Model;
 
-namespace com.pb.shippingapi.fluent
+namespace PitneyBowes.Developer.ShippingApi.Fluent
 {
-    public class ParcelFluent
+    public class ParcelFluent<T> where T : IParcel, new()
     {
-        private Parcel _parcel;
+        private IParcel _parcel;
 
-        public static ParcelFluent Create()
+        public static ParcelFluent<T> Create()
         {
-            return new ParcelFluent();
-        }
-        public ParcelFluent()
-        {
-            _parcel = new Parcel();
-            _parcel.CurrencyCode = "USD";
+            var p = new ParcelFluent<T>() { _parcel = new T() };
+            p._parcel.CurrencyCode = "USD";
+            return p;
         }
 
-        public static implicit operator Parcel( ParcelFluent p)
+ 
+        private ParcelFluent()
         {
-            return p._parcel;
+         
         }
 
-        public ParcelFluent Height(decimal d, UnitOfDimension unit = UnitOfDimension.IN) 
+        public static implicit operator T( ParcelFluent<T> p)
         {
-            if (_parcel.Dimension == null) _parcel.Dimension = new ParcelDimension();
-            _parcel.Dimension.UnitOfMeasurement = unit;
-            _parcel.Dimension.Height = d;
-            return this;
+            return (T)p._parcel;
         }
-        public ParcelFluent Length(decimal d, UnitOfDimension unit = UnitOfDimension.IN) 
+
+        public ParcelFluent<T> Dimension(decimal l, decimal h, decimal w, UnitOfDimension u = UnitOfDimension.IN) 
         {
-            if (_parcel.Dimension == null) _parcel.Dimension = new ParcelDimension();
-            _parcel.Dimension.UnitOfMeasurement = unit;
-            _parcel.Dimension.Length = d;
-            return this;
-        }
-        public ParcelFluent Width(decimal d, UnitOfDimension unit = UnitOfDimension.IN) 
-        {
-            if (_parcel.Dimension == null) _parcel.Dimension = new ParcelDimension();
-            _parcel.Dimension.UnitOfMeasurement = unit;
-            _parcel.Dimension.Width = d;
+            _parcel.Dimension = new ParcelDimension() { Length = l, Height = h, Width = w, UnitOfMeasurement = u };
             return this;
         }
 
-        public ParcelFluent Weight(decimal d, UnitOfWeight unit = UnitOfWeight.OZ) 
+
+        public ParcelFluent<T> Weight(decimal d, UnitOfWeight unit = UnitOfWeight.OZ) 
        {
-            if (_parcel.Weight == null) _parcel.Weight = new model.ParcelWeight() { UnitOfMeasurement = unit};
-            _parcel.Weight.Weight = d;
+            _parcel.Weight = new ParcelWeight() { Weight = d, UnitOfMeasurement = unit };
             return this;
         }
 
-        public ParcelFluent ValueOfGoods( decimal d) 
+        public ParcelFluent<T> ValueOfGoods( decimal d) 
         { 
             _parcel.ValueOfGoods = d;
             return this;
         }
 
-        public ParcelFluent CurrencyCode( string s) 
+        public ParcelFluent<T> CurrencyCode( string s) 
         {
             _parcel.CurrencyCode = s;
             return this;

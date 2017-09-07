@@ -1,39 +1,36 @@
 
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 
-namespace com.pb.shippingapi.model
+namespace PitneyBowes.Developer.ShippingApi.Model
 {
-    public class CustomsInfo
+    public class CustomsInfo : ICustomsInfo
     {
-        [JsonProperty("reasonForExport")]
-        [JsonConverter(typeof(StringEnumConverter))]
-        public ReasonForExport ReasonForExport { get; set;}
-        [JsonProperty("reasonForExportExplanation")]
-        public string reasonForExportExplanation { get; set;}
-        [JsonProperty("comments")]
-        public string Comments { get;set;}
-        [JsonProperty("invoiceNumber")]
-        public string InvoiceNumber {get;set;}
-        [JsonProperty("importerCustomsReference")]
-        public string ImporterCustomsReference {get;set;}
-        [JsonProperty("insuredNumber")]
-        public string InsuredNumber {get;set;}
-        [JsonProperty("insuredAmount")]
-        public decimal InsuredAmount {get;set;}
-        [JsonProperty("sdrValue")]
-        public decimal SdrValue { get;set;}
-        [JsonProperty("EELPFC")]
-        public string EELPFC {get;set;}
-        [JsonProperty("fromCustomsReference")]
-        public string FromCustomsReference {get;set;}
-        [JsonProperty("customsDeclaredValue")]
-        public decimal CustomsDeclaredValue { get;set;}
-        [JsonProperty("currencyCode")]
-        public string CurrencyCode {get;set;}
-        [JsonProperty("licenseNumber")]
-        public string LicenseNumber {get;set;}
-        [JsonProperty("certificateNumber")]
-        public string CertificateNumber {get;set;}
+
+        virtual public ReasonForExport ReasonForExport { get; set;}
+
+        virtual public string reasonForExportExplanation { get; set;}
+
+        virtual public string Comments { get;set;}
+
+        virtual public string InvoiceNumber {get;set;}
+
+        virtual public string ImporterCustomsReference {get;set;}
+
+        virtual public string InsuredNumber {get;set;}
+
+        virtual public decimal InsuredAmount {get;set;}
+
+        virtual public decimal SdrValue { get;set;}
+
+        virtual public string EELPFC {get;set;}
+
+        virtual public string FromCustomsReference {get;set;}
+
+        virtual public decimal CustomsDeclaredValue { get;set;}
+
+        virtual public string CurrencyCode {get;set;}
+
+        virtual public string LicenseNumber {get;set;}
+
+        virtual public string CertificateNumber {get;set;}
     }
 }

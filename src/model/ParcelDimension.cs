@@ -1,22 +1,17 @@
 
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-
-namespace com.pb.shippingapi.model
+namespace PitneyBowes.Developer.ShippingApi.Model
 {
-    public class ParcelDimension
+    public class ParcelDimension : IParcelDimension
     {
-        [JsonProperty("length")]
-        public decimal Length { get; set;}
-        [JsonProperty("height")]
-        public decimal Height { get; set;}
-        [JsonProperty("width")]
-        public decimal Width { get;set;}
-        [JsonProperty("unitOfMeasurement")]
-        [JsonConverter(typeof(StringEnumConverter))]
-        public UnitOfDimension UnitOfMeasurement {get;set;}
-        [JsonProperty("irregularParcelGirth")]
-        public string CountryCode {get;set;}
+        virtual public decimal Length { get; set;}
+
+        virtual public decimal Height { get; set;}
+
+        virtual public decimal Width { get;set;}
+
+        virtual public UnitOfDimension UnitOfMeasurement {get;set;}
+
+        virtual public decimal IrregularParcelGirth {get;set;}
 
     }
 }

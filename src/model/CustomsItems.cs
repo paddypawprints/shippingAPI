@@ -1,22 +1,23 @@
 
-using Newtonsoft.Json;
+using System;
 
-namespace com.pb.shippingapi.model
+namespace PitneyBowes.Developer.ShippingApi.Model
 {
-    public class CustomsItems
+    public class CustomsItems : ICustomsItems
     {
-        [JsonProperty("description")]
-        public string Description { get; set;}
-        [JsonProperty("quantity")]
-        public int Quantity { get; set;}
-        [JsonProperty("unitPrice")]
-        public decimal UnitPrice { get;set;}
-        [JsonProperty("unitWeight")]
-        public ParcelWeight UnitWeight {get;set;}
-        [JsonProperty("hSTariffCode")]
-        public string HSTariffCode {get;set;}
-        [JsonProperty("originCountryCode")]
-        public string OriginCountryCode {get;set;}
-        
+
+        virtual public string Description { get; set;}
+
+        virtual public int Quantity { get; set;}
+
+        virtual public decimal UnitPrice { get;set;}
+
+        virtual public IParcelWeight UnitWeight {get;set;}
+
+        virtual public string HSTariffCode {get;set;}
+
+        virtual public string OriginCountryCode {get;set;}
+
     }
+
 }

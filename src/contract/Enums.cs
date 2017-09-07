@@ -1,7 +1,5 @@
 
-using Newtonsoft.Json;
-
-namespace com.pb.shippingapi.model
+namespace PitneyBowes.Developer.ShippingApi
 {
     public enum AddressStatus
     {
@@ -12,8 +10,8 @@ namespace com.pb.shippingapi.model
 
     public enum Carrier
     {
-        usps,
-        pbps
+        USPS,
+        PBPS
     }
     public enum CreditCardType
     {
@@ -50,6 +48,18 @@ namespace com.pb.shippingapi.model
         @return,
         abandon,
         redirect
+    }
+    public enum PackageLocation
+    {
+        FrontDoor,
+        BackDoor,
+        SideDoor,
+        KnockonDoorRingBell,
+        MailRoom,
+        Office,
+        Reception,
+        InAtMailbox,
+        Other
     }
 
     public enum PackageTypeIndicator
@@ -146,6 +156,13 @@ namespace com.pb.shippingapi.model
         SHIPPING_LABEL_RECEIPT
     }
 
+    public enum Trackable
+    {
+        TRACKABLE,
+        NON_TRACKABLE,
+        REQUIRES_TRACKABLE_SPECIAL_SERVICE
+    }
+
     public enum USPSSpecialServiceCodes
     {
         Ins,
@@ -194,5 +211,11 @@ namespace com.pb.shippingapi.model
     {
         GM,
         OZ
+    }
+    public enum TrackingStatusCode
+    {
+        InTransit,
+        Delivered,
+        Manifest
     }
 }
