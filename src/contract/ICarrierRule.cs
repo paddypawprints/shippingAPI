@@ -3,7 +3,6 @@ using System.Text;
 
 namespace PitneyBowes.Developer.ShippingApi
 {
-
     public interface ICarrierRule
     {
         string ServiceId { get; set; }

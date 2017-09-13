@@ -10,14 +10,14 @@ namespace PitneyBowes.Developer.ShippingApi.Json
 
         public JsonParcel(T t) : base(t) { }
 
-        [JsonProperty("dimension")]
+        [JsonProperty("dimension", Order = 1)]
         public IParcelDimension Dimension
         {
             get => Wrapped.Dimension;
             set { Wrapped.Dimension = value; }
         }
 
-        [JsonProperty("weight")]
+        [JsonProperty("weight", Order = 0)]
         virtual public IParcelWeight Weight
         {
             get => Wrapped.Weight;
@@ -25,14 +25,14 @@ namespace PitneyBowes.Developer.ShippingApi.Json
         }
 
         public bool ShouldSerializeValueOfGoods() { return ValueOfGoods > 0.0M;  }
-        [JsonProperty("valueOfGoods")]
+        [JsonProperty("valueOfGoods", Order = 2)]
         public decimal ValueOfGoods
         {
             get => Wrapped.ValueOfGoods;
             set { Wrapped.ValueOfGoods = value;  }
         }
         public bool ShouldSerializeCurrencyCode() { return ValueOfGoods > 0.0M; }
-        [JsonProperty("currencyCode")]
+        [JsonProperty("currencyCode", Order = 3)]
         public string CurrencyCode
         {
             get => Wrapped.CurrencyCode;

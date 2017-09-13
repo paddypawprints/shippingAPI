@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <ApplicationIcon />
+    <StartupObject />
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\..\..\..\..\..\Development\usaddress-20003\trunk\AddressParser\AddressParser.cs" Link="AddressParser.cs" />
+    <Compile Include="..\..\..\..\..\..\..\Development\usaddress-20003\trunk\AddressParser\AddressParseResult.cs" Link="AddressParseResult.cs" />
+  </ItemGroup>
+
+</Project>

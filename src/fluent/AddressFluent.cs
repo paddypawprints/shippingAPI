@@ -92,5 +92,15 @@ namespace PitneyBowes.Developer.ShippingApi.Fluent
             _address.Status = s;
             return this;
         }
+
+        public AddressFluent<T> Verify()
+        {
+            var addressResponse = AddressessMethods.VerifyAddress<T>(_address).GetAwaiter().GetResult();
+            if (addressResponse.Success)
+            {
+                _address = addressResponse.APIResponse;
+            }
+            return this;
+        }
     }
 }

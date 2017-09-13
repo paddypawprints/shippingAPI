@@ -24,7 +24,7 @@ namespace PitneyBowes.Developer.ShippingApi.Json
             set { Wrapped.TransactionDateTime = value; }
         }
         [JsonProperty("transactionType")]
-        [JsonConverter(typeof(StringEnumConverter))]
+        [JsonConverter(typeof(TransactionTypeConverter))]
         public TransactionType TransactionType
         {
             get => Wrapped.TransactionType;
@@ -55,7 +55,7 @@ namespace PitneyBowes.Developer.ShippingApi.Json
             set { Wrapped.DeveloperRatePlan = value; }
         }
         [JsonProperty("developerRateAmount")]
-        public Decimal DeveloperRateAmount
+        public Decimal? DeveloperRateAmount
         {
             get => Wrapped.DeveloperRateAmount;
             set { Wrapped.DeveloperRateAmount = value; }
@@ -91,19 +91,19 @@ namespace PitneyBowes.Developer.ShippingApi.Json
             set { Wrapped.MerchantRatePlan = value; }
         }
         [JsonProperty("merchantRate")]
-        public Decimal MerchantRate
+        public Decimal? MerchantRate
         {
             get => Wrapped.MerchantRate;
             set { Wrapped.MerchantRate = value; }
         }
         [JsonProperty("shipperPostagePaymentAccountBalance")]
-        public Decimal ShipperPostagePaymentAccountBalance
+        public Decimal? ShipperPostagePaymentAccountBalance
         {
             get => Wrapped.ShipperPostagePaymentAccountBalance;
             set { Wrapped.ShipperPostagePaymentAccountBalance = value; }
         }
         [JsonProperty("labelFee")]
-        public Decimal LabelFee
+        public Decimal? LabelFee
         {
             get => Wrapped.LabelFee;
             set { Wrapped.LabelFee = value; }
@@ -115,45 +115,45 @@ namespace PitneyBowes.Developer.ShippingApi.Json
             set { Wrapped.ParcelTrackingNumber = value; }
         }
         [JsonProperty("weightInOunces")]
-        public Decimal WeightInOunces
+        public Decimal? WeightInOunces
         {
             get => Wrapped.WeightInOunces;
             set { Wrapped.WeightInOunces = value; }
         }
         [JsonProperty("zone")]
-        public int Zone
+        public int? Zone
         {
             get => Wrapped.Zone;
             set { Wrapped.Zone = value; }
         }
         [JsonProperty("packageLengthInInches")]
-        public Decimal PackageLengthInInches
+        public Decimal? PackageLengthInInches
         {
             get => Wrapped.PackageLengthInInches;
             set { Wrapped.PackageLengthInInches = value; }
         }
         [JsonProperty("packageWidthInInches")]
-        public Decimal PackageWidthInInches
+        public Decimal? PackageWidthInInches
         {
             get => Wrapped.PackageWidthInInches;
             set { Wrapped.PackageWidthInInches = value; }
         }
         [JsonProperty("packageHeightInInches")]
-        public Decimal PackageHeightInInches
+        public Decimal? PackageHeightInInches
         {
             get => Wrapped.PackageHeightInInches;
             set { Wrapped.PackageHeightInInches = value; }
         }
         [JsonProperty("packageTypeIndicator")]
         [JsonConverter(typeof(StringEnumConverter))]
-        public PackageTypeIndicator PackageTypeIndicator
+        public PackageTypeIndicator? PackageTypeIndicator
         {
             get => Wrapped.PackageTypeIndicator;
             set { Wrapped.PackageTypeIndicator = value; }
         }
         [JsonProperty("packageType")]
         [JsonConverter(typeof(StringEnumConverter))]
-        public USPSParcelType PackageType
+        public USPSParcelType? PackageType
         {
             get => Wrapped.PackageType;
             set { Wrapped.PackageType = value; }

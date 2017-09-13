@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using System.Globalization;
 
 namespace PitneyBowes.Developer.ShippingApi
 {
@@ -108,8 +109,13 @@ namespace PitneyBowes.Developer.ShippingApi
                             }
                             else
                             {
-                                var val = propertyInfo.GetValue(request) as string;
-                                v = val ?? propertyInfo.GetValue(request).ToString();
+                                if (((Attribute)attribute).Format != null)
+                                    v = string.Format(((Attribute)attribute).Format, propertyInfo.GetValue(request));
+                                else
+                                {
+                                    var val = propertyInfo.GetValue(request) as string;
+                                    v = val ?? propertyInfo.GetValue(request).ToString();
+                                }
                             }
                         }
                         propAction( (Attribute)attribute, ((Attribute)attribute).Name, v, propertyInfo.Name);
@@ -152,6 +158,7 @@ namespace PitneyBowes.Developer.ShippingApi
                         case "Authorization": 
                             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(s, v);
                             break;
+
                         default:
                             client.DefaultRequestHeaders.Remove(s);
                             client.DefaultRequestHeaders.Add(s, v );
@@ -164,7 +171,7 @@ namespace PitneyBowes.Developer.ShippingApi
         { 
              ProcessRequestAttributes<RequestQuery,ShippingAPIResourceAttribute>(request, 
                 (a,s,v, p)=> {
-
+                    if (v == null || v.Equals(String.Empty)) return;
                     uri.Append('/');
                     UrlHelper.URLAdd( uri, s);
                     if (a.AddId)
@@ -174,7 +181,7 @@ namespace PitneyBowes.Developer.ShippingApi
                     }
                     if ( a.PathSuffix != null )
                     {
-                        UrlHelper.URLAdd(uri, (string)v);
+                        uri.Append(a.PathSuffix);
                     }
                 }
             );   
@@ -187,19 +194,22 @@ namespace PitneyBowes.Developer.ShippingApi
  
              ProcessRequestAttributes<RequestQuery, ShippingAPIQueryAttribute>(request, 
                 (a,s,v, p)=> {
-                    if (a.OmitIfEmpty && v.Equals(String.Empty)) return;
+                    if (a.OmitIfEmpty && (v == null || v.Equals(String.Empty))) return;
                     if ( !hasQuery )
-                        {
-                            uri.Append('?');
-                            hasQuery = true;
-                        }
-                        else
-                        {
-                            uri.Append(',');
-                        }
-                        UrlHelper.URLAdd( uri, s);
+                    {
+                        uri.Append('?');
+                        hasQuery = true;
+                    }
+                    else
+                    {
+                        uri.Append('&');
+                    }
+                    UrlHelper.URLAdd( uri, s);
+                    if (v != null)
+                    {
                         uri.Append('=');
-                        UrlHelper.URLAdd( uri, v);
+                        UrlHelper.URLAdd(uri, v);
+                    }
                 }
             );   
         }
@@ -232,11 +242,12 @@ namespace PitneyBowes.Developer.ShippingApi
             if ( session == null ) session = ShippingApi.DefaultSession;
             var client = session.Client(session.EndPoint );
             client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(request.ContentType));
-            client.DefaultRequestHeaders.Add("User-Agent", "Ps API Client Proxy");
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            client.DefaultRequestHeaders.Add("user-agent", "Ps API Client Proxy");
             AddRequestHeaders<Request>(client, request);
 
-            StringBuilder uriBuilder = new StringBuilder(session.EndPoint + resource);
+            StringBuilder uriBuilder = new StringBuilder(resource);
+            AddRequestResource<Request>(uriBuilder, request);
             AddRequestQuery<Request>(uriBuilder, request);
             
             HttpResponseMessage httpResponseMessage;
@@ -251,7 +262,8 @@ namespace PitneyBowes.Developer.ShippingApi
                         stream.Seek(0, SeekOrigin.Begin);
                         using (var reqContent = new StreamContent(stream))
                         {
-                            httpResponseMessage = await client.PutAsync(resource.ToString(), reqContent);
+                            reqContent.Headers.ContentType = new MediaTypeHeaderValue(request.ContentType);
+                            httpResponseMessage = await client.PutAsync(uriBuilder.ToString(), reqContent);
                         }
                     }
                 break;
@@ -263,15 +275,16 @@ namespace PitneyBowes.Developer.ShippingApi
                         stream.Seek(0, SeekOrigin.Begin);
                         using (var reqContent = new StreamContent(stream))
                         {
-                            httpResponseMessage = await client.PostAsync(resource.ToString(), reqContent);
+                            reqContent.Headers.ContentType = new MediaTypeHeaderValue(request.ContentType);
+                            httpResponseMessage = await client.PostAsync(uriBuilder.ToString(), reqContent);
                         }
                     }
                 break;
                 case HttpVerb.DELETE:
-                    httpResponseMessage = await client.DeleteAsync(resource.ToString()); 
+                    httpResponseMessage = await client.DeleteAsync(uriBuilder.ToString()); 
                     break;
                 case HttpVerb.GET:
-                    httpResponseMessage = await client.GetAsync(resource.ToString());  
+                    httpResponseMessage = await client.GetAsync(uriBuilder.ToString());  
                     break;   
                 default:
                     throw new ArgumentException(); //TODO

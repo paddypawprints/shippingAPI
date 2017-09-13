@@ -21,18 +21,21 @@ namespace PitneyBowes.Developer.ShippingApi.Json
         }
 
         [JsonProperty(PropertyName ="length", Order = 1)]
+        [JsonConverter(typeof(DecimalConverter))]
         public decimal Length
         {
             get => Wrapped.Length;
             set { Wrapped.Length = value; }
         }
         [JsonProperty(PropertyName ="height", Order = 2)]
+        [JsonConverter(typeof(DecimalConverter))]
         public decimal Height
         {
             get => Wrapped.Height;
             set { Wrapped.Height = value; }
         }
         [JsonProperty(PropertyName ="width", Order = 3)]
+        [JsonConverter(typeof(DecimalConverter))]
         public decimal Width
         {
             get => Wrapped.Width;
@@ -48,6 +51,7 @@ namespace PitneyBowes.Developer.ShippingApi.Json
         public bool ShouldSerializeIrregularParcelGirth() { return IrregularParcelGirth > 0.0M; }
 
         [JsonProperty(PropertyName ="irregularParcelGirth", Order = 4)]
+        [JsonConverter(typeof(DecimalConverter))]
         public decimal IrregularParcelGirth
         {
             get => Wrapped.IrregularParcelGirth;

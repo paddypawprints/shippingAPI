@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.16
+VisualStudioVersion = 15.0.26730.12
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "shippingapi.core", "src\shippingapi.core.csproj", "{750B2D66-900F-476A-8CB5-7127CAF75055}"
 EndProject
@@ -9,7 +9,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "example", "example\example.
 		{750B2D66-900F-476A-8CB5-7127CAF75055} = {750B2D66-900F-476A-8CB5-7127CAF75055}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenerateWrapper.core", "Tools\GenerateWrapper.core\GenerateWrapper.core.csproj", "{FC95BE84-F304-4CF0-999B-C791C4FF80B2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GenerateWrapper.core", "Tools\GenerateWrapper.core\GenerateWrapper.core.csproj", "{FC95BE84-F304-4CF0-999B-C791C4FF80B2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "OpenSource", "OpenSource", "{198BC02C-D853-46A2-8D46-1768E5EF06D0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AddressParser.Core", "OpenSource\AddressParser\AddressParser.Core\AddressParser.Core.csproj", "{59ECEFF5-54E0-4E62-86F5-2AF8D839F0F8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntervalKDTree.core", "OpenSource\IntervalKDTree.core\IntervalKDTree.core.csproj", "{6A48FA4E-2A60-415E-942B-9CE21336437E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntervalTree.core", "OpenSource\Interval-Tree\IntervalTree.core\IntervalTree.core.csproj", "{157041ED-C01F-4FE2-B12E-E812712D2F31}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,8 +65,52 @@ Global
 		{FC95BE84-F304-4CF0-999B-C791C4FF80B2}.Release|x64.Build.0 = Release|Any CPU
 		{FC95BE84-F304-4CF0-999B-C791C4FF80B2}.Release|x86.ActiveCfg = Release|Any CPU
 		{FC95BE84-F304-4CF0-999B-C791C4FF80B2}.Release|x86.Build.0 = Release|Any CPU
+		{59ECEFF5-54E0-4E62-86F5-2AF8D839F0F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59ECEFF5-54E0-4E62-86F5-2AF8D839F0F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59ECEFF5-54E0-4E62-86F5-2AF8D839F0F8}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{59ECEFF5-54E0-4E62-86F5-2AF8D839F0F8}.Debug|x64.Build.0 = Debug|Any CPU
+		{59ECEFF5-54E0-4E62-86F5-2AF8D839F0F8}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{59ECEFF5-54E0-4E62-86F5-2AF8D839F0F8}.Debug|x86.Build.0 = Debug|Any CPU
+		{59ECEFF5-54E0-4E62-86F5-2AF8D839F0F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59ECEFF5-54E0-4E62-86F5-2AF8D839F0F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59ECEFF5-54E0-4E62-86F5-2AF8D839F0F8}.Release|x64.ActiveCfg = Release|Any CPU
+		{59ECEFF5-54E0-4E62-86F5-2AF8D839F0F8}.Release|x64.Build.0 = Release|Any CPU
+		{59ECEFF5-54E0-4E62-86F5-2AF8D839F0F8}.Release|x86.ActiveCfg = Release|Any CPU
+		{59ECEFF5-54E0-4E62-86F5-2AF8D839F0F8}.Release|x86.Build.0 = Release|Any CPU
+		{6A48FA4E-2A60-415E-942B-9CE21336437E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A48FA4E-2A60-415E-942B-9CE21336437E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A48FA4E-2A60-415E-942B-9CE21336437E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{6A48FA4E-2A60-415E-942B-9CE21336437E}.Debug|x64.Build.0 = Debug|Any CPU
+		{6A48FA4E-2A60-415E-942B-9CE21336437E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6A48FA4E-2A60-415E-942B-9CE21336437E}.Debug|x86.Build.0 = Debug|Any CPU
+		{6A48FA4E-2A60-415E-942B-9CE21336437E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A48FA4E-2A60-415E-942B-9CE21336437E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A48FA4E-2A60-415E-942B-9CE21336437E}.Release|x64.ActiveCfg = Release|Any CPU
+		{6A48FA4E-2A60-415E-942B-9CE21336437E}.Release|x64.Build.0 = Release|Any CPU
+		{6A48FA4E-2A60-415E-942B-9CE21336437E}.Release|x86.ActiveCfg = Release|Any CPU
+		{6A48FA4E-2A60-415E-942B-9CE21336437E}.Release|x86.Build.0 = Release|Any CPU
+		{157041ED-C01F-4FE2-B12E-E812712D2F31}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{157041ED-C01F-4FE2-B12E-E812712D2F31}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{157041ED-C01F-4FE2-B12E-E812712D2F31}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{157041ED-C01F-4FE2-B12E-E812712D2F31}.Debug|x64.Build.0 = Debug|Any CPU
+		{157041ED-C01F-4FE2-B12E-E812712D2F31}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{157041ED-C01F-4FE2-B12E-E812712D2F31}.Debug|x86.Build.0 = Debug|Any CPU
+		{157041ED-C01F-4FE2-B12E-E812712D2F31}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{157041ED-C01F-4FE2-B12E-E812712D2F31}.Release|Any CPU.Build.0 = Release|Any CPU
+		{157041ED-C01F-4FE2-B12E-E812712D2F31}.Release|x64.ActiveCfg = Release|Any CPU
+		{157041ED-C01F-4FE2-B12E-E812712D2F31}.Release|x64.Build.0 = Release|Any CPU
+		{157041ED-C01F-4FE2-B12E-E812712D2F31}.Release|x86.ActiveCfg = Release|Any CPU
+		{157041ED-C01F-4FE2-B12E-E812712D2F31}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{59ECEFF5-54E0-4E62-86F5-2AF8D839F0F8} = {198BC02C-D853-46A2-8D46-1768E5EF06D0}
+		{6A48FA4E-2A60-415E-942B-9CE21336437E} = {198BC02C-D853-46A2-8D46-1768E5EF06D0}
+		{157041ED-C01F-4FE2-B12E-E812712D2F31} = {198BC02C-D853-46A2-8D46-1768E5EF06D0}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DF4EB9DD-C31B-4399-BF8B-686A91ABFF1D}
 	EndGlobalSection
 EndGlobal

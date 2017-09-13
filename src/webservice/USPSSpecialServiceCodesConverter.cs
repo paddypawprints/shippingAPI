@@ -16,10 +16,8 @@ namespace PitneyBowes.Developer.ShippingApi
             switch(reader.Value)
             {
                 case "liveanimal-poultry":
-                    reader.Read();
                     return USPSSpecialServiceCodes.liveanimal_poultry;
                 case "sunday-holiday":
-                    reader.Read();
                     return USPSSpecialServiceCodes.sunday_holiday;
                 default:
                     var converter = new StringEnumConverter();

@@ -17,6 +17,7 @@ namespace PitneyBowes.Developer.ShippingApi.Json
             UnitOfMeasurement = u;
         }
         [JsonProperty(PropertyName ="weight", Order = 1)]
+        [JsonConverter(typeof(DecimalConverter))]
         public decimal Weight
         {
             get => Wrapped.Weight;

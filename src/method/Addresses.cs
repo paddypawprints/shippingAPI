@@ -10,14 +10,14 @@ using Newtonsoft.Json.Converters;
 namespace PitneyBowes.Developer.ShippingApi
 {
     [JsonObject(MemberSerialization.OptIn)]
-    class AddressVerifyRequest<T> : IShippingApiRequest where T: IAddress, new()
+    public class AddressVerifyRequest<T> : IShippingApiRequest where T: IAddress, new()
     {
-        AddressVerifyRequest()
+        public AddressVerifyRequest()
         {
             Wrapped = new T();
             Suggest = null;
         }
-        AddressVerifyRequest(T t)
+        public AddressVerifyRequest(T t)
         {
             Wrapped = t;
             Suggest = null;
@@ -126,24 +126,21 @@ namespace PitneyBowes.Developer.ShippingApi
         AddressSuggestions Suggestions { get; set; }
     }
 
-    class Addresses
+    public static class AddressessMethods
     {
-        public static class AddressessMethods
+        public async static Task<ShippingAPIResponse<T>> VerifyAddress<T>(T request, ShippingApi.Session session = null) where T : IAddress, new()
         {
-
-            public async static Task<ShippingAPIResponse<T>> VerifyAddress<T>(AddressVerifyRequest<T> request, ShippingApi.Session session = null) where T : IAddress, new()
-            {
-                if (session == null) session = ShippingApi.DefaultSession;
-                return await WebMethod.Post<T, AddressVerifyRequest<T>>("/shippingservices/v1/addresses/verify", request, session);
-            }
-
-            public async static Task<ShippingAPIResponse<AddressSuggestions>> VerifySuggestAddress<T>(AddressVerifyRequest<T> request, ShippingApi.Session session = null) where T : IAddress, new()
-            {
-                if (session == null) session = ShippingApi.DefaultSession;
-                request.Suggest = true;
-                return await WebMethod.Post<AddressSuggestions, AddressVerifyRequest<T>>("/shippingservices/v1/addresses/verify-suggest", request, session);
-            }
-
+            var verifyRequest = new AddressVerifyRequest<T>(request);
+            if (session == null) session = ShippingApi.DefaultSession;
+            verifyRequest.Authorization = new StringBuilder(session.AuthToken.AccessToken);
+            return await WebMethod.Post<T, AddressVerifyRequest<T>>("/shippingservices/v1/addresses/verify", verifyRequest, session);
+        }
+        public async static Task<ShippingAPIResponse<AddressSuggestions>> VerifySuggestAddress<T>(AddressVerifyRequest<T> request, ShippingApi.Session session = null) where T : IAddress, new()
+        {
+            if (session == null) session = ShippingApi.DefaultSession;
+            request.Authorization = new StringBuilder(session.AuthToken.AccessToken);
+            request.Suggest = true;
+            return await WebMethod.Post<AddressSuggestions, AddressVerifyRequest<T>>("/shippingservices/v1/addresses/verify-suggest", request, session);
         }
     }
 }

@@ -153,7 +153,9 @@ namespace PitneyBowes.Developer.ShippingApi
         ADD_TO_MANIFEST,
         FUTURE_SHIPMENT_DATE,
         SHIPPING_LABEL_SENDER_SIGNATURE,
-        SHIPPING_LABEL_RECEIPT
+        SHIPPING_LABEL_RECEIPT,
+        SHIPPER_BASE_CHARGE,
+        SHIPPER_TOTAL_CHARGE
     }
 
     public enum Trackable

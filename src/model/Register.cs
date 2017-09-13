@@ -23,6 +23,7 @@ namespace PitneyBowes.Developer.ShippingApi.Model
             session.RegisterSerializationTypes<ISpecialServices, SpecialServices>();
             session.RegisterSerializationTypes<IToken, Token>();
             session.RegisterSerializationTypes<ITransaction, Transaction>();
+            session.RegisterSerializationTypes<ITransactionSort, TransactionSort>();
         }
     }
 }

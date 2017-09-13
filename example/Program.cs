@@ -7,6 +7,107 @@ using static PitneyBowes.Developer.ShippingApi.ShippingApi;
 
 namespace example
 {
+
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Initialize();
+
+            // Authenticate
+            var tokenResponse = TokenMethods.token<Token>().GetAwaiter().GetResult();
+
+            // Create shipment
+            var shipment = new CreateShipmentRequest<Shipment>()
+            {
+                ToAddress = (Address)AddressFluent<Address>.Create().Company("ABC Company")
+                    .Person("Rufous Sirius Canid","323 555-1212","rs.canid@gmail.com")
+                    .Residential(false)
+                    .AddressLines("643 Greenway RD")
+                    .CityTown("Boone")
+                    .StateProvince("NC")
+                    .PostalCode("28607")
+                    .CountryCode("US")
+                    .Verify() // calls the service for address validation
+            };
+
+            shipment.MinimalAddressValidation = "true";
+            shipment.ShipperRatePlan = "PP_SRP_NEWBLUE";
+
+            shipment.FromAddress = (Address)AddressFluent<Address>.Create()
+                .HeadOffice()
+                .Person("Paul Wright", "203-555-1213","john.publica@pb.com");
+
+            shipment.Parcel = (Parcel)ParcelFluent<Parcel>.Create()
+                .Dimension(12, 12, 10)
+                .Weight(16m, UnitOfWeight.OZ);
+
+            shipment.Rates = RatesArrayFluent<Rates>.Create()
+                .USPSPriority()
+                .InductionPostalCode("06484");
+
+            shipment.Documents = DocumentsArrayFluent<Document>.Create()
+                .ShippingLabel();
+
+            shipment.ShipmentOptions = ShipmentOptionsArrayFluent<ShipmentOptions>.Create()
+                .ShipperId("9014888410")
+                .AddToManifest();
+
+            shipment.TransactionId = Guid.NewGuid().ToString().Substring(15);
+
+            var label = ShipmentsMethods.CreateShipment(shipment).GetAwaiter().GetResult();
+
+            if (label.Success) Console.WriteLine(label.APIResponse.ParcelTrackingNumber);
+
+            // Transaction report
+
+            var transactionsReportRequest = new ReportRequest()
+            {
+                FromDate = DateTimeOffset.Parse("6/30/2017"),
+                ToDate = DateTimeOffset.Now,
+                DeveloperId = "46841939"
+            };
+            foreach (var t in TransactionsReport<Transaction>.Report(transactionsReportRequest, x => x.CreditCardFee == null || x.CreditCardFee > 10.0M ))
+            {
+                Console.WriteLine(t);
+            }
+
+            TransactionsReport<Transaction> report = new TransactionsReport<Transaction>("46841939");
+            var query = from transaction in report
+                        where transaction.TransactionDateTime >= DateTimeOffset.Parse("6/30/2017") && transaction.TransactionDateTime <= DateTimeOffset.Now
+                        select new { transaction.MerchantId };
+
+            foreach (var obj in query)
+                Console.WriteLine(obj);
+        }
+
+        static void ExtensionMethod()
+        {
+            Address address = AddressFluent<Address>.Create().USParse("101 Jenkins Pl, Santa Clara, CA 95051")
+                .Status(AddressStatus.NOT_CHANGED);
+        }
+        static void Initialize()
+        {
+            // Initialize framework
+            Init();
+            Model.RegisterSerializationTypes(DefaultSession);
+
+            // Configuration
+            DefaultSession = "sandbox";
+            DefaultSession.LogWarning = (s) => Console.WriteLine("Warning:" + s);
+            DefaultSession.LogError = (s) => Console.WriteLine("Error:" + s);
+            DefaultSession.LogConfigError = (s) => Console.WriteLine("Bad code:" + s);
+            DefaultSession.LogDebug = (s) => Console.WriteLine(s);
+            DefaultSession.GetAPISecret = () => "wgNEtZkNbP0iV8h0".ToCharArray();
+            AddConfigItem("ApiKey", "Ci4vEAgBP8Aww7TBwGOKhr43uKTPNyfO");
+            AddConfigItem("RatePlan", "PP_SRP_NEWBLUE");
+
+
+            DefaultSession.TraceSerialization = true;
+        }
+    }
+
     static class Extensions
     {
         public static AddressFluent<Address> USParse(this AddressFluent<Address> f, string s)
@@ -26,132 +127,54 @@ namespace example
             return f.Add().Carrier(Carrier.USPS)
                 .ParcelType(USPSParcelType.PKG)
                 .Service(USPSServices.PM)
-                .SpecialService<SpecialServices>(USPSSpecialServiceCodes.Ins, 0M, new Parameter("INPUT_VALUE", "500"))
                 .SpecialService<SpecialServices>(USPSSpecialServiceCodes.DelCon, 0M, new Parameter("INPUT_VALUE", "0"));
+        }
+
+        public static RatesArrayFluent<Rates> Insurance(this RatesArrayFluent<Rates> f, decimal amount)
+        {
+            return f.SpecialService<SpecialServices>(USPSSpecialServiceCodes.Ins, 0M, new Parameter("INPUT_VALUE", amount.ToString()));
         }
 
         public static AddressFluent<Address> HeadOffice( this AddressFluent<Address> f)
         {
-            return f.AddressLines("12FL", "3000 Summer St.")
-                .CityTown("Stamford")
+            return f.Company("Pitney Bowes Inc.")
+                .AddressLines("27 Waterview Drive")
+                .Residential(false)
+                .CityTown("Shelton")
                 .StateProvince("CT")
-                .PostalCode("05051")
+                .PostalCode("06484")
                 .CountryCode("US");
         }
-    }
 
-    class Program
-    {
-
-        static void Main(string[] args)
+        public static AddressFluent<Address> Person( this AddressFluent<Address> f, string name, string phone = null, string email = null)
         {
-            // Initialize framework
-            Init();
-            Model.RegisterSerializationTypes(DefaultSession);
+            return f.Name(name).Phone(phone).Email(email);
+        }
 
-            // Configuration
-            DefaultSession = "sandbox";
-            DefaultSession.LogWarning = (s)=> Console.WriteLine("Warning:" + s);
-            DefaultSession.LogError = (s)=> Console.WriteLine("Error:" + s);
-            DefaultSession.LogConfigError = (s) => Console.WriteLine("Bad code:" + s);
-            DefaultSession.LogDebug = (s) => Console.WriteLine( s);
-            DefaultSession.GetAPISecret = ()=> "wgNEtZkNbP0iV8h0".ToCharArray();
-            AddConfigItem("ApiKey", "Ci4vEAgBP8Aww7TBwGOKhr43uKTPNyfO");
-            AddConfigItem("RatePlan", /*"PP_SRP_CBP"*/"");
-
-
-            DefaultSession.TraceSerialization = true;
-
-
-            // Authenticate
-            var tokenResponse = TokenMethods.token<Token>().GetAwaiter().GetResult();
-
-            // Create shipment
-            var shipment = new CreateShipmentRequest<Shipment>()
-            {
-                ToAddress = (Address)AddressFluent<Address>.Create().AddressLines("101 Jenkins Place")
-                    .CityTown("Santa Clara")
-                    .StateProvince("CA")
-                    .PostalCode("95051")
-                    .CountryCode("US")
-            };
-            shipment.FromAddress = (Address)AddressFluent<Address>.Create().HeadOffice();
-
-            shipment.Parcel = (Parcel)ParcelFluent<Parcel>.Create().Dimension(12, 12, 10)
-                .Weight(16m, UnitOfWeight.OZ);
-            shipment.Rates = RatesArrayFluent<Rates>.Create().USPSPriority().InductionPostalCode("06484-4301");
-            shipment.Documents = DocumentsArrayFluent<Document>.Create().Add()
+        public static DocumentsArrayFluent<Document> ShippingLabel(this DocumentsArrayFluent<Document> f, ContentType contentType = ContentType.URL, Size size = Size.DOC_8X11, FileFormat fileFormat = FileFormat.PDF)
+        { 
+            return f.Add()
                 .DocumentType(DocumentType.SHIPPING_LABEL)
-                .ContentType(ContentType.URL)
-                .Size(Size.DOC_8X11)
-                .FileFormat(FileFormat.PDF)
-                .PrintDialogOption(PrintDialogOption.EMBED_PRINT_DIALOG);
-            shipment.ShipmentOptions = ShipmentOptionsArrayFluent<ShipmentOptions>.Create()
-                .Add().Option(ShipmentOption.SHIPPER_ID, "9014888410")
-                .Add().Option(ShipmentOption.ADD_TO_MANIFEST, "true")
-                .Add().Option(ShipmentOption.MINIMAL_ADDRESS_VALIDATION, "true");
-
-            shipment.TransactionId = Guid.NewGuid().ToString().Substring(15);
-
-            var label = ShipmentsMethods.CreateShipment(shipment).GetAwaiter().GetResult();
-
-            if (label.Success) Console.WriteLine(label.APIResponse.ParcelTrackingNumber);
-
-            // Transaction report
-
-            TransactionsReport<Transaction> report = new TransactionsReport<Transaction>();
-
-            var query = from transaction in report
-                        where transaction.TransactionDateTime > DateTimeOffset.Now
-                        select new { transaction.MerchantId };
-
-            foreach (var obj in report)
-                Console.WriteLine(obj);
+                .ContentType(contentType)
+                .Size(size)
+                .FileFormat(fileFormat)
+                .PrintDialogOption(PrintDialogOption.NO_PRINT_DIALOG);
         }
-
-        static void CreateShipmentModel()
+        public static ShipmentOptionsArrayFluent<ShipmentOptions> ShipperId(this ShipmentOptionsArrayFluent<ShipmentOptions> f, string shipperId)
         {
-            var shipment = new CreateShipmentRequest<Shipment>() { ToAddress = new Address() };
-            shipment.ToAddress.AddAddressLine("101 Jenkins Pl");
-            shipment.ToAddress.CityTown = "Santa Clara";
-            shipment.ToAddress.PostalCode = "95051";
-            shipment.ToAddress.StateProvince = "CA";
-            shipment.ToAddress.CountryCode = "US";
-            shipment.FromAddress = new Address();
-            shipment.FromAddress.AddAddressLine("12 Fl");
-            shipment.FromAddress.AddAddressLine("3000 Summer St");
-            shipment.FromAddress.CityTown = "Stamford";
-            shipment.FromAddress.PostalCode = "01235";
-            shipment.FromAddress.StateProvince = "CT";
-            shipment.FromAddress.CountryCode = "US";
-#pragma warning disable IDE0017 // Simplify object initialization
-            shipment.Parcel = new Parcel();
-#pragma warning restore IDE0017 // Simplify object initialization
-            shipment.Parcel.Weight = new ParcelWeight { Weight = 16.0M, UnitOfMeasurement = UnitOfWeight.OZ };
-            shipment.AddShipmentOptions( new ShipmentOptions() { ShipmentOption = ShipmentOption.MINIMAL_ADDRESS_VALIDATION, Value = "true"  });
-            shipment.AddShipmentOptions(new ShipmentOptions() { ShipmentOption = ShipmentOption.SHIPPER_ID, Value = "9014888410" });
-            shipment.AddShipmentOptions(new ShipmentOptions() { ShipmentOption = ShipmentOption.ADD_TO_MANIFEST, Value = "true" });
-            shipment.AddRates(new Rates() {
-                Carrier = Carrier.USPS,
-                ParcelType = USPSParcelType.PKG,
-                ServiceId = USPSServices.PM,
-            }).AddSpecialservices(new SpecialServices() { SpecialServiceId = USPSSpecialServiceCodes.DelCon}).AddParameter(new Parameter("INPUT_VALUE", "0"));
-            shipment.AddDocument( new Document() { FileFormat = FileFormat.PDF, Size = Size.DOC_8X11, PrintDialogOption = PrintDialogOption.NO_PRINT_DIALOG, Type = DocumentType.SHIPPING_LABEL });
-            shipment.TransactionId = Guid.NewGuid().ToString().Substring(15);
-
-            var label = ShipmentsMethods.CreateShipment<Shipment>(shipment).GetAwaiter().GetResult();
-
-            Console.WriteLine(label.APIResponse.ParcelTrackingNumber);
-
+            return f.Add().Option(ShipmentOption.SHIPPER_ID, shipperId);
         }
-
-        static void ExtensionMethod()
+        public static ShipmentOptionsArrayFluent<ShipmentOptions> AddToManifest(this ShipmentOptionsArrayFluent<ShipmentOptions> f)
         {
-            Address address = AddressFluent<Address>.Create().USParse("101 Jenkins Pl, Santa Clara, CA 95051")
-                .Status(AddressStatus.NOT_CHANGED);
+            return f.Add().Option(ShipmentOption.ADD_TO_MANIFEST, "true");
         }
-
-
-
+        public static ShipmentOptionsArrayFluent<ShipmentOptions> MinimalAddressvalidation(this ShipmentOptionsArrayFluent<ShipmentOptions> f)
+        {
+            return f.Add().Option(ShipmentOption.MINIMAL_ADDRESS_VALIDATION, "true");
+        }
+        public static ShipmentOptionsArrayFluent<ShipmentOptions> AddOption(this ShipmentOptionsArrayFluent<ShipmentOptions> f, ShipmentOption option, string value)
+        {
+            return f.Add().Option(option, value);
+        }
     }
 }

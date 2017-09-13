@@ -10,13 +10,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\OpenSource\AddressParser\AddressParser.Core\AddressParser.Core.csproj" />
     <ProjectReference Include="..\src\shippingapi.core.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="AddressParser.Core">
-      <HintPath>..\..\..\Users\patrick\Documents\Visual Studio 2017\Projects\AddressParser.Core\AddressParser.Core\bin\Debug\netcoreapp2.0\AddressParser.Core.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>

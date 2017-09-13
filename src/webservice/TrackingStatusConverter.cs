@@ -16,7 +16,6 @@ namespace PitneyBowes.Developer.ShippingApi
             switch (reader.Value)
             {
                 case "In Transit":
-                    reader.Read();
                     return TrackingStatusCode.InTransit;
                 default:
                     var converter = new StringEnumConverter();

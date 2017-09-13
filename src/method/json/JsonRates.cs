@@ -11,28 +11,28 @@ namespace PitneyBowes.Developer.ShippingApi.Json
 
         public JsonRates(T t) : base(t) { }
 
-        [JsonProperty("carrier")]
+        [JsonProperty("carrier", Order =0)]
         [JsonConverter(typeof(StringEnumConverter))]
         public Carrier Carrier
         {
             get => Wrapped.Carrier;
             set { Wrapped.Carrier = value; }
         }
-        [JsonProperty("serviceId")]
+        [JsonProperty("serviceId", Order = 4)]
         [JsonConverter(typeof(StringEnumConverter))]
         public USPSServices ServiceId
         {
             get => Wrapped.ServiceId;
             set { Wrapped.ServiceId = value; }
         }
-        [JsonProperty("parcelType")]
+        [JsonProperty("parcelType", Order = 1)]
         [JsonConverter(typeof(StringEnumConverter))]
         public USPSParcelType ParcelType
         {
             get => Wrapped.ParcelType;
             set { Wrapped.ParcelType = value; }
         }
-        [JsonProperty("specialServices")]
+        [JsonProperty("specialServices", Order = 3)]
         public IEnumerable<ISpecialServices> SpecialServices
         {
             get => Wrapped.SpecialServices;
@@ -44,7 +44,7 @@ namespace PitneyBowes.Developer.ShippingApi.Json
             return Wrapped.AddSpecialservices(s);
         }
 
-        [JsonProperty("inductionPostalCode")]
+        [JsonProperty("inductionPostalCode", Order = 2)]
         public string InductionPostalCode
         {
             get => Wrapped.InductionPostalCode;

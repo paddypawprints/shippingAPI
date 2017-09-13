@@ -133,6 +133,7 @@ namespace PitneyBowes.Developer.ShippingApi
                 WrapperRegistry.Add(typeof(IParameter), typeof(JsonParameter<>));
                 WrapperRegistry.Add(typeof(IShipment), typeof(JsonShipment<>));
                 WrapperRegistry.Add(typeof(ITransaction), typeof(JsonTransaction<>));
+                WrapperRegistry.Add(typeof(ITransactionSort), typeof(JsonTransactionSort<>));
             }
         }
 

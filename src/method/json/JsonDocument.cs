@@ -13,34 +13,34 @@ namespace PitneyBowes.Developer.ShippingApi.Json
         public JsonDocument(T t) : base(t) { }
 
         [JsonConverter(typeof(StringEnumConverter))]
-        [JsonProperty("type")]
+        [JsonProperty("type", Order = 2)]
         public DocumentType Type
         {
             get => Wrapped.Type;
             set { Wrapped.Type = value;  }
         }
-        [JsonProperty("size")]
+        [JsonProperty("size", Order = 0)]
         [JsonConverter(typeof(StringEnumConverter))]
         public Size Size
         {
             get => Wrapped.Size;
             set { Wrapped.Size = value; }
         }
-        [JsonProperty("fileFormat")]
+        [JsonProperty("fileFormat", Order = 4)]
         [JsonConverter(typeof(StringEnumConverter))]
         public FileFormat FileFormat
         {
             get;
             set;
         }
-        [JsonProperty("contentType")]
+        [JsonProperty("contentType", Order = 3)]
         [JsonConverter(typeof(StringEnumConverter))]
         public ContentType ContentType
         {
             get => Wrapped.ContentType;
             set { Wrapped.ContentType = value; }
         }
-        [JsonProperty("printDialogOption")]
+        [JsonProperty("printDialogOption", Order = 1)]
         [JsonConverter(typeof(StringEnumConverter))]
         public PrintDialogOption PrintDialogOption
         {

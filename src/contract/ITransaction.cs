@@ -13,23 +13,23 @@ namespace PitneyBowes.Developer.ShippingApi
         string DeveloperId { get; set; }
         string DeveloperPostagePaymentMethod { get; set; }
         string DeveloperRatePlan { get; set; }
-        decimal DeveloperRateAmount { get; set; }
+        decimal? DeveloperRateAmount { get; set; }
         decimal? DeveloperPostagePaymentAccountBalance { get; set; }
         string MerchantName { get; set; }
         string MerchantId { get; set; }
         string MerchantPostageAccountPaymentMethod { get; set; }
         string MerchantRatePlan { get; set; }
-        decimal MerchantRate { get; set; }
-        decimal ShipperPostagePaymentAccountBalance { get; set; }
-        decimal LabelFee { get; set; }
+        decimal? MerchantRate { get; set; }
+        decimal? ShipperPostagePaymentAccountBalance { get; set; }
+        decimal? LabelFee { get; set; }
         string ParcelTrackingNumber { get; set; }
-        decimal WeightInOunces { get; set; }
-        int Zone { get; set; }
-        decimal PackageLengthInInches { get; set; }
-        decimal PackageWidthInInches { get; set; }
-        decimal PackageHeightInInches { get; set; }
-        PackageTypeIndicator PackageTypeIndicator { get; set; }
-        USPSParcelType PackageType { get; set; }
+        decimal? WeightInOunces { get; set; }
+        int? Zone { get; set; }
+        decimal? PackageLengthInInches { get; set; }
+        decimal? PackageWidthInInches { get; set; }
+        decimal? PackageHeightInInches { get; set; }
+        PackageTypeIndicator? PackageTypeIndicator { get; set; }
+        USPSParcelType? PackageType { get; set; }
         string MailClass { get; set; }
         string InternationalCountryPriceGroup { get; set; }
         string OriginationAddress { get; set; }

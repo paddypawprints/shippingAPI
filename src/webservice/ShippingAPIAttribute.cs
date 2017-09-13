@@ -5,6 +5,7 @@ namespace PitneyBowes.Developer.ShippingApi
     public class ShippingAPIAttribute : Attribute
     {
         public string Name { get;set; }
+        public string Format { get; set; }
         public ShippingAPIAttribute(string name)
         {
             Name = name;
@@ -15,7 +16,6 @@ namespace PitneyBowes.Developer.ShippingApi
     public class ShippingAPIHeaderAttribute : ShippingAPIAttribute
     {
         public bool OmitIfEmpty { get; set; }
-
         public ShippingAPIHeaderAttribute(string name, bool omitIfEmpty = true) : base(name)
         {
             OmitIfEmpty = omitIfEmpty;

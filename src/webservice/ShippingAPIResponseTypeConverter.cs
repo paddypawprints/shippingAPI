@@ -24,7 +24,7 @@ namespace PitneyBowes.Developer.ShippingApi
                     _failed = (token != JsonToken.StartObject);
                     break;
                 case 2:
-                    if (token == JsonToken.String)
+                    if (token == JsonToken.PropertyName)
                     {
                         if (((string)value).Equals("errorCode"))
                         {
@@ -34,16 +34,7 @@ namespace PitneyBowes.Developer.ShippingApi
                         {
                             return typeof(ErrorFormat3);
                         }
-                        else if (((string)value).Equals("countryCode"))
-                        {
-                            return typeof(IEnumerable<ICountry>);
-                        }
-                        else if (((string)value).Equals("serviceId"))
-                        {
-                            return typeof(IEnumerable<ICarrierRule>);
-                        }
-
-                        else _failed = true;
+                        else return defaultType;
                     }
                     break;
                 default:
