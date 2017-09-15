@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using System.IO;
 using Newtonsoft.Json.Converters;
 
 
@@ -18,7 +19,27 @@ namespace PitneyBowes.Developer.ShippingApi
         [ShippingAPIQuery("originCountryCode")]
         public string OriginCountryCode { get; set; }
 
-        public string ContentType { get => "application/json"; set => throw new NotImplementedException(); }
+        public string GetUri(string baseUrl)
+        {
+            StringBuilder uri = new StringBuilder(baseUrl);
+            ShippingApiRequest.AddRequestResource(this, uri);
+            ShippingApiRequest.AddRequestQuery(this, uri);
+            return uri.ToString();
+        }
+
+        public IEnumerable<Tuple<ShippingAPIHeaderAttribute, string, string>> GetHeaders()
+        {
+            return ShippingApiRequest.GetHeaders(this);
+        }
+
+        public void SerializeBody(StreamWriter writer, ShippingApi.Session session)
+        {
+            ShippingApiRequest.SerializeBody(this, writer, session);
+        }
+
+        [JsonProperty("destinationZone")]
+
+        public string ContentType => "application/json";
 
         [ShippingAPIHeader("Bearer")]
         public StringBuilder Authorization { get; set; }

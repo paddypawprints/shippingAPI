@@ -24,6 +24,13 @@ namespace PitneyBowes.Developer.ShippingApi.Model
             session.RegisterSerializationTypes<IToken, Token>();
             session.RegisterSerializationTypes<ITransaction, Transaction>();
             session.RegisterSerializationTypes<ITransactionSort, TransactionSort>();
+            session.RegisterSerializationTypes<IPickup, Pickup>();
+            session.RegisterSerializationTypes<IPickupCount, PickupCount>();
+            session.RegisterSerializationTypes<IUserInfo, UserInfo>();
+            session.RegisterSerializationTypes<IPaymentInfo, PaymentInfo>();
+            session.RegisterSerializationTypes<IPpPaymentDetails, PpPaymentDetails>();
+            session.RegisterSerializationTypes<ICcPaymentDetails, CcPaymentDetails>();
+            session.RegisterSerializationTypes<IAutoRefill, AutoRefill>();
         }
     }
 }

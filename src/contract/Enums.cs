@@ -68,6 +68,14 @@ namespace PitneyBowes.Developer.ShippingApi
         NonCubic
     }
 
+    public enum PaymentType
+    {
+        POSTAGE_AND_SUBSCRIPTION,
+        SUBSCRIPTION,
+        POSTAGE
+    }
+
+
     public enum USPSParcelType
     {
         FRE,
@@ -91,12 +99,8 @@ namespace PitneyBowes.Developer.ShippingApi
         PAYPAL,
         PurchasePower
     }
-    public enum PaymentType
-    {
-        POSTAGE,
-        POSTAGE_AND_SUBSCRIPTION,
-        SUBSCRIPTION
-    }
+
+
     public enum PrintDialogOption 
     {
         NO_PRINT_DIALOG,

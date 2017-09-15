@@ -1,3 +1,6 @@
+using System;
+using System.Text;
+using System.IO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System.Collections.Generic;
@@ -9,11 +12,14 @@ namespace PitneyBowes.Developer.ShippingApi.Json
     /// </summary>
    
     [JsonObject(MemberSerialization.OptIn)]
-    public class JsonAddress<T> : JsonWrapper<T>, IAddress where T : IAddress, new()
+    public class JsonAddress<T> : JsonWrapper<T>, IAddress, IShippingApiRequest where T : IAddress, new()
     {
         public JsonAddress() : base() {}
 
         public JsonAddress(T t) : base(t) {}
+
+        [ShippingAPIQuery("returnSuggestions", true)]
+        public bool? Suggest { get; set; }
 
         [JsonProperty("addressLines", Order = 5)]
         public IEnumerable<string> AddressLines
@@ -87,5 +93,29 @@ namespace PitneyBowes.Developer.ShippingApi.Json
             get => Wrapped.Status;
             set { Wrapped.Status = value; }
         }
+
+        public string ContentType { get => "application/json"; }
+
+        [ShippingAPIHeader("Bearer")]
+        public StringBuilder Authorization { get; set; }
+
+        public string GetUri(string baseUrl)
+        {
+            StringBuilder uri = new StringBuilder(baseUrl);
+            ShippingApiRequest.AddRequestResource(this, uri);
+            ShippingApiRequest.AddRequestQuery(this, uri);
+            return uri.ToString();
+        }
+
+        public IEnumerable<Tuple<ShippingAPIHeaderAttribute, string, string>> GetHeaders()
+        {
+            return ShippingApiRequest.GetHeaders(this);
+        }
+
+        public void SerializeBody(StreamWriter writer, ShippingApi.Session session)
+        {
+            ShippingApiRequest.SerializeBody(this, writer, session);
+        }
+
     }
 }

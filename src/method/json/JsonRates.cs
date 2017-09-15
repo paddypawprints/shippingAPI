@@ -1,11 +1,14 @@
+using System;
+using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System.Collections.Generic;
+using System.IO;
 
 namespace PitneyBowes.Developer.ShippingApi.Json
 {
     [JsonObject(MemberSerialization.OptIn)]
-    public class JsonRates<T> : JsonWrapper<T>, IRates where T:IRates, new()
+    public class JsonRates<T> : JsonWrapper<T>, IShippingApiRequest, IRates where T:IRates, new()
     {
         public JsonRates() : base() { }
 
@@ -105,11 +108,34 @@ namespace PitneyBowes.Developer.ShippingApi.Json
         }
         public bool ShouldSerializeDestinationZone() => false;
 
+        public string GetUri(string baseUrl)
+        {
+            StringBuilder uri = new StringBuilder(baseUrl);
+            ShippingApiRequest.AddRequestResource(this, uri);
+            ShippingApiRequest.AddRequestQuery(this, uri);
+            return uri.ToString();
+        }
+
+        public IEnumerable<Tuple<ShippingAPIHeaderAttribute, string, string>> GetHeaders()
+        {
+            return ShippingApiRequest.GetHeaders(this);
+        }
+
+        public void SerializeBody(StreamWriter writer, ShippingApi.Session session)
+        {
+            ShippingApiRequest.SerializeBody(this, writer, session);
+        }
+
         [JsonProperty("destinationZone")]
         public int DestinationZone
         {
             get => Wrapped.DestinationZone;
             set { Wrapped.DestinationZone = value; }
         }
+
+        public string ContentType => "application/json";
+
+        [ShippingAPIHeader("Bearer")]
+        public StringBuilder Authorization { get; set; }
     }
 }

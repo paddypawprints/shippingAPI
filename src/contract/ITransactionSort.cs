@@ -4,6 +4,7 @@ using System.Text;
 
 namespace PitneyBowes.Developer.ShippingApi
 {
+    [CodeGeneration(GenerateJsonWrapper = true, GenerateModel = false)]
     public interface ITransactionSort
     {
         string Ascending { get; set; }

@@ -10,31 +10,42 @@ namespace PitneyBowes.Developer.ShippingApi
 {
 
     [JsonObject(MemberSerialization.OptIn)]
-    internal class TokenRequest : IShippingApiRequest, IDisposable
+    internal class TokenRequest : ShippingApiRequest, IDisposable
     {
         [JsonProperty(PropertyName="grant_type")]
-        public string GrantType {get;set;}
+        public string GrantType {get => "client_credentials";}
 
         [ShippingAPIHeader("Basic")]
-        public StringBuilder Authorization {get;set;}
-        [ShippingAPIHeader("ContentType")]
-        public string ContentType {get;set;}
+        public override StringBuilder  Authorization {get;set;}
 
-        public TokenRequest()
-        {
-            GrantType = "client_credentials";
-            ContentType = "application/x-www-form-urlencoded";
-            Authorization = new StringBuilder();
-        }
-        public void BasicAuth(string key, char[] secret )
+
+        public override string ContentType  => "application/x-www-form-urlencoded"; 
+
+        public void BasicAuth(string key, char[] secret ) //TODO: make this better
         {
             var authHeader = new StringBuilder();
             authHeader.Append( key).Append(':').Append( secret);
             var buffer = new char[authHeader.Length];
             authHeader.CopyTo(0, buffer, 0, buffer.Length);
             authHeader.Clear();
-            UrlHelper.Encode( Authorization, buffer );
+            var bytes = Encoding.UTF8.GetBytes( buffer );
+            var base64array = new char[(bytes.Length * 4) / 3 + 10];
+            Convert.ToBase64CharArray(bytes, 0, bytes.Length, base64array, 0);
+            if (Authorization == null) Authorization = new StringBuilder(base64array.Length);
+            else Authorization.Clear();
+            bool firstEqual = false;
+            foreach( var c in base64array)
+            {
+                Authorization.Append(c);
+                if (c == '=') // end with 2 = chars
+                {
+                    if (firstEqual) break;
+                    firstEqual = true;
+                }
+            }
+            bytes.Initialize();
             buffer.Initialize();
+            base64array.Initialize();
         }
 
         public void Dispose()

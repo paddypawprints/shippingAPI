@@ -70,13 +70,13 @@ namespace example
             };
             foreach (var t in TransactionsReport<Transaction>.Report(transactionsReportRequest, x => x.CreditCardFee == null || x.CreditCardFee > 10.0M ))
             {
-                Console.WriteLine(t);
+                Console.WriteLine(t.DestinationAddress);
             }
 
             TransactionsReport<Transaction> report = new TransactionsReport<Transaction>("46841939");
             var query = from transaction in report
                         where transaction.TransactionDateTime >= DateTimeOffset.Parse("6/30/2017") && transaction.TransactionDateTime <= DateTimeOffset.Now
-                        select new { transaction.MerchantId };
+                        select new { transaction.DestinationCountry };
 
             foreach (var obj in query)
                 Console.WriteLine(obj);

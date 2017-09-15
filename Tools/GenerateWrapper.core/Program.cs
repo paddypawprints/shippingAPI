@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using System.Text;
 using System.IO;
 using PitneyBowes.Developer.ShippingApi;
 
@@ -33,24 +34,29 @@ namespace GenerateWrapper.core
                     var ifTypeName = "PitneyBowes.Developer.ShippingApi.I" + baseName;
                     var ifType = assembly.GetType(ifTypeName);
 
-                    var modelPath = path + @"model\" + baseName + ".cs";
-                    if (ifType != null && !File.Exists(modelPath))
+                    if (ifType != null)
                     {
-                        using (var modelStream = new FileStream(modelPath, FileMode.OpenOrCreate))
-                        using (var modelWriter = new StreamWriter(modelStream))
+                        var modelPath = path + @"model\" + baseName + ".cs";
+                        var c = ifType.GetCustomAttribute<CodeGenerationAttribute>();
+                        if ((c == null || c.GenerateModel) && !File.Exists(modelPath))
                         {
-                            GenerateModel(ifType, s => modelWriter.WriteLine(s));
+                            using (var modelStream = new FileStream(modelPath, FileMode.OpenOrCreate))
+                            using (var modelWriter = new StreamWriter(modelStream))
+                            {
+
+                                GenerateModel(ifType, s => modelWriter.WriteLine(s));
+                            }
                         }
-                    }
 
-                    var jsonPath = path + @"method\json\Json" + baseName + ".cs";
+                        var jsonPath = path + @"method\json\Json" + baseName + ".cs";
 
-                    if (ifType != null && !File.Exists(jsonPath))
-                    {
-                        using (var jsonStream = new FileStream(jsonPath, FileMode.OpenOrCreate))
-                        using (var jsonWriter = new StreamWriter(jsonStream))
+                        if ((c == null || c.GenerateJsonWrapper) && !File.Exists(jsonPath))
                         {
-                            GenerateWrapper(ifType, s => jsonWriter.WriteLine(s));
+                            using (var jsonStream = new FileStream(jsonPath, FileMode.OpenOrCreate))
+                            using (var jsonWriter = new StreamWriter(jsonStream))
+                            {
+                                GenerateWrapper(ifType, s => jsonWriter.WriteLine(s));
+                            }
                         }
                     }
                 }
@@ -68,26 +74,41 @@ namespace GenerateWrapper.core
 
         private static string TypeName( Type t)
         {
-            var tName = t.Name;
+            var tName = new StringBuilder();
             bool nullable = false;
             if ((t.GetTypeInfo().IsValueType && (Nullable.GetUnderlyingType(t) != null)))
             {
                 nullable = true;
-                tName = Nullable.GetUnderlyingType(t).Name;
+                tName.Append(TypeName(Nullable.GetUnderlyingType(t)));
             }
-            switch (tName)
+            else if (t.IsGenericType)
             {
-                case "String":
-                    tName = "string";
-                    break;
-                case "Int32":
-                    tName = "int";
-                    break;
-                default:
-                    break;
+                tName.Append(t.Name.Substring(t.Name.IndexOf('`'))); // drop the `1 after the type name
+                tName.Append('<');
+                foreach (var gt in t.GenericTypeArguments) tName.Append(TypeName(gt));
+                tName.Append('>');
+                return tName.ToString();
             }
-            if (nullable) tName += "?";
-            return tName;
+            else
+            {
+                switch (t.Name.ToString())
+                {
+                    case "String":
+                        tName.Append("string");
+                        break;
+                    case "Int32":
+                        tName.Append("int");
+                        break;
+                    case "Decimal":
+                        tName.Append("decimal");
+                        break;
+                    default:
+                        tName.Append(t.Name);
+                        break;
+                }
+            }
+            if (nullable) tName.Append("?");
+            return tName.ToString();
         }
 
         static void GenerateModel(Type intf, Action<string> writer)

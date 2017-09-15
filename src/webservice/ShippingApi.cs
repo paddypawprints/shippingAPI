@@ -31,6 +31,8 @@ namespace PitneyBowes.Developer.ShippingApi
     {
         public class Session
         {
+            internal IHttpRequest Requestor { get; set; } // to allow mocking
+
             public static implicit operator Session(string name)
             {
                 return ShippingApi._defaultSessions[name];
@@ -109,8 +111,8 @@ namespace PitneyBowes.Developer.ShippingApi
                 _defaultConfigs.Add("SANDBOX_ENDPOINT", "https://api-sandbox.pitneybowes.com");
                 _defaultConfigs.Add("PRODUCTION_ENDPOINT", "https://api-sandbox.pitneybowes.com");
 
-                var sandbox = new Session() { Name = "sandbox", EndPoint = GetConfigItem("SANDBOX_ENDPOINT")};
-                var production = new Session() { Name= "production", EndPoint = GetConfigItem("PRODUCTION_ENDPOINT")};
+                var sandbox = new Session() { Name = "sandbox", EndPoint = GetConfigItem("SANDBOX_ENDPOINT"), Requestor = new ShippingApiHttpRequest()};
+                var production = new Session() { Name= "production", EndPoint = GetConfigItem("PRODUCTION_ENDPOINT"), Requestor = new ShippingApiHttpRequest() };
                 _defaultSessions.Add("sandbox", sandbox );
                 _defaultSessions.Add("production", production );
                 DefaultSession = sandbox;
@@ -134,6 +136,13 @@ namespace PitneyBowes.Developer.ShippingApi
                 WrapperRegistry.Add(typeof(IShipment), typeof(JsonShipment<>));
                 WrapperRegistry.Add(typeof(ITransaction), typeof(JsonTransaction<>));
                 WrapperRegistry.Add(typeof(ITransactionSort), typeof(JsonTransactionSort<>));
+                WrapperRegistry.Add(typeof(IPickup), typeof(JsonPickup<>));
+                WrapperRegistry.Add(typeof(IPickupCount), typeof(JsonPickupCount<>));
+                WrapperRegistry.Add(typeof(IUserInfo), typeof(JsonUserInfo<>));
+                WrapperRegistry.Add(typeof(IPaymentInfo), typeof(JsonPaymentInfo<>));
+                WrapperRegistry.Add(typeof(IPpPaymentDetails), typeof(JsonPpPaymentDetails<>));
+                WrapperRegistry.Add(typeof(ICcPaymentDetails), typeof(JsonCcPaymentDetails<>));
+                WrapperRegistry.Add(typeof(IAutoRefill), typeof(JsonAutoRefill<>));
             }
         }
 

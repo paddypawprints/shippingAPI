@@ -3,18 +3,20 @@ using Newtonsoft.Json;
 using PitneyBowes.Developer.ShippingApi.Json;
 using System.Text;
 using System.Collections.Generic;
+using System;
+using System.IO;
 
 namespace PitneyBowes.Developer.ShippingApi
 {
     [JsonObject(MemberSerialization.OptIn)]
     public class CreateShipmentRequest<T> : JsonWrapper<T>, IShippingApiRequest where T:IShipment, new()
-    {
+    { 
 
         [ShippingAPIHeader("x-pb-transactionId", true)]
         public string TransactionId { get; set; }
 
         [ShippingAPIHeader("ContentType", true)]
-        public string ContentType { get; set; }
+        public string ContentType { get => "application/json"; }
 
         [ShippingAPIHeader("Bearer", true)]
         public StringBuilder Authorization { get; set; }
@@ -80,26 +82,36 @@ namespace PitneyBowes.Developer.ShippingApi
         {
             return Wrapped.AddShipmentOptions(s);
         }
+
+        public string GetUri(string baseUrl)
+        {
+            return baseUrl;
+        }
+
+        public IEnumerable<Tuple<ShippingAPIHeaderAttribute, string, string>> GetHeaders()
+        {
+            return ShippingApiRequest.GetHeaders(this);
+        }
+
+        public void SerializeBody(StreamWriter writer, ShippingApi.Session session)
+        {
+            ShippingApiRequest.SerializeBody(this, writer, session);
+        }
+
         [JsonProperty("customs")]
         public ICustoms Customs
         {
             get => Wrapped.Customs;
             set { Wrapped.Customs = value; }
         }
-
-        public CreateShipmentRequest()
-        {
-            ContentType = "application/json";
-        }
     }
 
     [JsonObject(MemberSerialization.OptIn)]
-    public class CancelShipmentRequest : IShippingApiRequest
+    public class CancelShipmentRequest : ShippingApiRequest
     {
-        [ShippingAPIHeader("ContentType")]
-        public string ContentType { get; set; }
+        public override string ContentType { get => "application/json"; }
         [ShippingAPIHeader("Bearer")]
-        public StringBuilder Authorization { get; set; }
+        public override StringBuilder Authorization { get; set; }
         [ShippingAPIHeader("X-PB-TransactionId")]
         public string TransactionId {get;set;}
         [ShippingAPIResource("shipments")]
@@ -109,10 +121,6 @@ namespace PitneyBowes.Developer.ShippingApi
         [JsonProperty("cancelInitiator")]
         public string CancelInitiator {get;set;}
 
-        public CancelShipmentRequest() 
-        {
-            ContentType="application/json";
-        }
     }
    public class CancelShipmentResponse 
     {
@@ -130,23 +138,17 @@ namespace PitneyBowes.Developer.ShippingApi
     }
 
     [JsonObject(MemberSerialization.OptIn)]
-    public class ReprintShipmentRequest : IShippingApiRequest
+    public class ReprintShipmentRequest : ShippingApiRequest
     {
-        [ShippingAPIHeader("ContentType")]
-        public string ContentType { get; set; }
+        public override string ContentType { get => "application/json"; }
         [ShippingAPIHeader("Bearer")]
-        public StringBuilder Authorization { get; set; }
+        public override StringBuilder Authorization { get; set; }
         [ShippingAPIResource("shipments")]
         public string ShipmentToCancel {get;set;}
         [JsonProperty("carrier")]
         public string Carrier;
         [JsonProperty("cancelInitiator")]
         public string CancelInitiator;
-        public ReprintShipmentRequest() 
-        {
-            ContentType="application/json";
-        }
-
     }
 
 
