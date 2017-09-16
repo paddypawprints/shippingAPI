@@ -87,7 +87,7 @@ namespace PitneyBowes.Developer.ShippingApi.Json
             ShippingApiRequest.AddRequestQuery(this, uri);
             return uri.ToString();
         }
-        public IEnumerable<Tuple<ShippingAPIHeaderAttribute, string, string>> GetHeaders()
+        public IEnumerable<Tuple<ShippingApiHeaderAttribute, string, string>> GetHeaders()
         {
             return ShippingApiRequest.GetHeaders(this);
         }
@@ -99,7 +99,7 @@ namespace PitneyBowes.Developer.ShippingApi.Json
 
         public string ContentType => "application/json";
 
-        [ShippingAPIHeader("Bearer")]
+        [ShippingApiHeaderAttribute("Bearer")]
         public StringBuilder Authorization { get; set; }
 
     }

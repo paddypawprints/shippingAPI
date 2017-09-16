@@ -15,7 +15,7 @@ namespace PitneyBowes.Developer.ShippingApi
         [JsonProperty(PropertyName="grant_type")]
         public string GrantType {get => "client_credentials";}
 
-        [ShippingAPIHeader("Basic")]
+        [ShippingApiHeaderAttribute("Basic")]
         public override StringBuilder  Authorization {get;set;}
 
 
@@ -65,7 +65,7 @@ namespace PitneyBowes.Developer.ShippingApi
     public static class TokenMethods
     {
 #pragma warning disable IDE1006 // Naming Styles
-        public static async Task<ShippingAPIResponse<T>> token<T>(ShippingApi.Session session = null) where T : IToken, new()
+        public static async Task<ShippingApiResponse<T>> token<T>(ShippingApi.Session session = null) where T : IToken, new()
 
 #pragma warning restore IDE1006 // Naming Styles
         {
@@ -78,7 +78,7 @@ namespace PitneyBowes.Developer.ShippingApi
                 {
                     session.AuthToken = jsonResponse.APIResponse;
                 }
-                return new ShippingAPIResponse<T>() { APIResponse = jsonResponse.APIResponse.Wrapped, Errors = jsonResponse.Errors, HttpStatus = jsonResponse.HttpStatus, Success = jsonResponse.Success };
+                return new ShippingApiResponse<T>() { APIResponse = jsonResponse.APIResponse.Wrapped, Errors = jsonResponse.Errors, HttpStatus = jsonResponse.HttpStatus, Success = jsonResponse.Success };
             }
         }
     }

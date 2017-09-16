@@ -46,18 +46,18 @@ namespace PitneyBowes.Developer.ShippingApi.Fluent
             return this;
         }
 
-        public RatesArrayFluent<T> Service(USPSServices s) 
+        public RatesArrayFluent<T> Service(Services s) 
         {
             _current.ServiceId = s;
             return this;
         }
-        public RatesArrayFluent<T> ParcelType(USPSParcelType t) 
+        public RatesArrayFluent<T> ParcelType(ParcelType t) 
         {
             _current.ParcelType = t;
             return this;
         }
 
-        public RatesArrayFluent<T> SpecialService<S>(USPSSpecialServiceCodes c, decimal f, params IParameter[] parameters) where S:ISpecialServices, new()
+        public RatesArrayFluent<T> SpecialService<S>(SpecialServiceCodes c, decimal f, params IParameter[] parameters) where S:ISpecialServices, new()
         {
             var s = new S() { SpecialServiceId = c, Fee = f };
 

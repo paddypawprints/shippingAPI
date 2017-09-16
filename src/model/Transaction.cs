@@ -27,7 +27,7 @@ namespace PitneyBowes.Developer.ShippingApi.Model
         public Decimal? PackageWidthInInches { get; set; }
         public Decimal? PackageHeightInInches { get; set; }
         public PackageTypeIndicator? PackageTypeIndicator { get; set; }
-        public USPSParcelType? PackageType { get; set; }
+        public ParcelType? PackageType { get; set; }
         public string MailClass { get; set; }
         public string InternationalCountryPriceGroup { get; set; }
         public string OriginationAddress { get; set; }

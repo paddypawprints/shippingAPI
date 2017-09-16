@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 
 namespace PitneyBowes.Developer.ShippingApi
 {
-    public class ReplaceQueryWithResultSetModifier<TResult, TReport> : ExpressionVisitor
+    internal class ReplaceQueryWithResultSetModifier<TResult, TReport> : ExpressionVisitor
     {
         private TReport _queryableTransactions;
 

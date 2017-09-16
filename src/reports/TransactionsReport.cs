@@ -13,29 +13,29 @@ namespace PitneyBowes.Developer.ShippingApi
 
     public class ReportRequest : ShippingApiRequest, IReportRequest
     {
-        [ShippingAPIResource("developers", true, PathSuffix ="/transactions/reports")]
+        [ShippingApiResource("developers", true, PathSuffix ="/transactions/reports")]
         public string DeveloperId { get; set; }
-        [ShippingAPIQuery("fromDate",Format = "{0:yyyy-MM-ddTHH:mm:ssZ}")]
+        [ShippingApiQuery("fromDate",Format = "{0:yyyy-MM-ddTHH:mm:ssZ}")]
         public DateTimeOffset FromDate { get; set; }
-        [ShippingAPIQuery("toDate",Format = "{0:yyyy-MM-ddTHH:mm:ssZ}")]
+        [ShippingApiQuery("toDate",Format = "{0:yyyy-MM-ddTHH:mm:ssZ}")]
         public DateTimeOffset ToDate { get; set; }
-        [ShippingAPIQuery("transactionId", true)]
+        [ShippingApiQuery("transactionId", true)]
         public string TransactionId { get; set; }
-        [ShippingAPIQuery("parcelTrackingNumber", true)]
+        [ShippingApiQuery("parcelTrackingNumber", true)]
         public string ParcelTrackingNumber { get; set; }
-        [ShippingAPIQuery("merchantId", true)]
+        [ShippingApiQuery("merchantId", true)]
         public string MerchantId { get; set; }
-        [ShippingAPIQuery("transactionType", true)]
+        [ShippingApiQuery("transactionType", true)]
         public TransactionType? TransactionType { get; set; }
-        [ShippingAPIQuery("size", true)]
+        [ShippingApiQuery("size", true)]
         public int? PageSize { get; set; }
-        [ShippingAPIQuery("page", true)]
+        [ShippingApiQuery("page", true)]
         public int Page { get; set; }
-        [ShippingAPIQuery("sort", true)]
+        [ShippingApiQuery("sort", true)]
         public string Sort { get; set; }
-        [ShippingAPIHeader("Bearer")]
+        [ShippingApiHeaderAttribute("Bearer")]
         public override StringBuilder Authorization { get; set; }
-        [ShippingAPIHeader("Accept-Language")]
+        [ShippingApiHeaderAttribute("Accept-Language")]
         public string AcceptLanguage { get; set; }
         public override string ContentType { get => "application/json";}
 
@@ -91,7 +91,7 @@ namespace PitneyBowes.Developer.ShippingApi
             _session = session;
         }
 
-        public async static Task<ShippingAPIResponse<TransactionPageResponse>> TransactionPage(ReportRequest request, ShippingApi.Session session = null)
+        public async static Task<ShippingApiResponse<TransactionPageResponse>> TransactionPage(ReportRequest request, ShippingApi.Session session = null)
         {
             if (session == null) session = ShippingApi.DefaultSession;
             request.Authorization = new StringBuilder(session.AuthToken.AccessToken);
@@ -145,7 +145,7 @@ namespace PitneyBowes.Developer.ShippingApi
         }
     }
 
-    public class ReportRequestFinder : RequestFinderVisitor<ReportRequest, Transaction>
+    internal class ReportRequestFinder : RequestFinderVisitor<ReportRequest, Transaction>
     {
         protected override Expression VisitBinary(BinaryExpression be)
         {

@@ -29,14 +29,14 @@ namespace PitneyBowes.Developer.ShippingApi
 
     public static class AddressessMethods
     {
-        public async static Task<ShippingAPIResponse<T>> VerifyAddress<T>(T request, ShippingApi.Session session = null) where T : IAddress, new()
+        public async static Task<ShippingApiResponse<T>> VerifyAddress<T>(T request, ShippingApi.Session session = null) where T : IAddress, new()
         {
             var verifyRequest = new JsonAddress<T>(request);
             if (session == null) session = ShippingApi.DefaultSession;
             verifyRequest.Authorization = new StringBuilder(session.AuthToken.AccessToken);
             return await WebMethod.Post<T, JsonAddress<T>>("/shippingservices/v1/addresses/verify", verifyRequest, session);
         }
-        public async static Task<ShippingAPIResponse<AddressSuggestions>> VerifySuggestAddress<T>(JsonAddress<T> request, ShippingApi.Session session = null) where T : IAddress, new()
+        public async static Task<ShippingApiResponse<AddressSuggestions>> VerifySuggestAddress<T>(JsonAddress<T> request, ShippingApi.Session session = null) where T : IAddress, new()
         {
             if (session == null) session = ShippingApi.DefaultSession;
             request.Authorization = new StringBuilder(session.AuthToken.AccessToken);

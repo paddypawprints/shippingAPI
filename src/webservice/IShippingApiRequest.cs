@@ -10,7 +10,7 @@ namespace PitneyBowes.Developer.ShippingApi
         string ContentType {get;}
         StringBuilder Authorization {get;set;}
         string GetUri(string baseUrl);
-        IEnumerable<Tuple<ShippingAPIHeaderAttribute, string, string>> GetHeaders();
+        IEnumerable<Tuple<ShippingApiHeaderAttribute, string, string>> GetHeaders();
         void SerializeBody(StreamWriter writer, ShippingApi.Session session);
     }
 }

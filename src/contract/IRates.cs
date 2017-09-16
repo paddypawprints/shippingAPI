@@ -6,8 +6,8 @@ namespace PitneyBowes.Developer.ShippingApi
     public interface IRates
     {
         Carrier Carrier { get; set; }
-        USPSServices ServiceId { get; set; }
-        USPSParcelType ParcelType { get; set; }
+        Services ServiceId { get; set; }
+        ParcelType ParcelType { get; set; }
         IEnumerable<ISpecialServices> SpecialServices { get; set; }
         ISpecialServices AddSpecialservices(ISpecialServices s);
         string InductionPostalCode { get; set; }

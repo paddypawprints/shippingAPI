@@ -11,7 +11,7 @@ namespace PitneyBowes.Developer.ShippingApi
 
     public static class RatesMethods
     {
-        public async static Task<ShippingAPIResponse<T>> Rates<T>(T request, ShippingApi.Session session = null) where T : IRates, new()
+        public async static Task<ShippingApiResponse<T>> Rates<T>(T request, ShippingApi.Session session = null) where T : IRates, new()
         {
             var ratesRequest = new JsonRates<T>(request);
             if (session == null) session = ShippingApi.DefaultSession;

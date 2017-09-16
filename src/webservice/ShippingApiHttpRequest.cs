@@ -8,7 +8,7 @@ namespace PitneyBowes.Developer.ShippingApi
 {
     internal class ShippingApiHttpRequest : IHttpRequest
     {
-        internal static void AddRequestHeaders(HttpClient client, ShippingAPIHeaderAttribute attribute, string propValue, string propName)
+        internal static void AddRequestHeaders(HttpClient client, ShippingApiHeaderAttribute attribute, string propValue, string propName)
         {
             if (attribute.OmitIfEmpty && (propValue == null || propValue.Equals(String.Empty))) return;
             switch (propName)
@@ -24,11 +24,11 @@ namespace PitneyBowes.Developer.ShippingApi
             }
         }
 
-        public async Task<ShippingAPIResponse<Response>> HttpRequest<Response, Request>(string resource, HttpVerb verb, Request request, ShippingApi.Session session = null) where Request : IShippingApiRequest
+        public async Task<ShippingApiResponse<Response>> HttpRequest<Response, Request>(string resource, HttpVerb verb, Request request, ShippingApi.Session session = null) where Request : IShippingApiRequest
         {
             return await HttpRequestStatic<Response, Request>(resource, verb, request, session);
         }
-        internal async static Task<ShippingAPIResponse<Response>> HttpRequestStatic<Response, Request>(string resource, HttpVerb verb, Request request, ShippingApi.Session session = null) where Request : IShippingApiRequest
+        internal async static Task<ShippingApiResponse<Response>> HttpRequestStatic<Response, Request>(string resource, HttpVerb verb, Request request, ShippingApi.Session session = null) where Request : IShippingApiRequest
         {
             if (session == null) session = ShippingApi.DefaultSession;
             var client = session.Client(session.EndPoint);
@@ -45,7 +45,7 @@ namespace PitneyBowes.Developer.ShippingApi
             return await HttpRequest<Response, Request>(verb, request, session, client, uriBuilder);
         }
 
-        private static async Task<ShippingAPIResponse<Response>> HttpRequest<Response, Request>(HttpVerb verb, Request request, ShippingApi.Session session, HttpClient client, string uriBuilder) where Request : IShippingApiRequest
+        private static async Task<ShippingApiResponse<Response>> HttpRequest<Response, Request>(HttpVerb verb, Request request, ShippingApi.Session session, HttpClient client, string uriBuilder) where Request : IShippingApiRequest
         {
             HttpResponseMessage httpResponseMessage;
 
@@ -79,8 +79,8 @@ namespace PitneyBowes.Developer.ShippingApi
             {
                 if (httpResponseMessage.IsSuccessStatusCode)
                 {
-                    var apiResponse = new ShippingAPIResponse<Response> { HttpStatus = httpResponseMessage.StatusCode, Success = httpResponseMessage.IsSuccessStatusCode };
-                    ShippingAPIResponse<Response>.Deserialize(session, respStream, apiResponse);
+                    var apiResponse = new ShippingApiResponse<Response> { HttpStatus = httpResponseMessage.StatusCode, Success = httpResponseMessage.IsSuccessStatusCode };
+                    ShippingApiResponse<Response>.Deserialize(session, respStream, apiResponse);
                     foreach (var h in httpResponseMessage.Headers)
                     {
                         apiResponse.ProcessResponseAttribute(h.Key, h.Value);
@@ -90,7 +90,7 @@ namespace PitneyBowes.Developer.ShippingApi
                 }
                 else
                 {
-                    var apiResponse = new ShippingAPIResponse<Response> { HttpStatus = httpResponseMessage.StatusCode, Success = httpResponseMessage.IsSuccessStatusCode };
+                    var apiResponse = new ShippingApiResponse<Response> { HttpStatus = httpResponseMessage.StatusCode, Success = httpResponseMessage.IsSuccessStatusCode };
 
                     apiResponse.Errors.Add(new ErrorDetail() { ErrorCode = "HTTP " + httpResponseMessage.Version + " " + httpResponseMessage.StatusCode.ToString(), Message = httpResponseMessage.ReasonPhrase });
                     return apiResponse;

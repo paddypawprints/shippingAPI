@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 
 namespace PitneyBowes.Developer.ShippingApi
 {
-    public class ShippingAPIResponse<Response>
+    public class ShippingApiResponse<Response>
     {
         public void ProcessResponseAttribute(string propName, IEnumerable<string> values)
         {
@@ -15,9 +15,9 @@ namespace PitneyBowes.Developer.ShippingApi
             if (propertyInfo == null) return;
             foreach (object attribute in propertyInfo.GetCustomAttributes(true))
             {
-                if (attribute is ShippingAPIHeaderAttribute)
+                if (attribute is ShippingApiHeaderAttribute)
                 {
-                    var sa = attribute as ShippingAPIHeaderAttribute;
+                    var sa = attribute as ShippingApiHeaderAttribute;
                     var v = new StringBuilder();
                     bool firstValue = true;
                     foreach (var value in values)
@@ -29,7 +29,7 @@ namespace PitneyBowes.Developer.ShippingApi
                 }
             }
         }
-        public static explicit operator Response(ShippingAPIResponse<Response> r)
+        public static explicit operator Response(ShippingApiResponse<Response> r)
         {
             return r.APIResponse;
         }
@@ -45,14 +45,14 @@ namespace PitneyBowes.Developer.ShippingApi
         }
 
 
-        public static void Deserialize(ShippingApi.Session session, Stream respStream, ShippingAPIResponse<Response> apiResponse)
+        public static void Deserialize(ShippingApi.Session session, Stream respStream, ShippingApiResponse<Response> apiResponse)
         {
             var deserializer = new JsonSerializer();
             deserializer.Error += DeserializationError;
-            deserializer.ContractResolver = new ShippingAPIContractResolver();
-            ((ShippingAPIContractResolver)deserializer.ContractResolver).Session = session;
+            deserializer.ContractResolver = new ShippingApiContractResolver();
+            ((ShippingApiContractResolver)deserializer.ContractResolver).Session = session;
 
-            JsonConverter converter = new ShippingAPIResponseTypeConverter<Response>();
+            JsonConverter converter = new ShippingApiResponseTypeConverter<Response>();
             Type t = (Type)converter.ReadJson(new JsonTextReader(new StreamReader(respStream)), typeof(Type), null, deserializer);
             respStream.Seek(0, SeekOrigin.Begin);
             if (t == typeof(ErrorFormat1))

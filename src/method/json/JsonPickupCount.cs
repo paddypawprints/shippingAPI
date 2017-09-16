@@ -13,7 +13,7 @@ namespace PitneyBowes.Developer.ShippingApi.Json
 
         [JsonProperty("serviceId")]
         [JsonConverter(typeof(StringEnumConverter))]
-        public USPSServices ServiceId
+        public Services ServiceId
         {
             get => Wrapped.ServiceId;
             set { Wrapped.ServiceId = value; }

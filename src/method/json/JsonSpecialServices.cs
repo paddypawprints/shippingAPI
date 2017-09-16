@@ -12,14 +12,14 @@ namespace PitneyBowes.Developer.ShippingApi.Json
 
         public JsonSpecialServices(T t) : base(t) { }
 
-        public JsonSpecialServices(USPSSpecialServiceCodes c) : base()
+        public JsonSpecialServices(SpecialServiceCodes c) : base()
         {
             Wrapped.SpecialServiceId = c;
         }
 
         [JsonProperty("specialServiceId")]
         [JsonConverter(typeof(StringEnumConverter))]
-        public USPSSpecialServiceCodes SpecialServiceId
+        public SpecialServiceCodes SpecialServiceId
         {
             get => Wrapped.SpecialServiceId;
             set { Wrapped.SpecialServiceId = value; }

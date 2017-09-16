@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace PitneyBowes.Developer.ShippingApi
 {
-    class DecimalConverter : JsonConverter
+    internal class DecimalConverter : JsonConverter
     {
         public override bool CanConvert(Type objectType)
         {

@@ -6,8 +6,8 @@ namespace PitneyBowes.Developer.ShippingApi.Model
     public class Rates : IRates
     {
         virtual public Carrier Carrier { get; set;}
-        virtual public USPSServices ServiceId { get;set;}
-        virtual public USPSParcelType ParcelType { get; set;}
+        virtual public Services ServiceId { get;set;}
+        virtual public ParcelType ParcelType { get; set;}
         virtual public IEnumerable<ISpecialServices> SpecialServices { get; set; }
         virtual public ISpecialServices AddSpecialservices( ISpecialServices s)
         {

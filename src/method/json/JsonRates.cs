@@ -23,14 +23,14 @@ namespace PitneyBowes.Developer.ShippingApi.Json
         }
         [JsonProperty("serviceId", Order = 4)]
         [JsonConverter(typeof(StringEnumConverter))]
-        public USPSServices ServiceId
+        public Services ServiceId
         {
             get => Wrapped.ServiceId;
             set { Wrapped.ServiceId = value; }
         }
         [JsonProperty("parcelType", Order = 1)]
         [JsonConverter(typeof(StringEnumConverter))]
-        public USPSParcelType ParcelType
+        public ParcelType ParcelType
         {
             get => Wrapped.ParcelType;
             set { Wrapped.ParcelType = value; }
@@ -116,7 +116,7 @@ namespace PitneyBowes.Developer.ShippingApi.Json
             return uri.ToString();
         }
 
-        public IEnumerable<Tuple<ShippingAPIHeaderAttribute, string, string>> GetHeaders()
+        public IEnumerable<Tuple<ShippingApiHeaderAttribute, string, string>> GetHeaders()
         {
             return ShippingApiRequest.GetHeaders(this);
         }
@@ -135,7 +135,7 @@ namespace PitneyBowes.Developer.ShippingApi.Json
 
         public string ContentType => "application/json";
 
-        [ShippingAPIHeader("Bearer")]
+        [ShippingApiHeaderAttribute("Bearer")]
         public StringBuilder Authorization { get; set; }
     }
 }

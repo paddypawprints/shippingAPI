@@ -6,7 +6,7 @@ namespace PitneyBowes.Developer.ShippingApi
 {
     internal static class TypeSystem
     {
-        internal static Type GetElementType(Type seqType)
+        public static Type GetElementType(Type seqType)
         {
             Type ienum = FindIEnumerable(seqType);
             if (ienum == null) return seqType;

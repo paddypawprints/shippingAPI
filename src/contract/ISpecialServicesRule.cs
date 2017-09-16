@@ -11,7 +11,7 @@ namespace PitneyBowes.Developer.ShippingApi
         bool Trackable { get; set; }
         IEnumerable<IServicesParameterRule> InputParameterRules { get; set; }
         IEnumerable<IServicesPrerequisiteRule> PrerequisiteRules { get; set; }
-        IEnumerable<USPSSpecialServiceCodes> IncompatibleSpecialServices { get; set; }
+        IEnumerable<SpecialServiceCodes> IncompatibleSpecialServices { get; set; }
     }
 }
 

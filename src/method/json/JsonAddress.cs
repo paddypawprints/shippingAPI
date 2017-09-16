@@ -18,7 +18,7 @@ namespace PitneyBowes.Developer.ShippingApi.Json
 
         public JsonAddress(T t) : base(t) {}
 
-        [ShippingAPIQuery("returnSuggestions", true)]
+        [ShippingApiQuery("returnSuggestions", true)]
         public bool? Suggest { get; set; }
 
         [JsonProperty("addressLines", Order = 5)]
@@ -96,7 +96,7 @@ namespace PitneyBowes.Developer.ShippingApi.Json
 
         public string ContentType { get => "application/json"; }
 
-        [ShippingAPIHeader("Bearer")]
+        [ShippingApiHeaderAttribute("Bearer")]
         public StringBuilder Authorization { get; set; }
 
         public string GetUri(string baseUrl)
@@ -107,7 +107,7 @@ namespace PitneyBowes.Developer.ShippingApi.Json
             return uri.ToString();
         }
 
-        public IEnumerable<Tuple<ShippingAPIHeaderAttribute, string, string>> GetHeaders()
+        public IEnumerable<Tuple<ShippingApiHeaderAttribute, string, string>> GetHeaders()
         {
             return ShippingApiRequest.GetHeaders(this);
         }

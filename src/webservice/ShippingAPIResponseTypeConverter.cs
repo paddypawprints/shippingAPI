@@ -4,13 +4,13 @@ using System.Collections.Generic;
 
 namespace PitneyBowes.Developer.ShippingApi
 {
-    abstract internal class ShippingAPITypeDetector
+    abstract internal class ShippingApiTypeDetector
     {
         protected bool _failed = false;
         abstract public Type NextToken(int i, JsonToken token, object value, Type defaultType = null);
     }
 
-    class ArrayTypeDetector : ShippingAPITypeDetector
+    internal class ArrayTypeDetector : ShippingApiTypeDetector
     {
         public override Type NextToken(int i, JsonToken token, object value, Type defaultType = null)
         {
@@ -44,7 +44,7 @@ namespace PitneyBowes.Developer.ShippingApi
             return null;
         }
     }
-    class ObjectTypeDetector : ShippingAPITypeDetector
+    internal class ObjectTypeDetector : ShippingApiTypeDetector
     {
         public override Type NextToken(int i, JsonToken token, object value, Type defaultType = null)
         {
@@ -79,16 +79,16 @@ namespace PitneyBowes.Developer.ShippingApi
         }
     }
 
-    internal class ShippingAPIResponseTypeConverter<Response> : JsonConverter
+    internal class ShippingApiResponseTypeConverter<Response> : JsonConverter
     {
         // chain of responsibility - easy to add new types. Make it config item if necessary.
-        public List<ShippingAPITypeDetector> Detectors { get; set; }
+        public List<ShippingApiTypeDetector> Detectors { get; set; }
 
         public const int MAX_TOKENS = 10;
 
-        public ShippingAPIResponseTypeConverter()
+        public ShippingApiResponseTypeConverter()
         {
-            Detectors = new List<ShippingAPITypeDetector>() { new ArrayTypeDetector(), new ObjectTypeDetector() };
+            Detectors = new List<ShippingApiTypeDetector>() { new ArrayTypeDetector(), new ObjectTypeDetector() };
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)

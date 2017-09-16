@@ -125,14 +125,14 @@ namespace example
         public static RatesArrayFluent<Rates> USPSPriority(this RatesArrayFluent<Rates> f)
         {
             return f.Add().Carrier(Carrier.USPS)
-                .ParcelType(USPSParcelType.PKG)
-                .Service(USPSServices.PM)
-                .SpecialService<SpecialServices>(USPSSpecialServiceCodes.DelCon, 0M, new Parameter("INPUT_VALUE", "0"));
+                .ParcelType(ParcelType.PKG)
+                .Service(Services.PM)
+                .SpecialService<SpecialServices>(SpecialServiceCodes.DelCon, 0M, new Parameter("INPUT_VALUE", "0"));
         }
 
         public static RatesArrayFluent<Rates> Insurance(this RatesArrayFluent<Rates> f, decimal amount)
         {
-            return f.SpecialService<SpecialServices>(USPSSpecialServiceCodes.Ins, 0M, new Parameter("INPUT_VALUE", amount.ToString()));
+            return f.SpecialService<SpecialServices>(SpecialServiceCodes.Ins, 0M, new Parameter("INPUT_VALUE", amount.ToString()));
         }
 
         public static AddressFluent<Address> HeadOffice( this AddressFluent<Address> f)

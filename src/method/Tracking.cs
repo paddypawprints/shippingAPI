@@ -12,22 +12,22 @@ namespace PitneyBowes.Developer.ShippingApi
     {
         public override string ContentType { get => "application/json"; }
 
-        [ShippingAPIHeader("Bearer")]
+        [ShippingApiHeaderAttribute("Bearer")]
         public override StringBuilder Authorization { get; set; }
 
-        [ShippingAPIResource("tracking", AddId = true)]
+        [ShippingApiResource("tracking", AddId = true)]
         public string TrackingNumber { get; set; }
 
-        [ShippingAPIQuery("packageIdentifierType")]
+        [ShippingApiQuery("packageIdentifierType")]
         public string PackageIdentifierType { get => "ParcelTrackingNumber"; }
     
-        [ShippingAPIQuery("carrier")]
+        [ShippingApiQuery("carrier")]
         Carrier Carrier { get; set; }
     }
 
     public static class TrackingMethods
     {
-        public async static Task<ShippingAPIResponse<T>> Tracking<T>(TrackingRequest request, ShippingApi.Session session = null) where T : IRates, new()
+        public async static Task<ShippingApiResponse<T>> Tracking<T>(TrackingRequest request, ShippingApi.Session session = null) where T : IRates, new()
         {
             if (session == null) session = ShippingApi.DefaultSession;
             request.Authorization = new StringBuilder(session.AuthToken.AccessToken);

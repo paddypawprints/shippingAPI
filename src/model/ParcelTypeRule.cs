@@ -8,7 +8,7 @@ namespace PitneyBowes.Developer.ShippingApi.Model
     public class ParcelTypeRule : IParcelTypeRule
     {
 
-        public USPSParcelType ParcelType{get; set;}
+        public ParcelType ParcelType{get; set;}
         public string BrandedName{get; set;}
         public string RateTypeId{get; set;}
         public string RateTypeBrandedName{get; set;}

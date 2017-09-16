@@ -30,7 +30,7 @@ namespace PitneyBowes.Developer.ShippingApi
         decimal? PackageWidthInInches { get; set; }
         decimal? PackageHeightInInches { get; set; }
         PackageTypeIndicator? PackageTypeIndicator { get; set; }
-        USPSParcelType? PackageType { get; set; }
+        ParcelType? PackageType { get; set; }
         string MailClass { get; set; }
         string InternationalCountryPriceGroup { get; set; }
         string OriginationAddress { get; set; }

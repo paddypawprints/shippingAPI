@@ -17,7 +17,7 @@ namespace PitneyBowes.Developer.ShippingApi
         public abstract string ContentType {get;}
         public abstract StringBuilder Authorization { get; set; }
 
-        private static void ProcessRequestAttributes<Attribute>(object o, Action<Attribute, string, string, string> propAction) where Attribute : ShippingAPIAttribute
+        private static void ProcessRequestAttributes<Attribute>(object o, Action<Attribute, string, string, string> propAction) where Attribute : ShippingApiAttribute
         {
             foreach (var propertyInfo in o.GetType().GetProperties())
             { 
@@ -54,7 +54,7 @@ namespace PitneyBowes.Developer.ShippingApi
         }
         public static void AddRequestResource(object o, StringBuilder uri)
         {
-            ProcessRequestAttributes<ShippingAPIResourceAttribute>( o,
+            ProcessRequestAttributes<ShippingApiResourceAttribute>( o,
                (a, s, v, p) => {
                    if (v == null || v.Equals(String.Empty)) return;
                    uri.Append('/');
@@ -76,7 +76,7 @@ namespace PitneyBowes.Developer.ShippingApi
 
             bool hasQuery = false;
 
-            ProcessRequestAttributes<ShippingAPIQueryAttribute>( o, 
+            ProcessRequestAttributes<ShippingApiQueryAttribute>( o, 
                (a, s, v, p) => {
                    if (a.OmitIfEmpty && (v == null || v.Equals(String.Empty))) return;
                    if (!hasQuery)
@@ -108,8 +108,8 @@ namespace PitneyBowes.Developer.ShippingApi
             switch (request.ContentType)
             {
                 case "application/json":
-                    var serializer = new JsonSerializer() { ContractResolver = new ShippingAPIContractResolver() };
-                    ((ShippingAPIContractResolver)serializer.ContractResolver).Session = session;
+                    var serializer = new JsonSerializer() { ContractResolver = new ShippingApiContractResolver() };
+                    ((ShippingApiContractResolver)serializer.ContractResolver).Session = session;
                     serializer.NullValueHandling = NullValueHandling.Ignore;
                     serializer.Formatting = Formatting.Indented;
                     if (session.TraceSerialization) serializer.TraceWriter = session.NewtonSoftTrace;
@@ -147,20 +147,20 @@ namespace PitneyBowes.Developer.ShippingApi
             AddRequestQuery(this, uri);
             return uri.ToString();
         }
-        public static IEnumerable<Tuple<ShippingAPIHeaderAttribute, string, string>> GetHeaders( object o)
+        public static IEnumerable<Tuple<ShippingApiHeaderAttribute, string, string>> GetHeaders( object o)
         {
             foreach (var propertyInfo in o.GetType().GetProperties())
             {
                 foreach (object attribute in propertyInfo.GetCustomAttributes(true))
                 {
-                    if (attribute is ShippingAPIHeaderAttribute)
+                    if (attribute is ShippingApiHeaderAttribute)
                     {
-                        var headerAttribute = attribute as ShippingAPIHeaderAttribute;
+                        var headerAttribute = attribute as ShippingApiHeaderAttribute;
                         string v;
                         if (propertyInfo.GetValue(o) is StringBuilder)
                         {
                             v = ((StringBuilder)propertyInfo.GetValue(o)).ToString();
-                            yield return new Tuple<ShippingAPIHeaderAttribute, string, string>(headerAttribute, v, propertyInfo.Name);
+                            yield return new Tuple<ShippingApiHeaderAttribute, string, string>(headerAttribute, v, propertyInfo.Name);
                         }
                         else
                         {
@@ -170,7 +170,7 @@ namespace PitneyBowes.Developer.ShippingApi
                             }
                             else
                             {
-                                if (((ShippingAPIHeaderAttribute)attribute).Format != null)
+                                if (((ShippingApiHeaderAttribute)attribute).Format != null)
                                     v = string.Format(headerAttribute.Format, propertyInfo.GetValue(o));
                                 else
                                 {
@@ -178,7 +178,7 @@ namespace PitneyBowes.Developer.ShippingApi
                                     v = val ?? propertyInfo.GetValue(o).ToString();
                                 }
                             }
-                            yield return new Tuple<ShippingAPIHeaderAttribute, string, string>(headerAttribute, v, propertyInfo.Name);
+                            yield return new Tuple<ShippingApiHeaderAttribute, string, string>(headerAttribute, v, propertyInfo.Name);
                         }
                     }
                 }
@@ -186,7 +186,7 @@ namespace PitneyBowes.Developer.ShippingApi
 
         }
 
-        public virtual IEnumerable<Tuple<ShippingAPIHeaderAttribute, string, string>> GetHeaders()
+        public virtual IEnumerable<Tuple<ShippingApiHeaderAttribute, string, string>> GetHeaders()
         {
             return GetHeaders(this);
         }

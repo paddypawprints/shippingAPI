@@ -13,17 +13,17 @@ namespace PitneyBowes.Developer.ShippingApi
 
     public class MerchantsReportRequest : ShippingApiRequest, IReportRequest
     {
-        [ShippingAPIResource("developers", true, PathSuffix = "/merchants")]
+        [ShippingApiResource("developers", true, PathSuffix = "/merchants")]
         public string DeveloperId { get; set; }
-        [ShippingAPIQuery("size", true)]
+        [ShippingApiQuery("size", true)]
         public int? PageSize { get; set; }
-        [ShippingAPIQuery("page", true)]
+        [ShippingApiQuery("page", true)]
         public int Page { get; set; }
-        [ShippingAPIQuery("sort", true)]
+        [ShippingApiQuery("sort", true)]
         public string Sort { get; set; }
-        [ShippingAPIHeader("Bearer")]
+        [ShippingApiHeaderAttribute("Bearer")]
         public override StringBuilder Authorization { get; set; }
-        [ShippingAPIHeader("Accept-Language")]
+        [ShippingApiHeaderAttribute("Accept-Language")]
         public string AcceptLanguage { get; set; }
         public override string ContentType { get => "application/json"; }
     
@@ -78,7 +78,7 @@ namespace PitneyBowes.Developer.ShippingApi
             _session = session;
         }
 
-        public async static Task<ShippingAPIResponse<MerchantsPageResponse>> MerchantsPage(MerchantsReportRequest request, ShippingApi.Session session = null)
+        public async static Task<ShippingApiResponse<MerchantsPageResponse>> MerchantsPage(MerchantsReportRequest request, ShippingApi.Session session = null)
         {
             if (session == null) session = ShippingApi.DefaultSession;
             request.Authorization = new StringBuilder(session.AuthToken.AccessToken);
@@ -132,7 +132,7 @@ namespace PitneyBowes.Developer.ShippingApi
         }
     }
 
-    public class MerchantsReportRequestFinder : RequestFinderVisitor<MerchantsReportRequest, Merchant>
+    internal class MerchantsReportRequestFinder : RequestFinderVisitor<MerchantsReportRequest, Merchant>
     {
         protected override Expression VisitBinary(BinaryExpression be)
         {

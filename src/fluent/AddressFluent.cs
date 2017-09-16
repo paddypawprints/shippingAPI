@@ -4,7 +4,8 @@
 namespace PitneyBowes.Developer.ShippingApi.Fluent
 {
     /// <summary>
-    /// Street address and/or apartment and/or P.O. Box. You can specify up to three address lines.
+    /// An address. If part of a response, this object also specifies address validation status, unless minimum validation is enabled.
+    /// <a href="https://shipping.pitneybowes.com/reference/resource-objects.html#object-address"/>
     /// </summary>
     public class AddressFluent<T> where T : IAddress, new()
     {
@@ -28,6 +29,10 @@ namespace PitneyBowes.Developer.ShippingApi.Fluent
         {
             
         }
+        /// <summary>
+        /// Specify up to three address lines for the street address, including suite number.
+        /// <a href="https://shipping.pitneybowes.com/reference/resource-objects.html#object-address"/>
+        /// </summary>
         public AddressFluent<T> AddressLines(string a1, string a2 = null, string a3 = null)
         {
             _address.AddAddressLine(a1);
@@ -36,6 +41,10 @@ namespace PitneyBowes.Developer.ShippingApi.Fluent
             return this;
         }
 
+        /// <summary>
+        /// City of town.
+        /// <a href="https://shipping.pitneybowes.com/reference/resource-objects.html#object-address"/>
+        /// </summary>
         public AddressFluent<T> CityTown(string c) 
         {
             _address.CityTown = c;
@@ -52,6 +61,10 @@ namespace PitneyBowes.Developer.ShippingApi.Fluent
             _address.PostalCode = s;
             return this;
         }
+        /// <summary>
+        /// Two character country code. The country code is required for all shipments.
+        /// <a href="https://shipping.pitneybowes.com/reference/resource-objects.html#object-address"/>
+        /// </summary>
         public AddressFluent<T> CountryCode(string s) 
         {
             _address.CountryCode = s;

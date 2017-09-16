@@ -8,7 +8,7 @@ namespace PitneyBowes.Developer.ShippingApi
     {
         public override bool CanConvert(Type objectType)
         {
-            return typeof(USPSSpecialServiceCodes).Equals(objectType);
+            return typeof(SpecialServiceCodes).Equals(objectType);
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
@@ -16,9 +16,9 @@ namespace PitneyBowes.Developer.ShippingApi
             switch(reader.Value)
             {
                 case "liveanimal-poultry":
-                    return USPSSpecialServiceCodes.liveanimal_poultry;
+                    return SpecialServiceCodes.liveanimal_poultry;
                 case "sunday-holiday":
-                    return USPSSpecialServiceCodes.sunday_holiday;
+                    return SpecialServiceCodes.sunday_holiday;
                 default:
                     var converter = new StringEnumConverter();
                     return converter.ReadJson(reader, objectType, existingValue, serializer);
@@ -27,14 +27,14 @@ namespace PitneyBowes.Developer.ShippingApi
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            if (!typeof(USPSSpecialServiceCodes).Equals(value.GetType())) throw new Exception(); //TODO
-            var s = (USPSSpecialServiceCodes)value;
+            if (!typeof(SpecialServiceCodes).Equals(value.GetType())) throw new Exception(); //TODO
+            var s = (SpecialServiceCodes)value;
             switch(s)
             {
-                case USPSSpecialServiceCodes.liveanimal_poultry:
+                case SpecialServiceCodes.liveanimal_poultry:
                     writer.WriteValue("liveanimal-poultry");
                     break;
-                case USPSSpecialServiceCodes.sunday_holiday:
+                case SpecialServiceCodes.sunday_holiday:
                     writer.WriteValue("sunday-holiday");
                     break;
                 default:

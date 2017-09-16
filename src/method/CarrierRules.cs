@@ -9,25 +9,25 @@ namespace PitneyBowes.Developer.ShippingApi
     {
         public override string ContentType => "application/json";
 
-        [ShippingAPIHeader("Bearer")]
+        [ShippingApiHeaderAttribute("Bearer")]
         public override StringBuilder Authorization {get;set;}
 
-        [ShippingAPIQuery("carrier")]
+        [ShippingApiQuery("carrier")]
         Carrier Carrier { get; set; }
-        [ShippingAPIQuery("originCountryCode")]
+        [ShippingApiQuery("originCountryCode")]
         string OriginCountryCode { get; set; }
-        [ShippingAPIQuery("destinationCountryCode")]
+        [ShippingApiQuery("destinationCountryCode")]
         string DestinationCountryCode { get; set; }
     }
 
     public static class CarrierRules
     {
 
-        public async static Task<ShippingAPIResponse<T>> RatingServices<T>(RatingServicesRequest request, ShippingApi.Session session = null) where T : ICarrierRule, new()
+        public async static Task<ShippingApiResponse<T>> RatingServices<T>(RatingServicesRequest request, ShippingApi.Session session = null) where T : ICarrierRule, new()
         {
             if (session == null) session = ShippingApi.DefaultSession;
             request.Authorization = new StringBuilder(session.AuthToken.AccessToken);
-            return await WebMethod.Get<T, RatingServicesRequest>("/shippingservices/v1/countries", request, session);
+            return await WebMethod.Get<T, RatingServicesRequest>("/v1/information/rules/rating-services", request, session);
         }
     }
 

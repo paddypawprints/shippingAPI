@@ -153,7 +153,7 @@ namespace PitneyBowes.Developer.ShippingApi.Json
         }
         [JsonProperty("packageType")]
         [JsonConverter(typeof(StringEnumConverter))]
-        public USPSParcelType? PackageType
+        public ParcelType? PackageType
         {
             get => Wrapped.PackageType;
             set { Wrapped.PackageType = value; }

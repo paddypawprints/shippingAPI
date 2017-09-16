@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 namespace PitneyBowes.Developer.ShippingApi
 {
-    interface IHttpRequest
+    internal interface IHttpRequest
     {
-         Task<ShippingAPIResponse<Response>> HttpRequest<Response, Request>(string resource, HttpVerb verb, Request request, ShippingApi.Session session = null) where Request : IShippingApiRequest;
+         Task<ShippingApiResponse<Response>> HttpRequest<Response, Request>(string resource, HttpVerb verb, Request request, ShippingApi.Session session = null) where Request : IShippingApiRequest;
     }
 }

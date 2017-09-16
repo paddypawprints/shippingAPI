@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace PitneyBowes.Developer.ShippingApi
 {
-    class ErrorFormat1
+    internal class ErrorFormat1
     {
         [JsonProperty("errorCode")]
         public string ErrorCode {get;set;}
@@ -13,7 +13,7 @@ namespace PitneyBowes.Developer.ShippingApi
         public string AdditionalInfo { get; set;}
     }
 
-    class ErrorFormat2
+    internal class ErrorFormat2
     {
         public class ErrorDetail
         {
@@ -25,7 +25,7 @@ namespace PitneyBowes.Developer.ShippingApi
         [JsonProperty("errors")]
         public ErrorDetail[] Errors {get;set;}
     }
-    class ErrorFormat3
+    internal class ErrorFormat3
     {
         [JsonProperty("key")]
         public string Key {get;set;}

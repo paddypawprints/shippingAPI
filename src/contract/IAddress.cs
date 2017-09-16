@@ -2,6 +2,11 @@
 
 namespace PitneyBowes.Developer.ShippingApi
 {
+    /// <summary>
+    /// An address. If part of a response, this object also specifies address validation status, unless minimum validation is enabled.
+    /// <a href="https://shipping.pitneybowes.com/reference/resource-objects.html#object-address"/>
+    /// </summary>
+
     public interface IAddress
     {
         IEnumerable<string> AddressLines { get; set; }

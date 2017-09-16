@@ -54,7 +54,7 @@ namespace PitneyBowes.Developer.ShippingApi.Json
             set { Wrapped.PrerequisiteRules = value; }
         }
         [JsonProperty("incompatibleSpecialServices")]
-        public IEnumerable<USPSSpecialServiceCodes> IncompatibleSpecialServices
+        public IEnumerable<SpecialServiceCodes> IncompatibleSpecialServices
         {
             get => Wrapped.IncompatibleSpecialServices;
             set { Wrapped.IncompatibleSpecialServices = value; }

@@ -20,7 +20,7 @@ namespace PitneyBowes.Developer.ShippingApi
             }
         }
 
-        protected object Execute<TResult, ReportItem, Request, RequestFinder>(Expression expression, bool isEnumerable, Func<Request, IEnumerable<ReportItem>> reportService, Action<Request> initializeRequest)
+        public object Execute<TResult, ReportItem, Request, RequestFinder>(Expression expression, bool isEnumerable, Func<Request, IEnumerable<ReportItem>> reportService, Action<Request> initializeRequest)
             where Request : IReportRequest, new()
             where RequestFinder : RequestFinderVisitor<Request, ReportItem>, new()
         {

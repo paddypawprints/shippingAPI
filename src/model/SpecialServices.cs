@@ -10,7 +10,7 @@ namespace PitneyBowes.Developer.ShippingApi.Model
         {
         }
 
-        virtual public USPSSpecialServiceCodes SpecialServiceId { get; set;}
+        virtual public SpecialServiceCodes SpecialServiceId { get; set;}
 
         virtual public IEnumerable<IParameter> InputParameters { get; set; }
         virtual public void AddParameter(IParameter p)

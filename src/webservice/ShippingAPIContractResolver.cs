@@ -5,10 +5,10 @@ using Newtonsoft.Json.Serialization;
 
 namespace PitneyBowes.Developer.ShippingApi
 {
-    internal class ShippingAPIContractResolver : DefaultContractResolver
+    internal class ShippingApiContractResolver : DefaultContractResolver
     {
 
-        public static readonly ShippingAPIContractResolver Instance = new ShippingAPIContractResolver();
+        public static readonly ShippingApiContractResolver Instance = new ShippingApiContractResolver();
         public ShippingApi.Session Session { get; set; }
 
         protected override JsonContract CreateContract(Type objectType )

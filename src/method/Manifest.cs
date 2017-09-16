@@ -13,13 +13,13 @@ namespace PitneyBowes.Developer.ShippingApi
     {
         public override string ContentType { get => "application/json"; }
 
-        [ShippingAPIHeader("Bearer")]
+        [ShippingApiHeaderAttribute("Bearer")]
         public override StringBuilder Authorization { get; set; }
 
-        [ShippingAPIHeader("X-PB-TransactionId")]
+        [ShippingApiHeaderAttribute("X-PB-TransactionId")]
         public string TransactionId { get; set; }
 
-        [ShippingAPIQuery("originalTransactionId")]
+        [ShippingApiQuery("originalTransactionId")]
         public string OriginalTransactionId { get; set; }
     }
 
@@ -27,28 +27,28 @@ namespace PitneyBowes.Developer.ShippingApi
     {
         public override string ContentType { get => "application/json";  }
 
-        [ShippingAPIHeader("Bearer")]
+        [ShippingApiHeaderAttribute("Bearer")]
         public override StringBuilder Authorization { get; set; }
 
-        [ShippingAPIResource("manifest", AddId = true)]
+        [ShippingApiResource("manifest", AddId = true)]
         public string ManifestId { get; set; }
     }
     public static class ManifestMethods
     {
-        public async static Task<ShippingAPIResponse<T>> Create<T>(T request, ShippingApi.Session session = null) where T : IManifest, new()
+        public async static Task<ShippingApiResponse<T>> Create<T>(T request, ShippingApi.Session session = null) where T : IManifest, new()
         {
             var manifestRequest = new JsonManifest<T>(request);
             if (session == null) session = ShippingApi.DefaultSession;
             manifestRequest.Authorization = new StringBuilder(session.AuthToken.AccessToken);
             return await WebMethod.Post<T, JsonManifest<T>>("/shippingservices/v1/manifests", manifestRequest, session);
         }
-        public async static Task<ShippingAPIResponse<T>> Reprint<T>(ReprintManifestRequest request, ShippingApi.Session session = null) where T : IManifest, new()
+        public async static Task<ShippingApiResponse<T>> Reprint<T>(ReprintManifestRequest request, ShippingApi.Session session = null) where T : IManifest, new()
         {
             if (session == null) session = ShippingApi.DefaultSession;
             request.Authorization = new StringBuilder(session.AuthToken.AccessToken);
             return await WebMethod.Post<T, ReprintManifestRequest> ("/shippingservices/v1", request, session);
         }
-        public async static Task<ShippingAPIResponse<T>> Retry<T>(RetryManifestRequest request, ShippingApi.Session session = null) where T : IManifest, new()
+        public async static Task<ShippingApiResponse<T>> Retry<T>(RetryManifestRequest request, ShippingApi.Session session = null) where T : IManifest, new()
         {
             if (session == null) session = ShippingApi.DefaultSession;
             request.Authorization = new StringBuilder(session.AuthToken.AccessToken);

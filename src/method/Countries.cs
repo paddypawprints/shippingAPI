@@ -13,10 +13,10 @@ namespace PitneyBowes.Developer.ShippingApi
     [JsonObject(MemberSerialization.OptIn)]
     public class CountriesRequest<T> : IShippingApiRequest where T : ICountry, new()
     {
-        [ShippingAPIQuery("carrier")]
+        [ShippingApiQuery("carrier")]
         public Carrier Carrier { get; set; }
 
-        [ShippingAPIQuery("originCountryCode")]
+        [ShippingApiQuery("originCountryCode")]
         public string OriginCountryCode { get; set; }
 
         public string GetUri(string baseUrl)
@@ -27,7 +27,7 @@ namespace PitneyBowes.Developer.ShippingApi
             return uri.ToString();
         }
 
-        public IEnumerable<Tuple<ShippingAPIHeaderAttribute, string, string>> GetHeaders()
+        public IEnumerable<Tuple<ShippingApiHeaderAttribute, string, string>> GetHeaders()
         {
             return ShippingApiRequest.GetHeaders(this);
         }
@@ -41,14 +41,14 @@ namespace PitneyBowes.Developer.ShippingApi
 
         public string ContentType => "application/json";
 
-        [ShippingAPIHeader("Bearer")]
+        [ShippingApiHeaderAttribute("Bearer")]
         public StringBuilder Authorization { get; set; }
     }
 
     public static class CountriesMethods
     {
 
-        public async static Task<ShippingAPIResponse<IEnumerable<T>>> Countries<T>(CountriesRequest<T> request, ShippingApi.Session session = null) where T : ICountry, new()
+        public async static Task<ShippingApiResponse<IEnumerable<T>>> Countries<T>(CountriesRequest<T> request, ShippingApi.Session session = null) where T : ICountry, new()
         {
             if (session == null) session = ShippingApi.DefaultSession;
             request.Authorization = new StringBuilder(session.AuthToken.AccessToken);
