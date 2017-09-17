@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using PitneyBowes.Developer.ShippingApi.Method;
 
 namespace PitneyBowes.Developer.ShippingApi.Rules
 {
@@ -21,10 +22,12 @@ namespace PitneyBowes.Developer.ShippingApi.Rules
             {
                 lock (_lock)
                 {
-                     // Load countries
-                    var countriesRequest = new CountriesRequest<Country>();
-                    countriesRequest.Carrier = Carrier.USPS;
-                    countriesRequest.OriginCountryCode = "US";
+                    // Load countries
+                    var countriesRequest = new CountriesRequest<Country>()
+                    {
+                        Carrier = Carrier.USPS,
+                        OriginCountryCode = "US"
+                    };
                     var countriesResponse = CountriesMethods.Countries(countriesRequest, session).GetAwaiter().GetResult();
                     if (countriesResponse.Success)
                     {

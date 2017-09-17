@@ -7,8 +7,7 @@ namespace PitneyBowes.Developer.ShippingApi.Model
 {
     public class ServicesPrerequisiteRule : IServicesPrerequisiteRule
     {
-
-        public string SpecialServiceId{get; set;}
-        public string MinInputValue{get; set;}
+        virtual public string SpecialServiceId{get; set;}
+        virtual public string MinInputValue{get; set;}
     }
 }

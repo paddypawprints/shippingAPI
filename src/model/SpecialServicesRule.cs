@@ -7,14 +7,13 @@ namespace PitneyBowes.Developer.ShippingApi.Model
 {
     public class SpecialServicesRule : ISpecialServicesRule
     {
-
-        public string SpecialServiceId{get; set;}
-        public string BrandedName{get; set;}
-        public string CategoryId{get; set;}
-        public string CategoryName{get; set;}
-        public Boolean Trackable{get; set;}
-        public IEnumerable<IServicesParameterRule> InputParameterRules{get; set;}
-        public IEnumerable<IServicesPrerequisiteRule> PrerequisiteRules{get; set;}
-        public IEnumerable<SpecialServiceCodes> IncompatibleSpecialServices{get; set;}
+        virtual public string SpecialServiceId{get; set;}
+        virtual public string BrandedName{get; set;}
+        virtual public string CategoryId{get; set;}
+        virtual public string CategoryName{get; set;}
+        virtual public Boolean Trackable{get; set;}
+        virtual public IEnumerable<IServicesParameterRule> InputParameterRules{get; set;}
+        virtual public IEnumerable<IServicesPrerequisiteRule> PrerequisiteRules{get; set;}
+        virtual public IEnumerable<SpecialServiceCodes> IncompatibleSpecialServices{get; set;}
     }
 }

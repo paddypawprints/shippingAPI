@@ -7,12 +7,11 @@ namespace PitneyBowes.Developer.ShippingApi.Model
 {
     public class DimensionRule : IDimensionRule
     {
-
-        public Boolean Required{get; set;}
-        public UnitOfDimension UnitOfMeasurement{get; set;}
-        public IParcelDimension MinParcelDimensions{get; set;}
-        public IParcelDimension MaxParcelDimensions{get; set;}
-        public Decimal MinLengthPlusGirth{get; set;}
-        public Decimal MaxLengthPlusGirth{get; set;}
+        virtual public Boolean Required{get; set;}
+        virtual public UnitOfDimension UnitOfMeasurement{get; set;}
+        virtual public IParcelDimension MinParcelDimensions{get; set;}
+        virtual public IParcelDimension MaxParcelDimensions{get; set;}
+        virtual public Decimal MinLengthPlusGirth{get; set;}
+        virtual public Decimal MaxLengthPlusGirth{get; set;}
     }
 }

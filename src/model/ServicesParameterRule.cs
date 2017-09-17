@@ -7,14 +7,13 @@ namespace PitneyBowes.Developer.ShippingApi.Model
 {
     public class ServicesParameterRule : IServicesParameterRule
     {
-
-        public string Name{get; set;}
-        public string BrandedName{get; set;}
-        public Boolean Required{get; set;}
-        public Decimal MinValue{get; set;}
-        public Decimal MaxValue{get; set;}
-        public Decimal FreeValue{get; set;}
-        public string Format{get; set;}
-        public string Description{get; set;}
+        virtual public string Name{get; set;}
+        virtual public string BrandedName{get; set;}
+        virtual public Boolean Required{get; set;}
+        virtual public Decimal MinValue{get; set;}
+        virtual public Decimal MaxValue{get; set;}
+        virtual public Decimal FreeValue{get; set;}
+        virtual public string Format{get; set;}
+        virtual public string Description{get; set;}
     }
 }

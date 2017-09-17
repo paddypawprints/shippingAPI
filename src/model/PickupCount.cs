@@ -7,9 +7,8 @@ namespace PitneyBowes.Developer.ShippingApi.Model
 {
     public class PickupCount : IPickupCount
     {
-
-        public Services ServiceId{get; set;}
-        public int Count{get; set;}
-        public IParcelWeight TotalWeight{get; set;}
+        virtual public Services ServiceId{get; set;}
+        virtual public int Count{get; set;}
+        virtual public IParcelWeight TotalWeight{get; set;}
     }
 }

@@ -7,11 +7,10 @@ namespace PitneyBowes.Developer.ShippingApi.Model
 {
     public class CcPaymentDetails : ICcPaymentDetails
     {
-
-        public CreditCardType CcType{get; set;}
-        public string CcTokenNumber{get; set;}
-        public string CcExpirationDate{get; set;}
-        public string CccvvNumber{get; set;}
-        public IAddress CcAddress{get; set;}
+        virtual public CreditCardType CcType{get; set;}
+        virtual public string CcTokenNumber{get; set;}
+        virtual public string CcExpirationDate{get; set;}
+        virtual public string CccvvNumber{get; set;}
+        virtual public IAddress CcAddress{get; set;}
     }
 }

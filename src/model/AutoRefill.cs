@@ -7,10 +7,9 @@ namespace PitneyBowes.Developer.ShippingApi.Model
 {
     public class AutoRefill : IAutoRefill
     {
-
-        public string MerchantID{get; set;}
-        public decimal Threshold{get; set;}
-        public decimal AddAmount{get; set;}
-        public Boolean Enabled{get; set;}
+        virtual public string MerchantID{get; set;}
+        virtual public decimal Threshold{get; set;}
+        virtual public decimal AddAmount{get; set;}
+        virtual public Boolean Enabled{get; set;}
     }
 }

@@ -37,6 +37,5 @@ namespace PitneyBowes.Developer.ShippingApi.Model
         virtual public ICustoms Customs { get; set; }
         virtual public string ShipmentId { get; set; }
         virtual public string ParcelTrackingNumber { get; set; }
-
     }
 }

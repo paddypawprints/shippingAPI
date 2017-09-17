@@ -7,10 +7,9 @@ namespace PitneyBowes.Developer.ShippingApi.Model
 {
     public class PaymentInfo : IPaymentInfo
     {
-
-        public PaymentType PaymentType{get; set;}
-        public PaymentMethod PaymentMethod{get; set;}
-        public IPpPaymentDetails PpPaymentDetails{get; set;}
-        public ICcPaymentDetails CcPaymentDetails{get; set;}
+        virtual public PaymentType PaymentType{get; set;}
+        virtual public PaymentMethod PaymentMethod{get; set;}
+        virtual public IPpPaymentDetails PpPaymentDetails{get; set;}
+        virtual public ICcPaymentDetails CcPaymentDetails{get; set;}
     }
 }

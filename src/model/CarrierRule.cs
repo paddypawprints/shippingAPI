@@ -7,9 +7,8 @@ namespace PitneyBowes.Developer.ShippingApi.Model
 {
     public class CarrierRule : ICarrierRule
     {
-
-        public string ServiceId{get; set;}
-        public string BrandedName{get; set;}
-        public IEnumerable<IParcelTypeRule> ParcelTypeRules{get; set;}
+        virtual public string ServiceId{get; set;}
+        virtual public string BrandedName{get; set;}
+        virtual public IEnumerable<IParcelTypeRule> ParcelTypeRules{get; set;}
     }
 }

@@ -11,7 +11,6 @@ namespace PitneyBowes.Developer.ShippingApi.Model
         }
 
         virtual public SpecialServiceCodes SpecialServiceId { get; set;}
-
         virtual public IEnumerable<IParameter> InputParameters { get; set; }
         virtual public void AddParameter(IParameter p)
         {
@@ -19,5 +18,4 @@ namespace PitneyBowes.Developer.ShippingApi.Model
         }
         virtual public decimal Fee { get; set;}
     }
-
 }

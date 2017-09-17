@@ -7,14 +7,13 @@ namespace PitneyBowes.Developer.ShippingApi.Model
 {
     public class TrackingEvent : ITrackingEvent
     {
-
-        public DateTimeOffset EventDateTime{get; set;}
-        public string EventCity{get; set;}
-        public string EventState{get; set;}
-        public string PostalCode{get; set;}
-        public string Country{get; set;}
-        public string ScanType{get; set;}
-        public string ScanDescription{get; set;}
-        public string PackageStatus{get; set;}
+        virtual public DateTimeOffset EventDateTime{get; set;}
+        virtual public string EventCity{get; set;}
+        virtual public string EventState{get; set;}
+        virtual public string PostalCode{get; set;}
+        virtual public string Country{get; set;}
+        virtual public string ScanType{get; set;}
+        virtual public string ScanDescription{get; set;}
+        virtual public string PackageStatus{get; set;}
     }
 }

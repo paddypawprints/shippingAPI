@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System;
 using System.IO;
 
-namespace PitneyBowes.Developer.ShippingApi
+namespace PitneyBowes.Developer.ShippingApi.Method
 {
     /// <summary>
     /// Request object when getting a shipping label.

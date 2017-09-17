@@ -1,6 +1,7 @@
 ﻿using PitneyBowes.Developer.ShippingApi;
 using PitneyBowes.Developer.ShippingApi.Fluent;
 using PitneyBowes.Developer.ShippingApi.Model;
+using PitneyBowes.Developer.ShippingApi.Method;
 using System;
 using System.Linq;
 using static PitneyBowes.Developer.ShippingApi.ShippingApi;

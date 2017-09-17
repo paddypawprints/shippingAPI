@@ -7,8 +7,7 @@ namespace PitneyBowes.Developer.ShippingApi.Model
 {
     public class PpPaymentDetails : IPpPaymentDetails
     {
-
-        public string EncryptedTIN{get; set;}
-        public string EncryptedBPN{get; set;}
+        virtual public string EncryptedTIN{get; set;}
+        virtual public string EncryptedBPN{get; set;}
     }
 }

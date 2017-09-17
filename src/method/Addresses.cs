@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 using PitneyBowes.Developer.ShippingApi.Json;
 
 
-namespace PitneyBowes.Developer.ShippingApi
+namespace PitneyBowes.Developer.ShippingApi.Method
 {
 
 

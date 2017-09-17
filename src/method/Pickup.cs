@@ -7,7 +7,7 @@ using Newtonsoft.Json.Converters;
 using PitneyBowes.Developer.ShippingApi.Json;
 
 
-namespace PitneyBowes.Developer.ShippingApi
+namespace PitneyBowes.Developer.ShippingApi.Method
 {
     [JsonObject(MemberSerialization.OptIn)]
     public class PickupCancelRequest : ShippingApiRequest

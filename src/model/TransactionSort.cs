@@ -2,11 +2,10 @@
 {
     public class TransactionSort : ITransactionSort
     {
-
-        public string Ascending { get; set; }
-        public string Direction { get; set; }
-        public string IgnoreCase { get; set; }
-        public string NullHandling { get; set; }
-        public string Property { get; set; }
+        virtual public string Ascending { get; set; }
+        virtual public string Direction { get; set; }
+        virtual public string IgnoreCase { get; set; }
+        virtual public string NullHandling { get; set; }
+        virtual public string Property { get; set; }
     }
 }

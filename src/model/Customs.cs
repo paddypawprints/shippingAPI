@@ -9,7 +9,6 @@ namespace PitneyBowes.Developer.ShippingApi.Model
         {
             CustomsItems = new List<CustomsItems>();
         }
-
         virtual public ICustomsInfo CustomsInfo { get; set;}
         virtual public IEnumerable<ICustomsItems> CustomsItems { get; set; }
         virtual public ICustomsItems AddCustomsItems(ICustomsItems c)

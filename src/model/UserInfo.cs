@@ -7,12 +7,11 @@ namespace PitneyBowes.Developer.ShippingApi.Model
 {
     public class UserInfo : IUserInfo
     {
-
-        public string FirstName{get; set;}
-        public string LastName{get; set;}
-        public string Company{get; set;}
-        public IAddress Address{get; set;}
-        public string Phone{get; set;}
-        public string Email{get; set;}
+        virtual public string FirstName{get; set;}
+        virtual public string LastName{get; set;}
+        virtual public string Company{get; set;}
+        virtual public IAddress Address{get; set;}
+        virtual public string Phone{get; set;}
+        virtual public string Email{get; set;}
     }
 }

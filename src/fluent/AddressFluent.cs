@@ -1,4 +1,4 @@
-
+using PitneyBowes.Developer.ShippingApi.Method;
 
 
 namespace PitneyBowes.Developer.ShippingApi.Fluent

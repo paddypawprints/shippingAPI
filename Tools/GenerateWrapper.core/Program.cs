@@ -120,12 +120,11 @@ namespace GenerateWrapper.core
             writer("{");
             writer("    public class " + jName + " : " + intf.Name );
             writer("    {");
-            writer("");
 
             foreach (var prop in intf.GetProperties())
             {
                 var cName = prop.Name;
-                writer("        public " + TypeName(prop.PropertyType) + " " + prop.Name + "{get; set;}");
+                writer("        virtual public " + TypeName(prop.PropertyType) + " " + prop.Name + "{get; set;}");
             }
             writer("    }");
             writer("}");
