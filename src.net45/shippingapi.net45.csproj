@@ -17,7 +17,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;NET45</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NET_45</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -43,11 +43,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\src\contract\CodeGenerationAttribute.cs">
+      <Link>contract\CodeGenerationAttribute.cs</Link>
+    </Compile>
     <Compile Include="..\src\contract\Enums.cs">
       <Link>contract\Enums.cs</Link>
     </Compile>
     <Compile Include="..\src\contract\IAddress.cs">
       <Link>contract\IAddress.cs</Link>
+    </Compile>
+    <Compile Include="..\src\contract\IAutoRefill.cs">
+      <Link>contract\IAutoRefill.cs</Link>
+    </Compile>
+    <Compile Include="..\src\contract\ICarrierPickup.cs">
+      <Link>contract\ICarrierPickup.cs</Link>
+    </Compile>
+    <Compile Include="..\src\contract\ICarrierRule.cs">
+      <Link>contract\ICarrierRule.cs</Link>
+    </Compile>
+    <Compile Include="..\src\contract\ICcPaymentDetails.cs">
+      <Link>contract\ICcPaymentDetails.cs</Link>
     </Compile>
     <Compile Include="..\src\contract\ICountry.cs">
       <Link>contract\ICountry.cs</Link>
@@ -63,6 +78,9 @@
     </Compile>
     <Compile Include="..\src\contract\IDeliveryCommitment.cs">
       <Link>contract\IDeliveryCommitment.cs</Link>
+    </Compile>
+    <Compile Include="..\src\contract\IDimensionRule.cs">
+      <Link>contract\IDimensionRule.cs</Link>
     </Compile>
     <Compile Include="..\src\contract\IDocument.cs">
       <Link>contract\IDocument.cs</Link>
@@ -82,11 +100,32 @@
     <Compile Include="..\src\contract\IParcelDimension.cs">
       <Link>contract\IParcelDimension.cs</Link>
     </Compile>
+    <Compile Include="..\src\contract\IParcelTypeRule.cs">
+      <Link>contract\IParcelTypeRule.cs</Link>
+    </Compile>
     <Compile Include="..\src\contract\IParcelWeight.cs">
       <Link>contract\IParcelWeight.cs</Link>
     </Compile>
+    <Compile Include="..\src\contract\IPaymentInfo.cs">
+      <Link>contract\IPaymentInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\src\contract\IPickup.cs">
+      <Link>contract\IPickup.cs</Link>
+    </Compile>
+    <Compile Include="..\src\contract\IPickupCount.cs">
+      <Link>contract\IPickupCount.cs</Link>
+    </Compile>
+    <Compile Include="..\src\contract\IPpPaymentDetails.cs">
+      <Link>contract\IPpPaymentDetails.cs</Link>
+    </Compile>
     <Compile Include="..\src\contract\IRates.cs">
       <Link>contract\IRates.cs</Link>
+    </Compile>
+    <Compile Include="..\src\contract\IServicesParameterRule.cs">
+      <Link>contract\IServicesParameterRule.cs</Link>
+    </Compile>
+    <Compile Include="..\src\contract\IServicesPrerequisiteRule.cs">
+      <Link>contract\IServicesPrerequisiteRule.cs</Link>
     </Compile>
     <Compile Include="..\src\contract\IShipment.cs">
       <Link>contract\IShipment.cs</Link>
@@ -97,8 +136,29 @@
     <Compile Include="..\src\contract\ISpecialServices.cs">
       <Link>contract\ISpecialServices.cs</Link>
     </Compile>
+    <Compile Include="..\src\contract\ISpecialServicesRule.cs">
+      <Link>contract\ISpecialServicesRule.cs</Link>
+    </Compile>
     <Compile Include="..\src\contract\IToken.cs">
       <Link>contract\IToken.cs</Link>
+    </Compile>
+    <Compile Include="..\src\contract\ITrackingEvent.cs">
+      <Link>contract\ITrackingEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\src\contract\ITrackingStatus.cs">
+      <Link>contract\ITrackingStatus.cs</Link>
+    </Compile>
+    <Compile Include="..\src\contract\ITransaction.cs">
+      <Link>contract\ITransaction.cs</Link>
+    </Compile>
+    <Compile Include="..\src\contract\ITransactionSort.cs">
+      <Link>contract\ITransactionSort.cs</Link>
+    </Compile>
+    <Compile Include="..\src\contract\IUserInfo.cs">
+      <Link>contract\IUserInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\src\contract\IWeightRule.cs">
+      <Link>contract\IWeightRule.cs</Link>
     </Compile>
     <Compile Include="..\src\fluent\AddressFluent.cs">
       <Link>fluent\AddressFluent.cs</Link>
@@ -106,8 +166,17 @@
     <Compile Include="..\src\fluent\DocumentsArrayFluent.cs">
       <Link>fluent\DocumentsArrayFluent.cs</Link>
     </Compile>
+    <Compile Include="..\src\fluent\ManifestFluent.cs">
+      <Link>fluent\ManifestFluent.cs</Link>
+    </Compile>
+    <Compile Include="..\src\fluent\MerchantFluent.cs">
+      <Link>fluent\MerchantFluent.cs</Link>
+    </Compile>
     <Compile Include="..\src\fluent\ParcelFluent.cs">
       <Link>fluent\ParcelFluent.cs</Link>
+    </Compile>
+    <Compile Include="..\src\fluent\PickupFluent.cs">
+      <Link>fluent\PickupFluent.cs</Link>
     </Compile>
     <Compile Include="..\src\fluent\RatesArrayFluent.cs">
       <Link>fluent\RatesArrayFluent.cs</Link>
@@ -115,8 +184,44 @@
     <Compile Include="..\src\fluent\ShipmentOptionsArrayFluent.cs">
       <Link>fluent\ShipmentOptionsArrayFluent.cs</Link>
     </Compile>
+    <Compile Include="..\src\method\converter\CalendarDateConverter.cs">
+      <Link>method\converter\CalendarDateConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\src\method\converter\DecimalConverter.cs">
+      <Link>method\converter\DecimalConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\src\method\converter\UnixMillisecondsTimeConverter.cs">
+      <Link>method\converter\UnixMillisecondsTimeConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\src\method\converter\UnixSecondsTimeConverter.cs">
+      <Link>method\converter\UnixSecondsTimeConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\src\method\enumConverter\PackageLocationConverter.cs">
+      <Link>method\enumConverter\PackageLocationConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\src\method\enumConverter\TrackingStatusConverter.cs">
+      <Link>method\enumConverter\TrackingStatusConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\src\method\enumConverter\TransactionTypeConverter.cs">
+      <Link>method\enumConverter\TransactionTypeConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\src\method\enumConverter\USPSSpecialServiceCodesConverter.cs">
+      <Link>method\enumConverter\USPSSpecialServiceCodesConverter.cs</Link>
+    </Compile>
     <Compile Include="..\src\method\json\JsonAddress.cs">
       <Link>method\json\JsonAddress.cs</Link>
+    </Compile>
+    <Compile Include="..\src\method\json\JsonAutoRefill.cs">
+      <Link>method\json\JsonAutoRefill.cs</Link>
+    </Compile>
+    <Compile Include="..\src\method\json\JsonCarrierPickup.cs">
+      <Link>method\json\JsonCarrierPickup.cs</Link>
+    </Compile>
+    <Compile Include="..\src\method\json\JsonCarrierRule.cs">
+      <Link>method\json\JsonCarrierRule.cs</Link>
+    </Compile>
+    <Compile Include="..\src\method\json\JsonCcPaymentDetails.cs">
+      <Link>method\json\JsonCcPaymentDetails.cs</Link>
     </Compile>
     <Compile Include="..\src\method\json\JsonCountry.cs">
       <Link>method\json\JsonCountry.cs</Link>
@@ -132,6 +237,9 @@
     </Compile>
     <Compile Include="..\src\method\json\JsonDeliveryCommitment.cs">
       <Link>method\json\JsonDeliveryCommitment.cs</Link>
+    </Compile>
+    <Compile Include="..\src\method\json\JsonDimensionRule.cs">
+      <Link>method\json\JsonDimensionRule.cs</Link>
     </Compile>
     <Compile Include="..\src\method\json\JsonDocument.cs">
       <Link>method\json\JsonDocument.cs</Link>
@@ -151,11 +259,35 @@
     <Compile Include="..\src\method\json\JsonParcelDimension.cs">
       <Link>method\json\JsonParcelDimension.cs</Link>
     </Compile>
+    <Compile Include="..\src\method\json\JsonParcelTypeRule.cs">
+      <Link>method\json\JsonParcelTypeRule.cs</Link>
+    </Compile>
     <Compile Include="..\src\method\json\JsonParcelWeight.cs">
       <Link>method\json\JsonParcelWeight.cs</Link>
     </Compile>
+    <Compile Include="..\src\method\json\JsonPaymentInfo.cs">
+      <Link>method\json\JsonPaymentInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\src\method\json\JsonPickup.cs">
+      <Link>method\json\JsonPickup.cs</Link>
+    </Compile>
+    <Compile Include="..\src\method\json\JsonPickupCount.cs">
+      <Link>method\json\JsonPickupCount.cs</Link>
+    </Compile>
+    <Compile Include="..\src\method\json\JsonPpPaymentDetails.cs">
+      <Link>method\json\JsonPpPaymentDetails.cs</Link>
+    </Compile>
     <Compile Include="..\src\method\json\JsonRates.cs">
       <Link>method\json\JsonRates.cs</Link>
+    </Compile>
+    <Compile Include="..\src\method\json\JsonServicesParameterRule.cs">
+      <Link>method\json\JsonServicesParameterRule.cs</Link>
+    </Compile>
+    <Compile Include="..\src\method\json\JsonServicesPrerequisiteRule.cs">
+      <Link>method\json\JsonServicesPrerequisiteRule.cs</Link>
+    </Compile>
+    <Compile Include="..\src\method\json\JsonServicesRule.cs">
+      <Link>method\json\JsonServicesRule.cs</Link>
     </Compile>
     <Compile Include="..\src\method\json\JsonShipment.cs">
       <Link>method\json\JsonShipment.cs</Link>
@@ -166,8 +298,29 @@
     <Compile Include="..\src\method\json\JsonSpecialServices.cs">
       <Link>method\json\JsonSpecialServices.cs</Link>
     </Compile>
+    <Compile Include="..\src\method\json\JsonSpecialServicesRule.cs">
+      <Link>method\json\JsonSpecialServicesRule.cs</Link>
+    </Compile>
     <Compile Include="..\src\method\json\JsonToken.cs">
       <Link>method\json\JsonToken.cs</Link>
+    </Compile>
+    <Compile Include="..\src\method\json\JsonTrackingEvent.cs">
+      <Link>method\json\JsonTrackingEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\src\method\json\JsonTrackingStatus.cs">
+      <Link>method\json\JsonTrackingStatus.cs</Link>
+    </Compile>
+    <Compile Include="..\src\method\json\JsonTransaction.cs">
+      <Link>method\json\JsonTransaction.cs</Link>
+    </Compile>
+    <Compile Include="..\src\method\json\JsonTransactionSort.cs">
+      <Link>method\json\JsonTransactionSort.cs</Link>
+    </Compile>
+    <Compile Include="..\src\method\json\JsonUserInfo.cs">
+      <Link>method\json\JsonUserInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\src\method\json\JsonWeightRule.cs">
+      <Link>method\json\JsonWeightRule.cs</Link>
     </Compile>
     <Compile Include="..\src\method\json\JsonWrapper.cs">
       <Link>method\json\JsonWrapper.cs</Link>
@@ -180,6 +333,18 @@
     </Compile>
     <Compile Include="..\src\model\Address.cs">
       <Link>model\Address.cs</Link>
+    </Compile>
+    <Compile Include="..\src\model\AutoRefill.cs">
+      <Link>model\AutoRefill.cs</Link>
+    </Compile>
+    <Compile Include="..\src\model\CarrierPickup.cs">
+      <Link>model\CarrierPickup.cs</Link>
+    </Compile>
+    <Compile Include="..\src\model\CarrierRule.cs">
+      <Link>model\CarrierRule.cs</Link>
+    </Compile>
+    <Compile Include="..\src\model\CcPaymentDetails.cs">
+      <Link>model\CcPaymentDetails.cs</Link>
     </Compile>
     <Compile Include="..\src\model\Country.cs">
       <Link>model\Country.cs</Link>
@@ -195,6 +360,9 @@
     </Compile>
     <Compile Include="..\src\model\DeliveryCommitment.cs">
       <Link>model\DeliveryCommitment.cs</Link>
+    </Compile>
+    <Compile Include="..\src\model\DimensionRule.cs">
+      <Link>model\DimensionRule.cs</Link>
     </Compile>
     <Compile Include="..\src\model\Document.cs">
       <Link>model\Document.cs</Link>
@@ -217,11 +385,38 @@
     <Compile Include="..\src\model\ParcelDimension.cs">
       <Link>model\ParcelDimension.cs</Link>
     </Compile>
+    <Compile Include="..\src\model\ParcelTypeRule.cs">
+      <Link>model\ParcelTypeRule.cs</Link>
+    </Compile>
     <Compile Include="..\src\model\ParcelWeight.cs">
       <Link>model\ParcelWeight.cs</Link>
     </Compile>
+    <Compile Include="..\src\model\PaymentInfo.cs">
+      <Link>model\PaymentInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\src\model\Pickup.cs">
+      <Link>model\Pickup.cs</Link>
+    </Compile>
+    <Compile Include="..\src\model\PickupCount.cs">
+      <Link>model\PickupCount.cs</Link>
+    </Compile>
+    <Compile Include="..\src\model\PpPaymentDetails.cs">
+      <Link>model\PpPaymentDetails.cs</Link>
+    </Compile>
     <Compile Include="..\src\model\Rates.cs">
       <Link>model\Rates.cs</Link>
+    </Compile>
+    <Compile Include="..\src\model\Register.cs">
+      <Link>model\Register.cs</Link>
+    </Compile>
+    <Compile Include="..\src\model\ServicesParameterRule.cs">
+      <Link>model\ServicesParameterRule.cs</Link>
+    </Compile>
+    <Compile Include="..\src\model\ServicesPrerequisiteRule.cs">
+      <Link>model\ServicesPrerequisiteRule.cs</Link>
+    </Compile>
+    <Compile Include="..\src\model\ServicesRule.cs">
+      <Link>model\ServicesRule.cs</Link>
     </Compile>
     <Compile Include="..\src\model\Shipment.cs">
       <Link>model\Shipment.cs</Link>
@@ -232,8 +427,77 @@
     <Compile Include="..\src\model\SpecialServices.cs">
       <Link>model\SpecialServices.cs</Link>
     </Compile>
+    <Compile Include="..\src\model\SpecialServicesRule.cs">
+      <Link>model\SpecialServicesRule.cs</Link>
+    </Compile>
     <Compile Include="..\src\model\Token.cs">
       <Link>model\Token.cs</Link>
+    </Compile>
+    <Compile Include="..\src\model\TrackingEvent.cs">
+      <Link>model\TrackingEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\src\model\TrackingStatus.cs">
+      <Link>model\TrackingStatus.cs</Link>
+    </Compile>
+    <Compile Include="..\src\model\Transaction.cs">
+      <Link>model\Transaction.cs</Link>
+    </Compile>
+    <Compile Include="..\src\model\TransactionSort.cs">
+      <Link>model\TransactionSort.cs</Link>
+    </Compile>
+    <Compile Include="..\src\model\UserInfo.cs">
+      <Link>model\UserInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\src\model\WeightRule.cs">
+      <Link>model\WeightRule.cs</Link>
+    </Compile>
+    <Compile Include="..\src\reports\linq\Evaluator.cs">
+      <Link>reports\linq\Evaluator.cs</Link>
+    </Compile>
+    <Compile Include="..\src\reports\linq\InnermostWhereFinder.cs">
+      <Link>reports\linq\InnermostWhereFinder.cs</Link>
+    </Compile>
+    <Compile Include="..\src\reports\linq\IReportRequest.cs">
+      <Link>reports\linq\IReportRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\src\reports\linq\NominateForEvaluationVisitor.cs">
+      <Link>reports\linq\NominateForEvaluationVisitor.cs</Link>
+    </Compile>
+    <Compile Include="..\src\reports\linq\ReportBase.cs">
+      <Link>reports\linq\ReportBase.cs</Link>
+    </Compile>
+    <Compile Include="..\src\reports\linq\ReportProviderBase.cs">
+      <Link>reports\linq\ReportProviderBase.cs</Link>
+    </Compile>
+    <Compile Include="..\src\reports\linq\RequestFinderVisitor.cs">
+      <Link>reports\linq\RequestFinderVisitor.cs</Link>
+    </Compile>
+    <Compile Include="..\src\reports\linq\ResplaceQueryWithResultSetModifier.cs">
+      <Link>reports\linq\ResplaceQueryWithResultSetModifier.cs</Link>
+    </Compile>
+    <Compile Include="..\src\reports\linq\SubtreeEvaluator.cs">
+      <Link>reports\linq\SubtreeEvaluator.cs</Link>
+    </Compile>
+    <Compile Include="..\src\reports\linq\TypeSystem.cs">
+      <Link>reports\linq\TypeSystem.cs</Link>
+    </Compile>
+    <Compile Include="..\src\reports\MerchantsReport.cs">
+      <Link>reports\MerchantsReport.cs</Link>
+    </Compile>
+    <Compile Include="..\src\reports\TransactionsReport.cs">
+      <Link>reports\TransactionsReport.cs</Link>
+    </Compile>
+    <Compile Include="..\src\rules\ServiceRules.cs">
+      <Link>rules\ServiceRules.cs</Link>
+    </Compile>
+    <Compile Include="..\src\webservice\ErrorDetail.cs">
+      <Link>webservice\ErrorDetail.cs</Link>
+    </Compile>
+    <Compile Include="..\src\webservice\IHttpRequest.cs">
+      <Link>webservice\IHttpRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\src\webservice\IShippingApiRequest.cs">
+      <Link>webservice\IShippingApiRequest.cs</Link>
     </Compile>
     <Compile Include="..\src\webservice\ShippingAPIContractResolver.cs">
       <Link>webservice\ShippingAPIContractResolver.cs</Link>
@@ -241,27 +505,32 @@
     <Compile Include="..\src\webservice\ShippingApiConverter.cs">
       <Link>webservice\ShippingApiConverter.cs</Link>
     </Compile>
+    <Compile Include="..\src\webservice\ShippingApiHttpRequest.cs">
+      <Link>webservice\ShippingApiHttpRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\src\webservice\ShippingApiRequest.cs">
+      <Link>webservice\ShippingApiRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\src\webservice\ShippingApiResponse.cs">
+      <Link>webservice\ShippingApiResponse.cs</Link>
+    </Compile>
     <Compile Include="..\src\webservice\ShippingAPIResponseTypeConverter.cs">
       <Link>webservice\ShippingAPIResponseTypeConverter.cs</Link>
     </Compile>
-    <Compile Include="..\src\webservice\UnixMillisecondsTimeConverter.cs">
-      <Link>webservice\UnixMillisecondsTimeConverter.cs</Link>
-    </Compile>
-    <Compile Include="..\src\webservice\UnixSecondsTimeConverter.cs">
-      <Link>webservice\UnixSecondsTimeConverter.cs</Link>
-    </Compile>
-    <Compile Include="..\src\webservice\USPSSpecialServiceCodesConverter.cs">
-      <Link>webservice\USPSSpecialServiceCodesConverter.cs</Link>
-    </Compile>
+    <Compile Include="method\Addresses.cs" />
+    <Compile Include="method\CarrierRules.cs" />
+    <Compile Include="method\Countries.cs" />
+    <Compile Include="method\Manifest.cs" />
+    <Compile Include="method\Merchant.cs" />
+    <Compile Include="method\Pickup.cs" />
+    <Compile Include="method\Rates.cs" />
+    <Compile Include="method\Tracking.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\src\webservice\ErrorMessages.cs">
       <Link>webservice\ErrorMessages.cs</Link>
     </Compile>
     <Compile Include="..\src\webservice\ShippingApi.cs">
       <Link>webservice\ShippingApi.cs</Link>
-    </Compile>
-    <Compile Include="..\src\webservice\UrlHelper.cs">
-      <Link>webservice\UrlHelper.cs</Link>
     </Compile>
     <Compile Include="..\src\webservice\WebMethod.cs">
       <Link>webservice\WebMethod.cs</Link>

@@ -84,7 +84,10 @@ namespace PitneyBowes.Developer.ShippingApi
             }
             else
             {
+#if NET_45
+#else
                 if (session.TraceSerialization) deserializer.TraceWriter = session.NewtonSoftTrace;
+#endif
                 apiResponse.APIResponse = (Response)deserializer.Deserialize(new StreamReader(respStream), t);
             }
         }

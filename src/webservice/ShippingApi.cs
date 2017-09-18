@@ -8,6 +8,10 @@ using Newtonsoft.Json;
 
 namespace PitneyBowes.Developer.ShippingApi
 {
+
+#if NET_45
+    // Differences in net_45 aqnd net_core Newtonsoft
+#else
     public class DebugTraceWriter : ITraceWriter
     {
         private Action<string> _writer;
@@ -26,7 +30,7 @@ namespace PitneyBowes.Developer.ShippingApi
             _writer( "== " + level.ToString() + " " + message + " " + ex.Message);
         }
     }
-
+#endif
     public static class ShippingApi
     {
         public class Session
@@ -40,6 +44,8 @@ namespace PitneyBowes.Developer.ShippingApi
             public string Name { get; set; }
             public IToken AuthToken { get; set; }
 
+#if NET_45
+#else
             public DebugTraceWriter NewtonSoftTrace { get; set; }
             public bool TraceSerialization
             {
@@ -50,7 +56,7 @@ namespace PitneyBowes.Developer.ShippingApi
                     if (!value) NewtonSoftTrace = null;
                 }
             }
-
+#endif
 
             internal Dictionary<Type, JsonConverter> SerializationRegistry = new Dictionary<Type, JsonConverter>();
             internal Dictionary<Type, Type> WrapperRegistry = new Dictionary<Type, Type>();

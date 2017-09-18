@@ -112,7 +112,10 @@ namespace PitneyBowes.Developer.ShippingApi
                     ((ShippingApiContractResolver)serializer.ContractResolver).Session = session;
                     serializer.NullValueHandling = NullValueHandling.Ignore;
                     serializer.Formatting = Formatting.Indented;
+#if NET_45
+#else
                     if (session.TraceSerialization) serializer.TraceWriter = session.NewtonSoftTrace;
+#endif
                     serializer.Serialize(writer, request);
                     writer.Flush();
                     return;
