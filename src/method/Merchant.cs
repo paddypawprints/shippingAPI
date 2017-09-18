@@ -59,19 +59,19 @@ namespace PitneyBowes.Developer.ShippingApi.Method
         public string DeveloperId { get; set; }
 
         [JsonProperty("contact")]
-        IAddress Contact { get; set; }
+        public IAddress Contact { get; set; }
 
         [JsonProperty("paymentInfo")]
-        IEnumerable<IPaymentInfo> PaymentInfo { get; set; }
+        public IEnumerable<IPaymentInfo> PaymentInfo { get; set; }
 
         [JsonProperty("initialPostageBalance")]
-        decimal IntialPostageValue { get; set; }
+        public decimal IntialPostageValue { get; set; }
 
         [JsonProperty("refillAmount")]
-        decimal RefillAmount { get; set; }
+        public decimal RefillAmount { get; set; }
 
         [JsonProperty("thresholdAmount")]
-        decimal ThresholdAmount { get; set; }
+        public decimal ThresholdAmount { get; set; }
     }
 
     [JsonObject(MemberSerialization.OptIn)]
@@ -86,10 +86,10 @@ namespace PitneyBowes.Developer.ShippingApi.Method
         public string DeveloperId { get; set; }
 
         [JsonProperty("username")]
-        string UserName { get; set; }
+        public string UserName { get; set; }
 
         [JsonProperty("password")]
-        string Password { get; set; }
+        public StringBuilder Password { get; set; }
     }
 
     [JsonObject(MemberSerialization.OptIn)]
@@ -104,10 +104,10 @@ namespace PitneyBowes.Developer.ShippingApi.Method
         public string DeveloperId { get; set; }
 
         [JsonProperty("username")]
-        string UserName { get; set; }
+        public string UserName { get; set; }
 
         [JsonProperty("password")]
-        string Password { get; set; }
+        public string Password { get; set; }
 
         [JsonProperty("addressLines", Order = 5)]
         public IEnumerable<string> AddressLines { get;set;}

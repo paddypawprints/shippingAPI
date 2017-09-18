@@ -9,7 +9,7 @@ using PitneyBowes.Developer.ShippingApi.Json;
 namespace PitneyBowes.Developer.ShippingApi.Method
 {
 
-    public class ReprintManifestRequest : ShippingApiRequest
+    public class RetryManifestRequest : ShippingApiRequest
     {
         public override string ContentType { get => "application/json"; }
 
@@ -23,7 +23,7 @@ namespace PitneyBowes.Developer.ShippingApi.Method
         public string OriginalTransactionId { get; set; }
     }
 
-    public class RetryManifestRequest : ShippingApiRequest
+    public class ReprintManifestRequest : ShippingApiRequest
     {
         public override string ContentType { get => "application/json";  }
 

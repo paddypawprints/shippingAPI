@@ -18,7 +18,7 @@ namespace PitneyBowes.Developer.ShippingApi.Method
         public override StringBuilder Authorization { get; set; }
 
         [ShippingApiResource("pickups", AddId = true, PathSuffix = "/cancel")]
-        string PickupId { get; set; }
+        public string PickupId { get; set; }
 
         [JsonProperty("status")]
         public string Status { get; set; }
@@ -33,7 +33,7 @@ namespace PitneyBowes.Developer.ShippingApi.Method
             scheduleRequest.Authorization = new StringBuilder(session.AuthToken.AccessToken);
             return await WebMethod.Post<T, JsonPickup<T>>("/shippingservices/v1/pickups/schedule", scheduleRequest, session);
         }
-        public async static Task<ShippingApiResponse<PickupCancelRequest>> CancelPickup<T>(PickupCancelRequest request, ShippingApi.Session session = null) where T : IAddress, new()
+        public async static Task<ShippingApiResponse<PickupCancelRequest>> CancelPickup(PickupCancelRequest request, ShippingApi.Session session = null)
         {
             request.Status = "Success";
             if (session == null) session = ShippingApi.DefaultSession;

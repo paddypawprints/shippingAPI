@@ -113,12 +113,12 @@ namespace example
     {
         public static AddressFluent<Address> USParse(this AddressFluent<Address> f, string s)
         {
-            var parser = new AddressParser.AddressParser();
+ /*           var parser = new AddressParser.AddressParser();
             var address = parser.ParseAddress(s);
             f.CityTown(address.City);
             f.CountryCode("US");
             f.PostalCode(address.Zip);
-            f.AddressLines(address.StreetLine);
+            f.AddressLines(address.StreetLine);*/
             return f;
 
         }

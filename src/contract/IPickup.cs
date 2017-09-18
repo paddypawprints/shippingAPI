@@ -8,6 +8,7 @@ namespace PitneyBowes.Developer.ShippingApi
         IAddress PickupAddress { get; set; }
         Carrier Carrier { get; set; }
         IEnumerable<IPickupCount> PickupSummary { get; set; }
+        void AddPickupCount(IPickupCount p);
         string Reference { get; set; }
         PackageLocation PackageLocation { get; set; }
         string SpecialInstructions { get; set; }

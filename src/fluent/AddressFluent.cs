@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using PitneyBowes.Developer.ShippingApi.Method;
 
 
@@ -25,10 +26,16 @@ namespace PitneyBowes.Developer.ShippingApi.Fluent
             return a;
         }
 
-        private AddressFluent()
+        public AddressFluent()
         {
-            
+            _address = new T();
         }
+
+        public AddressFluent(IAddress a )
+        {
+            _address = (T)a;
+        }
+
         /// <summary>
         /// Specify up to three address lines for the street address, including suite number.
         /// <a href="https://shipping.pitneybowes.com/reference/resource-objects.html#object-address"/>
@@ -108,12 +115,25 @@ namespace PitneyBowes.Developer.ShippingApi.Fluent
 
         public AddressFluent<T> Verify()
         {
-            var addressResponse = AddressessMethods.VerifyAddress<T>(_address).GetAwaiter().GetResult();
+            var addressResponse = AddressessMethods.VerifyAddress(_address).GetAwaiter().GetResult();
             if (addressResponse.Success)
             {
                 _address = addressResponse.APIResponse;
             }
             return this;
+        }
+        public IEnumerable<AddressFluent<T>> VerifySuggest()
+        {
+            var addressResponse = AddressessMethods.VerifySuggestAddress<T>(_address).GetAwaiter().GetResult();
+            if (addressResponse.Success)
+            {
+                _address = (T)addressResponse.APIResponse.Address;
+                foreach( var a in addressResponse.APIResponse.Suggestions.Addresses)
+                {
+                    yield return new AddressFluent<T>((T)a);
+                }
+            }
+            yield break;
         }
     }
 }

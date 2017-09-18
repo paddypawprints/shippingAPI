@@ -16,5 +16,10 @@ namespace PitneyBowes.Developer.ShippingApi.Model
         virtual public DateTime PickupDate { get; set; }
         virtual public string PickupConfirmationNumber { get; set; }
         virtual public string PickupId { get; set; }
+
+        public void AddPickupCount(IPickupCount p)
+        {
+            ModelHelper.AddToEnumerable<IPickupCount, IPickupCount>(p, () => PickupSummary, (x) => PickupSummary = x);
+        }
     }
 }

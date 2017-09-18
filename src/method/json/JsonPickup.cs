@@ -102,5 +102,9 @@ namespace PitneyBowes.Developer.ShippingApi.Json
         [ShippingApiHeaderAttribute("Bearer")]
         public StringBuilder Authorization { get; set; }
 
+        public void AddPickupCount(IPickupCount p)
+        {
+            Wrapped.AddPickupCount(p);
+        }
     }
 }
