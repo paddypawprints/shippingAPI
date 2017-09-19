@@ -41,20 +41,20 @@ namespace PitneyBowes.Developer.ShippingApi
 
         private static void DeserializationError(object sender, Newtonsoft.Json.Serialization.ErrorEventArgs e)
         {
-            throw e.ErrorContext.Error; //TODO:
+            throw new ApplicationException("Error deserializing", e.ErrorContext.Error);
         }
 
 
-        public static void Deserialize(ShippingApi.Session session, Stream respStream, ShippingApiResponse<Response> apiResponse)
+        public static void Deserialize(ShippingApi.Session session, Stream respStream, ShippingApiResponse<Response> apiResponse, long streamPos = 0)
         {
             var deserializer = new JsonSerializer();
             deserializer.Error += DeserializationError;
             deserializer.ContractResolver = new ShippingApiContractResolver();
             ((ShippingApiContractResolver)deserializer.ContractResolver).Session = session;
-
+            respStream.Seek(streamPos, SeekOrigin.Begin);
             JsonConverter converter = new ShippingApiResponseTypeConverter<Response>();
             Type t = (Type)converter.ReadJson(new JsonTextReader(new StreamReader(respStream)), typeof(Type), null, deserializer);
-            respStream.Seek(0, SeekOrigin.Begin);
+            respStream.Seek(streamPos, SeekOrigin.Begin);
             if (t == typeof(ErrorFormat1))
             {
                 var error = (ErrorFormat1[])deserializer.Deserialize(new StreamReader(respStream), typeof(ErrorFormat1[]));

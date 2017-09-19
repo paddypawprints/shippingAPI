@@ -93,7 +93,7 @@ namespace PitneyBowes.Developer.ShippingApi
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            throw new NotImplementedException();
+            throw new ApplicationException("ShippingApiResponseTypeConverter does not support serialization");
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
@@ -107,9 +107,10 @@ namespace PitneyBowes.Developer.ShippingApi
                     if (t != null) return t;
                 }
                 i++;
-                if (i > MAX_TOKENS) throw new Exception();
+                if (i > MAX_TOKENS) throw new ApplicationException("ShippingApiResponseTypeConverter only looks at " + MAX_TOKENS + " tokens");
             }
-            throw new Exception(); // TODO: logging etc.
+
+            throw new ApplicationException("ShippingApiResponseTypeConverter type not found - stream ran out of tokens");
         }
 
         public override bool CanConvert(Type objectType)

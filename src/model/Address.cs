@@ -13,7 +13,7 @@ namespace PitneyBowes.Developer.ShippingApi.Model
         {
             if (AddressLines as List<string> != null )
             {
-                if ((AddressLines as List<string>).Count == 3) throw new Exception();
+                if ((AddressLines as List<string>).Count == 3) throw new InvalidOperationException("Address can only have 3 lines");
             }
             ModelHelper.AddToEnumerable<string, string>(s,()=>AddressLines, (x)=>AddressLines = x);
         }

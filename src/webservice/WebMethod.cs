@@ -4,10 +4,7 @@ using System.Threading.Tasks;
 
 namespace PitneyBowes.Developer.ShippingApi
 {
-    internal enum HttpVerb
-    {
-        POST, PUT, GET, DELETE
-    }
+
 
     internal class WebMethod
     {

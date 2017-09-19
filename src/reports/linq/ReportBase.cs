@@ -21,15 +21,15 @@ namespace PitneyBowes.Developer.ShippingApi
         {
             if (expression == null)
             {
-                throw new ArgumentNullException("expression");
+                throw new ArgumentNullException("expression is null");
             }
 
             if (!typeof(IQueryable<T>).IsAssignableFrom(expression.Type))
             {
-                throw new ArgumentOutOfRangeException("expression");
+                throw new ArgumentOutOfRangeException("expression type mismatch");
             }
 
-            Provider = provider ?? throw new ArgumentNullException("provider");
+            Provider = provider ?? throw new ArgumentNullException("provider is null");
             Expression = expression;
         }
 

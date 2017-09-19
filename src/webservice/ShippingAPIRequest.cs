@@ -140,7 +140,8 @@ namespace PitneyBowes.Developer.ShippingApi
 
                     return;
                 default:
-                    throw new Exception(); //TODO:
+                    session.LogConfigError("Unrecognized request content type:" + request.ContentType);
+                    throw new ApplicationException("Unrecognized request content type:" + request.ContentType); 
             }
         }
         public virtual string GetUri(string baseUrl)

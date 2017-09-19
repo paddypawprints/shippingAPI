@@ -25,7 +25,7 @@ namespace PitneyBowes.Developer.ShippingApi
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            if (!typeof(TrackingStatusCode).Equals(value.GetType())) throw new Exception(); //TODO
+            if (!typeof(TrackingStatusCode).Equals(value.GetType())) throw new InvalidOperationException(string.Format("Cant TrackingStatusConverter use on a {0}", value.GetType().ToString())); 
             var s = (TrackingStatusCode)value;
             switch (s)
             {

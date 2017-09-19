@@ -27,7 +27,7 @@ namespace PitneyBowes.Developer.ShippingApi
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            if (!typeof(SpecialServiceCodes).Equals(value.GetType())) throw new Exception(); //TODO
+            if (!typeof(SpecialServiceCodes).Equals(value.GetType())) throw new InvalidOperationException(string.Format("Can't use a USPSSpecialServiceCodesConverter to serialize {0}", value.GetType().ToString())); 
             var s = (SpecialServiceCodes)value;
             switch(s)
             {

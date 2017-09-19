@@ -21,10 +21,8 @@ namespace PitneyBowes.Developer.ShippingApi
             _writer = writer;
         }
 
-        public TraceLevel LevelFilter => throw new NotImplementedException();
-
-        TraceLevel ITraceWriter.LevelFilter => throw new NotImplementedException();
-
+        public TraceLevel LevelFilter => throw new NotImplementedException("JsonConvert TraceLevel");
+        TraceLevel ITraceWriter.LevelFilter => throw new NotImplementedException("JsonConvert TraceLevelFilter");
         public void Trace(TraceLevel level, string message, Exception ex)
         {
             _writer( "== " + level.ToString() + " " + message + " " + ex.Message);
@@ -35,7 +33,7 @@ namespace PitneyBowes.Developer.ShippingApi
     {
         public class Session
         {
-            internal IHttpRequest Requestor { get; set; } // to allow mocking
+            public IHttpRequest Requestor { get; set; } // to allow mocking
 
             public static implicit operator Session(string name)
             {

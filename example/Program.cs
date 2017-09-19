@@ -104,6 +104,8 @@ namespace example
             AddConfigItem("ApiKey", "Ci4vEAgBP8Aww7TBwGOKhr43uKTPNyfO");
             AddConfigItem("RatePlan", "PP_SRP_NEWBLUE");
 
+            DefaultSession.Requestor = new ShippingAPIMock();
+
 #if NET_45
 #else
             DefaultSession.TraceSerialization = true;

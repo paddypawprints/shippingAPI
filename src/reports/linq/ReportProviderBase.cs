@@ -32,7 +32,7 @@ namespace PitneyBowes.Developer.ShippingApi
             var request = rf.Request;
             initializeRequest(request);
             if (!request.Validate())
-                throw new Exception("Request is not valid"); // TODO
+                throw new ApplicationException("Execute: Request is not valid"); 
 
             // Call the Web service and get the results.
             var report = reportService(request);

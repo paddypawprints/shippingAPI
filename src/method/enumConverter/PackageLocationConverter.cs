@@ -36,7 +36,7 @@ namespace PitneyBowes.Developer.ShippingApi
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            if (!typeof(PackageLocation).Equals(value.GetType())) throw new Exception(); //TODO
+            if (!typeof(PackageLocation).Equals(value.GetType())) throw new InvalidOperationException(string.Format("Can't use PackageLocationConverter on a {0}", value.GetType().ToString())); 
             var s = (PackageLocation)value;
             switch (s)
             {

@@ -29,7 +29,7 @@ namespace PitneyBowes.Developer.ShippingApi
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            if (!typeof(TransactionType).Equals(value.GetType())) throw new Exception(); //TODO
+            if (!typeof(TransactionType).Equals(value.GetType())) throw new InvalidOperationException(string.Format("Cant use TransactionTypeConverter to serialize a {0}", value.GetType().ToString())); 
             var s = (TransactionType)value;
             switch (s)
             {

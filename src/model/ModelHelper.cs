@@ -9,7 +9,7 @@ namespace PitneyBowes.Developer.ShippingApi.Model
             where T: class
             where I :class
         {
-            if ((i as T) == null) throw new Exception(); //TODO:
+            if ((i as T) == null) throw new NullReferenceException(string.Format("Cant add null to Enumerable {0}, {1}", typeof(T).Name, typeof(I).Name)); 
             List<T> l;
             if (get() == null)
             {

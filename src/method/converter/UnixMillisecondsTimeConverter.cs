@@ -23,7 +23,7 @@ namespace PitneyBowes.Developer.ShippingApi
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException("UnixMillisecondsTimeConverter serializer not implemented");
         }
  
     }

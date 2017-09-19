@@ -16,7 +16,7 @@ namespace PitneyBowes.Developer.ShippingApi.Method
         public string GrantType {get => "client_credentials";}
 
         [ShippingApiHeaderAttribute("Basic")]
-        public override StringBuilder  Authorization {get;set;}
+        public override StringBuilder Authorization {get;set;}
 
 
         public override string ContentType  => "application/x-www-form-urlencoded"; 
@@ -73,12 +73,15 @@ namespace PitneyBowes.Developer.ShippingApi.Method
             {
                 if (session == null) session = ShippingApi.DefaultSession;
                 request.BasicAuth(session.GetConfigItem("ApiKey"), session.GetAPISecret());
-                var jsonResponse = await WebMethod.Post<PitneyBowes.Developer.ShippingApi.Json.JsonToken<T>, TokenRequest>("/oauth/token", request, session);
+                var jsonResponse = await WebMethod.Post<JsonToken<T>, TokenRequest>("/oauth/token", request, session);
                 if (jsonResponse.HttpStatus == HttpStatusCode.OK)
                 {
                     session.AuthToken = jsonResponse.APIResponse;
                 }
-                return new ShippingApiResponse<T>() { APIResponse = jsonResponse.APIResponse.Wrapped, Errors = jsonResponse.Errors, HttpStatus = jsonResponse.HttpStatus, Success = jsonResponse.Success };
+                if (jsonResponse.APIResponse != null)
+                    return new ShippingApiResponse<T>() { APIResponse = jsonResponse.APIResponse.Wrapped, Errors = jsonResponse.Errors, HttpStatus = jsonResponse.HttpStatus, Success = jsonResponse.Success };
+                else
+                    return new ShippingApiResponse<T>() { APIResponse = default(T), Errors = jsonResponse.Errors, HttpStatus = jsonResponse.HttpStatus, Success = jsonResponse.Success };
             }
         }
     }

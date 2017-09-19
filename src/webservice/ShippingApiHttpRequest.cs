@@ -42,11 +42,6 @@ namespace PitneyBowes.Developer.ShippingApi
 
             string uriBuilder = request.GetUri(resource);
 
-            return await HttpRequest<Response, Request>(verb, request, session, client, uriBuilder);
-        }
-
-        private static async Task<ShippingApiResponse<Response>> HttpRequest<Response, Request>(HttpVerb verb, Request request, ShippingApi.Session session, HttpClient client, string uriBuilder) where Request : IShippingApiRequest
-        {
             HttpResponseMessage httpResponseMessage;
 
             if (verb == HttpVerb.PUT || verb == HttpVerb.POST)
@@ -90,6 +85,7 @@ namespace PitneyBowes.Developer.ShippingApi
                 }
                 else
                 {
+                    session.LogWarning(String.Format("http {0} request to {1} failed with error {2}", verb.ToString(), uriBuilder, httpResponseMessage.StatusCode));
                     var apiResponse = new ShippingApiResponse<Response> { HttpStatus = httpResponseMessage.StatusCode, Success = httpResponseMessage.IsSuccessStatusCode };
 
                     apiResponse.Errors.Add(new ErrorDetail() { ErrorCode = "HTTP " + httpResponseMessage.Version + " " + httpResponseMessage.StatusCode.ToString(), Message = httpResponseMessage.ReasonPhrase });
