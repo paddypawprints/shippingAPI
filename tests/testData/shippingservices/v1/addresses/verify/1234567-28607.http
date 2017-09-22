@@ -1,0 +1,12 @@
+Connection:keep-alive
+Date:Fri, 22 Sep 2017 14:30:56 GMT
+Server:ApigeeRouter
+X-PB-CorrelationId:12a3cd570af14f30a4245223dd6638c7
+X-PB-DeveloperId:46841939
+X-PB-IntegratorId:46841939
+X-PB-IsCharged:true
+X-PB-MessageWeight:1
+X-PB-PartnerId:325584758
+X-PB-TransactionId:1506090655943
+
+{"addressLines":["643 Greenway Rd"],"cityTown":"Boone","stateProvince":"NC","postalCode":"28607-4819","countryCode":"US","company":"ABC Company","name":"Rufous Sirius Canid","phone":"323 555-1212","email":"rs.canid@gmail.com","residential":false,"deliveryPoint":"99","status":"VALIDATED_CHANGED"}

@@ -44,16 +44,19 @@ namespace PitneyBowes.Developer.ShippingApi
             throw new ApplicationException("Error deserializing", e.ErrorContext.Error);
         }
 
-        public static void Deserialize(Session session, Stream respStream, ShippingApiResponse<Response> apiResponse, long streamPos = 0)
+        public static void Deserialize(Session session, RecordingStream respStream, ShippingApiResponse<Response> apiResponse, long streamPos = 0)
         {
             var deserializer = new JsonSerializer();
             deserializer.Error += DeserializationError;
             deserializer.ContractResolver = new ShippingApiContractResolver();
             ((ShippingApiContractResolver)deserializer.ContractResolver).Session = session;
+            var recording = respStream.IsRecording;
+            respStream.IsRecording = false;
             respStream.Seek(streamPos, SeekOrigin.Begin);
             JsonConverter converter = new ShippingApiResponseTypeConverter<Response>();
             Type t = (Type)converter.ReadJson(new JsonTextReader(new StreamReader(respStream)), typeof(Type), null, deserializer);
             respStream.Seek(streamPos, SeekOrigin.Begin);
+            respStream.IsRecording = recording;
             if (t == typeof(ErrorFormat1))
             {
                 var error = (ErrorFormat1[])deserializer.Deserialize(new StreamReader(respStream), typeof(ErrorFormat1[]));

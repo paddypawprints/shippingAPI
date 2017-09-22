@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Text;
 
 namespace PitneyBowes.Developer.ShippingApi
 {
@@ -12,40 +13,68 @@ namespace PitneyBowes.Developer.ShippingApi
         private Stream _baseStream = null;
         private FileStream _recorder = null;
         private FileMode _fileMode;
+        private bool _recording;
 
         public RecordingStream(Stream baseStream, string path, FileMode fileMode )
         {
             _baseStream = baseStream;
             _path = path;
             _fileMode = fileMode;
-            RecordAfterSeek = false;
+            _recording = false;
         }
-
-        /// <summary>
-        /// Sets up recording to begin after the stream is positioned at correct place for reading or writing
-        /// </summary>
-        public bool RecordAfterSeek { get; set; }
 
         /// <summary>
         /// Turns recording on or off. This is a heavy operation - opens and closes the file. If you want to start and stop a lot, modify this method
         /// </summary>
         public bool IsRecording
         {
-            get { return _recorder != null; }
-            set
+            get { return _recorder != null && _recording; }
+            set { _recording = value; }
+        }
+
+        public void OpenRecord()
+        {
+            if (_recorder == null)
             {
-                if ( value && _recorder == null )
-                {
-                    Directory.CreateDirectory(Path.GetDirectoryName(_path));
-                    _recorder = new FileStream(_path, _fileMode, FileAccess.Write);
-                }
-                else if ( !value && _recorder != null )
-                {
-                    _recorder.Dispose();
-                    _recorder = null;
-                }
+                Directory.CreateDirectory(Path.GetDirectoryName(_path));
+                _recorder = new FileStream(_path, _fileMode, FileAccess.Write);
             }
         }
+
+        public void CloseRecord()
+        {
+            if ( _recorder != null)
+            {
+                _recording = false;
+                _recorder.Close();
+                _recorder.Dispose();
+                _recorder = null;
+            }
+        }
+        public void WriteRecord( string s)
+        {
+            if (_recorder == null) return;
+            if (!_recording) return;
+            var b = Encoding.UTF8.GetBytes(s);
+            _recorder.Write(b, 0, b.Length);
+        }
+
+        public void WriteRecordCRLF(string s)
+        {
+            if (_recorder == null) return;
+            if (!_recording) return;
+            WriteRecord(s);
+            WriteRecord("\r\n"); 
+        }
+
+
+        public void FlushRecord()
+        {
+            if (_recorder == null) return;
+            _recorder.Flush();
+
+        }
+
         public override bool CanRead => _baseStream.CanRead;
 
         public override bool CanSeek => _baseStream.CanSeek;
@@ -75,10 +104,6 @@ namespace PitneyBowes.Developer.ShippingApi
 
         public override long Seek(long offset, SeekOrigin origin)
         {
-            if ( !IsRecording && RecordAfterSeek )
-            {
-                IsRecording = true;
-            }
             return _baseStream.Seek(offset, origin);
         }
 
@@ -95,11 +120,7 @@ namespace PitneyBowes.Developer.ShippingApi
 
         public new void Dispose()
         {
-            if (_recorder != null)
-            {
-                _recorder.Dispose();
-                _recorder = null;
-            }
+            CloseRecord();
             base.Dispose();
         }
     }

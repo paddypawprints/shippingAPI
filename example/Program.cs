@@ -4,6 +4,7 @@ using PitneyBowes.Developer.ShippingApi.Model;
 using PitneyBowes.Developer.ShippingApi.Method;
 using System;
 using System.Linq;
+
 using static PitneyBowes.Developer.ShippingApi.SessionDefaults;
 
 namespace example
@@ -100,7 +101,7 @@ namespace example
             DefaultSession.LogConfigError = (s) => Console.WriteLine("Bad code:" + s);
             DefaultSession.LogDebug = (s) => Console.WriteLine(s);
             //DefaultSession.Requestor = new ShippingAPIMock();
-            DefaultSession.Record = true;
+            //DefaultSession.Record = true;
 #if NET_45
 #else
             DefaultSession.TraceSerialization = true;

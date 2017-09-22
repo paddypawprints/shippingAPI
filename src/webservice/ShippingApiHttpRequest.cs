@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Text;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -74,16 +75,29 @@ namespace PitneyBowes.Developer.ShippingApi
             {
                 using (var recordingStream = new RecordingStream(respStream, request.RecordingFullPath(resource, session), FileMode.Create))
                 {
-                    if (session.Record ) recordingStream.RecordAfterSeek = true; 
+                    if (session.Record)
+                    {
+                        recordingStream.OpenRecord();
+                    }
 
                     if (httpResponseMessage.IsSuccessStatusCode)
                     {
                         var apiResponse = new ShippingApiResponse<Response> { HttpStatus = httpResponseMessage.StatusCode, Success = httpResponseMessage.IsSuccessStatusCode };
-                        ShippingApiResponse<Response>.Deserialize(session, recordingStream, apiResponse);
+                        recordingStream.IsRecording = true;
+                        var sb = new StringBuilder();
                         foreach (var h in httpResponseMessage.Headers)
                         {
                             apiResponse.ProcessResponseAttribute(h.Key, h.Value);
+                            foreach( var s in h.Value )
+                            {
+                                sb.Append(s);
+                            }
+                            recordingStream.WriteRecordCRLF(string.Format("{0}:{1}", h.Key, sb.ToString()));
+                            sb.Clear();
                         }
+                        recordingStream.WriteRecordCRLF("");
+
+                        ShippingApiResponse<Response>.Deserialize(session, recordingStream, apiResponse);
                         return apiResponse;
                     }
                     else

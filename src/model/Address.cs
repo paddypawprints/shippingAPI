@@ -8,6 +8,10 @@ namespace PitneyBowes.Developer.ShippingApi.Model
     /// </summary>
     public class  Address : IAddress
     {
+        public Address()
+        {
+            Status = AddressStatus.NOT_CHANGED;
+        }
         virtual public IEnumerable<string> AddressLines { get; set; }
         virtual public void AddAddressLine(string s)
         {

@@ -17,6 +17,7 @@ namespace PitneyBowes.Developer.ShippingApi
         public async Task<ShippingApiResponse<Response>> HttpRequest<Response, Request>(string resource, HttpVerb verb, Request request, Session session = null) where Request : IShippingApiRequest
         {
             string fullPath = request.RecordingFullPath(resource, session);
+            string cwd = Directory.GetCurrentDirectory();
 
             if ( File.Exists(fullPath))
             {
@@ -25,22 +26,23 @@ namespace PitneyBowes.Developer.ShippingApi
                 using (var fileStream = new FileStream(fullPath, FileMode.Open, FileAccess.Read))
                 using (var fileReader = new StreamReader(fileStream))
                 {
-                    string line;
-                    while ( true )
+
+                    for (var line = await fileReader.ReadLineAsync(); line!=string.Empty; line = await fileReader.ReadLineAsync())
                     {
-                        line = await fileReader.ReadLineAsync();
                         jsonPosition += line.Length + 2; // + CRLF
-                        if (line == String.Empty) break;
-                        var header = line.Split(':');
-                        if (header.Length == 2 )
-                            apiResponse.ProcessResponseAttribute(header[0].Trim(), header[1].Trim().Split(','));
+                        if (line.IndexOf(':') == -1) continue;
+                        var headerName = line.Substring(0, line.IndexOf(':'));
+                        var headerValue = line.IndexOf(':') == line.Length? string.Empty : line.Substring( line.IndexOf(':')+1 );
+                        apiResponse.ProcessResponseAttribute(headerName, headerValue.Split(','));
                     }
                 }
-                using (var fileStream = new FileStream(fullPath, FileMode.Open, FileAccess.Read))
+                using (var fileStream = new FileStream(fullPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                using (var recordingStream = new RecordingStream(fileStream, request.RecordingFullPath(resource, session), FileMode.Create))
                 {
                     try
                     {
-                        ShippingApiResponse<Response>.Deserialize(session, fileStream, apiResponse, jsonPosition);
+                        //dont open the record file
+                        ShippingApiResponse<Response>.Deserialize(session, recordingStream, apiResponse, jsonPosition);
                     }
                     catch (Exception ex)
                     {
