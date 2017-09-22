@@ -1,7 +1,5 @@
-using System.Net.Http;
 using System;
 using System.Collections.Generic;
-using Newtonsoft.Json.Serialization;
 using PitneyBowes.Developer.ShippingApi.Json;
 using Newtonsoft.Json;
 
@@ -9,90 +7,8 @@ using Newtonsoft.Json;
 namespace PitneyBowes.Developer.ShippingApi
 {
 
-#if NET_45
-    // Differences in net_45 aqnd net_core Newtonsoft
-#else
-    public class DebugTraceWriter : ITraceWriter
+    public static class SessionDefaults
     {
-        private Action<string> _writer;
-
-        public DebugTraceWriter(Action<string> writer)
-        {
-            _writer = writer;
-        }
-
-        public TraceLevel LevelFilter => throw new NotImplementedException("JsonConvert TraceLevel");
-        TraceLevel ITraceWriter.LevelFilter => throw new NotImplementedException("JsonConvert TraceLevelFilter");
-        public void Trace(TraceLevel level, string message, Exception ex)
-        {
-            _writer( "== " + level.ToString() + " " + message + " " + ex.Message);
-        }
-    }
-#endif
-    public static class ShippingApi
-    {
-        public class Session
-        {
-            public IHttpRequest Requestor { get; set; } // to allow mocking
-
-            public static implicit operator Session(string name)
-            {
-                return ShippingApi._defaultSessions[name];
-            }
-            public string Name { get; set; }
-            public IToken AuthToken { get; set; }
-
-#if NET_45
-#else
-            public DebugTraceWriter NewtonSoftTrace { get; set; }
-            public bool TraceSerialization
-            {
-                get { return NewtonSoftTrace == null; }
-                set
-                {
-                    if (value && (NewtonSoftTrace == null)) NewtonSoftTrace = new DebugTraceWriter(LogDebug);
-                    if (!value) NewtonSoftTrace = null;
-                }
-            }
-#endif
-
-            internal Dictionary<Type, JsonConverter> SerializationRegistry = new Dictionary<Type, JsonConverter>();
-            internal Dictionary<Type, Type> WrapperRegistry = new Dictionary<Type, Type>();
-
-            private static object _clientLock = new object();
-            private static Dictionary<string, HttpClient> _clientLookup = new Dictionary<string, HttpClient>();
-            public HttpClient Client(string baseUrl)
-            {
-                lock (_clientLock)
-                {
-                    if (!_clientLookup.TryGetValue(baseUrl, out HttpClient client))
-                    {
-                        client = new HttpClient() { BaseAddress = new Uri(baseUrl) };
-                        _clientLookup.Add(baseUrl, client);
-                    }
-                    return client;
-                }
-            }
-            public Func<string, string> GetConfigItem = ShippingApi.GetConfigItem;
-            public Action<string, string> AddConfigItem = ShippingApi.AddConfigItem;
-            public Action<string> LogWarning = ShippingApi.LogWarning;
-            public Action<string> LogError = ShippingApi.LogError;
-            public Action<string> LogConfigError = ShippingApi.LogConfigError;
-            public Action<string> LogDebug = ShippingApi.LogDebug;
-            public Func<char[]> GetAPISecret = ShippingApi.GetAPISecret;
-            public string EndPoint { get; set; }
-            public void RegisterSerializationTypes<I, T>() where T : I
-            {
-                Type interfaceType = typeof(I);
-                Type objectType = typeof(T);
-                Type wrapperType = ShippingApi.WrapperRegistry[interfaceType];
-                JsonConverter c = new ShippingApiConverter(objectType, wrapperType.MakeGenericType(new Type[] { objectType }), this);
-
-                SerializationRegistry[interfaceType] = c;
-                SerializationRegistry[objectType] = c;
-                //WrapperRegistry[objectType] = wrapperType;
-            }
-        }
         public static Func<string, string> GetConfigItem = (s) => { return _defaultConfigs[s]; };
         public static Action<string, string> AddConfigItem = (k, v) => { _defaultConfigs.Add(k, v); };
         public static Action<string> LogWarning = (s) => { };
@@ -106,7 +22,7 @@ namespace PitneyBowes.Developer.ShippingApi
         public static Session DefaultSession;
 
         private static object _initLock = new object();
-        private static Dictionary<Type, Type> WrapperRegistry = new Dictionary<Type, Type>();
+        internal static Dictionary<Type, Type> WrapperRegistry = new Dictionary<Type, Type>();
 
         public static void Init()
         { 

@@ -135,5 +135,10 @@ namespace PitneyBowes.Developer.ShippingApi.Fluent
             }
             yield break;
         }
+
+        public AddressFluent<T> Person( string name, string phone = null, string email = null)
+        {
+            return Name(name).Phone(phone).Email(email);
+        }
     }
 }

@@ -11,10 +11,10 @@ namespace PitneyBowes.Developer.ShippingApi.Method
 
     public static class RatesMethods
     {
-        public async static Task<ShippingApiResponse<T>> Rates<T>(T request, ShippingApi.Session session = null) where T : IRates, new()
+        public async static Task<ShippingApiResponse<T>> Rates<T>(T request, Session session = null) where T : IRates, new()
         {
             var ratesRequest = new JsonRates<T>(request);
-            if (session == null) session = ShippingApi.DefaultSession;
+            if (session == null) session = SessionDefaults.DefaultSession;
             ratesRequest.Authorization = new StringBuilder(session.AuthToken.AccessToken);
             return await WebMethod.Post<T, JsonRates<T>>("/shippingservices/v1/rates", ratesRequest, session);
         }

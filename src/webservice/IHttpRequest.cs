@@ -12,6 +12,6 @@ namespace PitneyBowes.Developer.ShippingApi
 
     public interface IHttpRequest
     {
-         Task<ShippingApiResponse<Response>> HttpRequest<Response, Request>(string resource, HttpVerb verb, Request request, ShippingApi.Session session = null) where Request : IShippingApiRequest;
+         Task<ShippingApiResponse<Response>> HttpRequest<Response, Request>(string resource, HttpVerb verb, Request request, Session session = null) where Request : IShippingApiRequest;
     }
 }

@@ -65,13 +65,13 @@ namespace PitneyBowes.Developer.ShippingApi.Method
     public static class TokenMethods
     {
 #pragma warning disable IDE1006 // Naming Styles
-        public static async Task<ShippingApiResponse<T>> token<T>(ShippingApi.Session session = null) where T : IToken, new()
+        public static async Task<ShippingApiResponse<T>> token<T>(Session session = null) where T : IToken, new()
 
 #pragma warning restore IDE1006 // Naming Styles
         {
             using (var request = new TokenRequest())
             {
-                if (session == null) session = ShippingApi.DefaultSession;
+                if (session == null) session = SessionDefaults.DefaultSession;
                 request.BasicAuth(session.GetConfigItem("ApiKey"), session.GetAPISecret());
                 var jsonResponse = await WebMethod.Post<JsonToken<T>, TokenRequest>("/oauth/token", request, session);
                 if (jsonResponse.HttpStatus == HttpStatusCode.OK)

@@ -1,8 +1,5 @@
-using Newtonsoft.Json;
-using System.Collections.Generic;
-using System;
-using PitneyBowes.Developer.ShippingApi.Model;
 
+using System.Collections.Generic;
 namespace PitneyBowes.Developer.ShippingApi.Fluent
 {
     public class DocumentsArrayFluent<T> : List<IDocument> where T : IDocument, new()
@@ -67,6 +64,15 @@ namespace PitneyBowes.Developer.ShippingApi.Fluent
         {
             _current.PrintDialogOption = option;
             return this;
+        }
+        public DocumentsArrayFluent<T> ShippingLabel( ContentType contentType = Developer.ShippingApi.ContentType.URL, Size size = Developer.ShippingApi.Size.DOC_8X11, FileFormat fileFormat = Developer.ShippingApi.FileFormat.PDF)
+        {
+            return Add()
+                .DocumentType(Developer.ShippingApi.DocumentType.SHIPPING_LABEL)
+                .ContentType(contentType)
+                .Size(size)
+                .FileFormat(fileFormat)
+                .PrintDialogOption(Developer.ShippingApi.PrintDialogOption.NO_PRINT_DIALOG);
         }
     }
 }

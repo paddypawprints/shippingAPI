@@ -44,8 +44,7 @@ namespace PitneyBowes.Developer.ShippingApi
             throw new ApplicationException("Error deserializing", e.ErrorContext.Error);
         }
 
-
-        public static void Deserialize(ShippingApi.Session session, Stream respStream, ShippingApiResponse<Response> apiResponse, long streamPos = 0)
+        public static void Deserialize(Session session, Stream respStream, ShippingApiResponse<Response> apiResponse, long streamPos = 0)
         {
             var deserializer = new JsonSerializer();
             deserializer.Error += DeserializationError;

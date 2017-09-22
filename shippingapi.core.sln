@@ -15,9 +15,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "OpenSource", "OpenSource", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AddressParser.Core", "OpenSource\AddressParser\AddressParser.Core\AddressParser.Core.csproj", "{59ECEFF5-54E0-4E62-86F5-2AF8D839F0F8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntervalKDTree.core", "OpenSource\IntervalKDTree.core\IntervalKDTree.core.csproj", "{6A48FA4E-2A60-415E-942B-9CE21336437E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntervalKDTree.core", "OpenSource\IntervalKDTree.core\IntervalKDTree.core.csproj", "{6A48FA4E-2A60-415E-942B-9CE21336437E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntervalTree.core", "OpenSource\Interval-Tree\IntervalTree.core\IntervalTree.core.csproj", "{157041ED-C01F-4FE2-B12E-E812712D2F31}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntervalTree.core", "OpenSource\Interval-Tree\IntervalTree.core\IntervalTree.core.csproj", "{157041ED-C01F-4FE2-B12E-E812712D2F31}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{DF857659-033E-4C4A-A4FF-3F7FCA0F5E2B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F6486649-A920-4981-8DAE-FD75E279CF50}"
+	ProjectSection(SolutionItems) = preProject
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -106,6 +114,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{FC95BE84-F304-4CF0-999B-C791C4FF80B2} = {DF857659-033E-4C4A-A4FF-3F7FCA0F5E2B}
 		{59ECEFF5-54E0-4E62-86F5-2AF8D839F0F8} = {198BC02C-D853-46A2-8D46-1768E5EF06D0}
 		{6A48FA4E-2A60-415E-942B-9CE21336437E} = {198BC02C-D853-46A2-8D46-1768E5EF06D0}
 		{157041ED-C01F-4FE2-B12E-E812712D2F31} = {198BC02C-D853-46A2-8D46-1768E5EF06D0}

@@ -15,7 +15,13 @@ namespace PitneyBowes.Developer.ShippingApi.Method
     /// 
     [JsonObject(MemberSerialization.OptIn)]
     public class CreateShipmentRequest<T> : JsonWrapper<T>, IShippingApiRequest where T:IShipment, new()
-    { 
+    {
+
+        public string RecordingSuffix => "";
+        public string RecordingFullPath(string resource, Session session)
+        {
+            return ShippingApiRequest.RecordingFullPath(this, resource, session);
+        }
 
         [ShippingApiHeader("x-pb-transactionId", true)]
         public string TransactionId { get; set; }
@@ -106,7 +112,7 @@ namespace PitneyBowes.Developer.ShippingApi.Method
             return ShippingApiRequest.GetHeaders(this);
         }
 
-        public void SerializeBody(StreamWriter writer, ShippingApi.Session session)
+        public void SerializeBody(StreamWriter writer, Session session)
         {
             ShippingApiRequest.SerializeBody(this, writer, session);
         }
@@ -168,22 +174,22 @@ namespace PitneyBowes.Developer.ShippingApi.Method
     public static class ShipmentsMethods
     {
 
-        public async static Task<ShippingApiResponse<T>> CreateShipment<T>(CreateShipmentRequest<T> request, ShippingApi.Session session = null) where T:IShipment, new()
+        public async static Task<ShippingApiResponse<T>> CreateShipment<T>(CreateShipmentRequest<T> request, Session session = null) where T:IShipment, new()
         {
-            if (session == null) session = ShippingApi.DefaultSession;
+            if (session == null) session = SessionDefaults.DefaultSession;
             request.Authorization = new StringBuilder(session.AuthToken.AccessToken);
             return await WebMethod.Post< T, CreateShipmentRequest<T>>( "/shippingservices/v1/shipments", request, session );
         }
-        public async static Task<ShippingApiResponse<CancelShipmentResponse>> CancelShipment( CancelShipmentRequest request, ShippingApi.Session session = null)
+        public async static Task<ShippingApiResponse<CancelShipmentResponse>> CancelShipment( CancelShipmentRequest request, Session session = null)
         {
-            if (session == null) session = ShippingApi.DefaultSession;
+            if (session == null) session = SessionDefaults.DefaultSession;
             request.Authorization = new StringBuilder(session.AuthToken.AccessToken);
             return await WebMethod.Delete<CancelShipmentResponse, CancelShipmentRequest>( "/shippingservices/v1/shipments", request, session );
         }
 
-        public async static Task<ShippingApiResponse<T>>  ReprintShipment<T>(ReprintShipmentRequest request, ShippingApi.Session session = null) where T : IShipment, new()
+        public async static Task<ShippingApiResponse<T>>  ReprintShipment<T>(ReprintShipmentRequest request, Session session = null) where T : IShipment, new()
         {
-            if (session == null) session = ShippingApi.DefaultSession;
+            if (session == null) session = SessionDefaults.DefaultSession;
             request.Authorization = new StringBuilder(session.AuthToken.AccessToken);
             return  await WebMethod.Get<T, ReprintShipmentRequest>( "/shippingservices/v1/shipments", request, session );
         }

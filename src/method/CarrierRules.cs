@@ -23,9 +23,9 @@ namespace PitneyBowes.Developer.ShippingApi.Method
     public static class CarrierRules
     {
 
-        public async static Task<ShippingApiResponse<T>> RatingServices<T>(RatingServicesRequest request, ShippingApi.Session session = null) where T : ICarrierRule, new()
+        public async static Task<ShippingApiResponse<T>> RatingServices<T>(RatingServicesRequest request, Session session = null) where T : ICarrierRule, new()
         {
-            if (session == null) session = ShippingApi.DefaultSession;
+            if (session == null) session = SessionDefaults.DefaultSession;
             request.Authorization = new StringBuilder(session.AuthToken.AccessToken);
             return await WebMethod.Get<T, RatingServicesRequest>("/v1/information/rules/rating-services", request, session);
         }

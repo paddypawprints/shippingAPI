@@ -10,7 +10,7 @@ namespace PitneyBowes.Developer.ShippingApi
     {
         private Type _objectType;
         private Type _wrapperType;
-        private ShippingApi.Session _session;
+        private Session _session;
 
         public object Wrap(object o)
         {
@@ -18,7 +18,7 @@ namespace PitneyBowes.Developer.ShippingApi
             return Activator.CreateInstance(_wrapperType, new object[] { o, });
         }
 
-        public ShippingApiConverter( Type objectType, Type wrapperType, ShippingApi.Session s )
+        public ShippingApiConverter( Type objectType, Type wrapperType, Session s )
         {
             _objectType = objectType;
             _wrapperType = wrapperType;

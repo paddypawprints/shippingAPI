@@ -29,17 +29,17 @@ namespace PitneyBowes.Developer.ShippingApi.Method
 
     public static class AddressessMethods
     {
-        public async static Task<ShippingApiResponse<T>> VerifyAddress<T>(T request, ShippingApi.Session session = null) where T : IAddress, new()
+        public async static Task<ShippingApiResponse<T>> VerifyAddress<T>(T request, Session session = null) where T : IAddress, new()
         {
             var verifyRequest = new JsonAddress<T>(request);
-            if (session == null) session = ShippingApi.DefaultSession;
+            if (session == null) session = SessionDefaults.DefaultSession;
             verifyRequest.Authorization = new StringBuilder(session.AuthToken.AccessToken);
             return await WebMethod.Post<T, JsonAddress<T>>("/shippingservices/v1/addresses/verify", verifyRequest, session);
         }
-        public async static Task<ShippingApiResponse<VerifySuggestResponse>> VerifySuggestAddress<T>(T request, ShippingApi.Session session = null) where T : IAddress, new()
+        public async static Task<ShippingApiResponse<VerifySuggestResponse>> VerifySuggestAddress<T>(T request, Session session = null) where T : IAddress, new()
         {
             var verifyRequest = new JsonAddress<T>(request);
-            if (session == null) session = ShippingApi.DefaultSession;
+            if (session == null) session = SessionDefaults.DefaultSession;
             verifyRequest.Authorization = new StringBuilder(session.AuthToken.AccessToken);
             verifyRequest.Suggest = true;
             return await WebMethod.Post<VerifySuggestResponse, JsonAddress<T>>("/shippingservices/v1/addresses/verify-suggest", verifyRequest, session);

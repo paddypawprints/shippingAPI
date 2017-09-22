@@ -4,12 +4,10 @@ using PitneyBowes.Developer.ShippingApi.Model;
 using PitneyBowes.Developer.ShippingApi.Method;
 using System;
 using System.Linq;
-using static PitneyBowes.Developer.ShippingApi.ShippingApi;
+using static PitneyBowes.Developer.ShippingApi.SessionDefaults;
 
 namespace example
 {
-
-
     class Program
     {
         static void Main(string[] args)
@@ -34,10 +32,16 @@ namespace example
             };
 
             shipment.MinimalAddressValidation = "true";
-            shipment.ShipperRatePlan = "PP_SRP_NEWBLUE";
+            shipment.ShipperRatePlan = DefaultSession.GetConfigItem("RatePlan");
 
             shipment.FromAddress = (Address)AddressFluent<Address>.Create()
-                .HeadOffice()
+                .Company("Pitney Bowes Inc.")
+                .AddressLines("27 Waterview Drive")
+                .Residential(false)
+                .CityTown("Shelton")
+                .StateProvince("CT")
+                .PostalCode("06484")
+                .CountryCode("US")
                 .Person("Paul Wright", "203-555-1213","john.publica@pb.com");
 
             shipment.Parcel = (Parcel)ParcelFluent<Parcel>.Create()
@@ -52,7 +56,7 @@ namespace example
                 .ShippingLabel();
 
             shipment.ShipmentOptions = ShipmentOptionsArrayFluent<ShipmentOptions>.Create()
-                .ShipperId("9014888410")
+                .ShipperId(DefaultSession.GetConfigItem("ShipperID"))
                 .AddToManifest();
 
             shipment.TransactionId = Guid.NewGuid().ToString().Substring(15);
@@ -67,14 +71,14 @@ namespace example
             {
                 FromDate = DateTimeOffset.Parse("6/30/2017"),
                 ToDate = DateTimeOffset.Now,
-                DeveloperId = "46841939"
+                DeveloperId = DefaultSession.GetConfigItem("DeveloperID")
             };
             foreach (var t in TransactionsReport<Transaction>.Report(transactionsReportRequest, x => x.CreditCardFee == null || x.CreditCardFee > 10.0M ))
             {
                 Console.WriteLine(t.DestinationAddress);
             }
 
-            TransactionsReport<Transaction> report = new TransactionsReport<Transaction>("46841939");
+            TransactionsReport<Transaction> report = new TransactionsReport<Transaction>(DefaultSession.GetConfigItem("DeveloperID"));
             var query = from transaction in report
                         where transaction.TransactionDateTime >= DateTimeOffset.Parse("6/30/2017") && transaction.TransactionDateTime <= DateTimeOffset.Now
                         select new { transaction.DestinationCountry };
@@ -83,11 +87,6 @@ namespace example
                 Console.WriteLine(obj);
         }
 
-        static void ExtensionMethod()
-        {
-            Address address = AddressFluent<Address>.Create().USParse("101 Jenkins Pl, Santa Clara, CA 95051")
-                .Status(AddressStatus.NOT_CHANGED);
-        }
         static void Initialize()
         {
             // Initialize framework
@@ -100,86 +99,21 @@ namespace example
             DefaultSession.LogError = (s) => Console.WriteLine("Error:" + s);
             DefaultSession.LogConfigError = (s) => Console.WriteLine("Bad code:" + s);
             DefaultSession.LogDebug = (s) => Console.WriteLine(s);
-            DefaultSession.GetAPISecret = () => "wgNEtZkNbP0iV8h0".ToCharArray();
-            AddConfigItem("ApiKey", "Ci4vEAgBP8Aww7TBwGOKhr43uKTPNyfO");
-            AddConfigItem("RatePlan", "PP_SRP_NEWBLUE");
-
-            DefaultSession.Requestor = new ShippingAPIMock();
-
+            //DefaultSession.Requestor = new ShippingAPIMock();
+            DefaultSession.Record = true;
 #if NET_45
 #else
             DefaultSession.TraceSerialization = true;
 #endif
-        }
-    }
-
-    static class Extensions
-    {
-        public static AddressFluent<Address> USParse(this AddressFluent<Address> f, string s)
-        {
- /*           var parser = new AddressParser.AddressParser();
-            var address = parser.ParseAddress(s);
-            f.CityTown(address.City);
-            f.CountryCode("US");
-            f.PostalCode(address.Zip);
-            f.AddressLines(address.StreetLine);*/
-            return f;
-
-        }
-
-        public static RatesArrayFluent<Rates> USPSPriority(this RatesArrayFluent<Rates> f)
-        {
-            return f.Add().Carrier(Carrier.USPS)
-                .ParcelType(ParcelType.PKG)
-                .Service(Services.PM)
-                .SpecialService<SpecialServices>(SpecialServiceCodes.DelCon, 0M, new Parameter("INPUT_VALUE", "0"));
-        }
-
-        public static RatesArrayFluent<Rates> Insurance(this RatesArrayFluent<Rates> f, decimal amount)
-        {
-            return f.SpecialService<SpecialServices>(SpecialServiceCodes.Ins, 0M, new Parameter("INPUT_VALUE", amount.ToString()));
-        }
-
-        public static AddressFluent<Address> HeadOffice( this AddressFluent<Address> f)
-        {
-            return f.Company("Pitney Bowes Inc.")
-                .AddressLines("27 Waterview Drive")
-                .Residential(false)
-                .CityTown("Shelton")
-                .StateProvince("CT")
-                .PostalCode("06484")
-                .CountryCode("US");
-        }
-
-        public static AddressFluent<Address> Person( this AddressFluent<Address> f, string name, string phone = null, string email = null)
-        {
-            return f.Name(name).Phone(phone).Email(email);
-        }
-
-        public static DocumentsArrayFluent<Document> ShippingLabel(this DocumentsArrayFluent<Document> f, ContentType contentType = ContentType.URL, Size size = Size.DOC_8X11, FileFormat fileFormat = FileFormat.PDF)
-        { 
-            return f.Add()
-                .DocumentType(DocumentType.SHIPPING_LABEL)
-                .ContentType(contentType)
-                .Size(size)
-                .FileFormat(fileFormat)
-                .PrintDialogOption(PrintDialogOption.NO_PRINT_DIALOG);
-        }
-        public static ShipmentOptionsArrayFluent<ShipmentOptions> ShipperId(this ShipmentOptionsArrayFluent<ShipmentOptions> f, string shipperId)
-        {
-            return f.Add().Option(ShipmentOption.SHIPPER_ID, shipperId);
-        }
-        public static ShipmentOptionsArrayFluent<ShipmentOptions> AddToManifest(this ShipmentOptionsArrayFluent<ShipmentOptions> f)
-        {
-            return f.Add().Option(ShipmentOption.ADD_TO_MANIFEST, "true");
-        }
-        public static ShipmentOptionsArrayFluent<ShipmentOptions> MinimalAddressvalidation(this ShipmentOptionsArrayFluent<ShipmentOptions> f)
-        {
-            return f.Add().Option(ShipmentOption.MINIMAL_ADDRESS_VALIDATION, "true");
-        }
-        public static ShipmentOptionsArrayFluent<ShipmentOptions> AddOption(this ShipmentOptionsArrayFluent<ShipmentOptions> f, ShipmentOption option, string value)
-        {
-            return f.Add().Option(option, value);
+            //*****************************************
+            // Replace these with your own values
+            //
+            AddConfigItem("ApiKey", "Ci4vEAgBP8Aww7TBwGOKhr43uKTPNyfO");
+            DefaultSession.GetAPISecret = () => "wgNEtZkNbP0iV8h0".ToCharArray();
+            AddConfigItem("RatePlan", "PP_SRP_NEWBLUE");
+            AddConfigItem("ShipperID", "9014888410");
+            AddConfigItem("DeveloperID", "46841939");
+            //******************************************
         }
     }
 }

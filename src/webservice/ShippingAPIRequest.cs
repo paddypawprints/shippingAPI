@@ -17,6 +17,45 @@ namespace PitneyBowes.Developer.ShippingApi
         public abstract string ContentType {get;}
         public abstract StringBuilder Authorization { get; set; }
 
+        /// <summary>
+        /// When recording a response, add a suffix to make the  filename unique
+        /// </summary>
+        virtual public string RecordingSuffix => "";
+
+        public static string RecordingFullPath(IShippingApiRequest request, string resource, Session session)
+        { 
+            string dirname = session.RecordPath;
+            StringBuilder uriBuilder = new StringBuilder(resource);
+            AddRequestResource(request, uriBuilder);
+
+            string fullPath = (dirname + uriBuilder.ToString().ToLower() + @"\")
+                .Replace('?', Path.DirectorySeparatorChar)
+                .Replace('&', Path.DirectorySeparatorChar)
+                .Replace('/', Path.DirectorySeparatorChar)
+                .Replace('=', '-');
+            string fileName = "default";
+
+            if (session == null) session = SessionDefaults.DefaultSession;
+
+            foreach (var h in request.GetHeaders())
+            {
+                if (h.Item3.ToLower().Equals("authorization"))
+                {
+                    if (fileName.Equals("default"))
+                    {
+                        fileName = h.Item2.Substring(0, 8).ToLower();
+                    }
+                }
+                if (h.Item1.Name.ToLower().Equals("x-pb-transactionid"))
+                {
+                    fileName = h.Item2.ToLower();
+                }
+            }
+            fileName += request.RecordingSuffix;
+            fileName += ".http";
+            return fullPath + Path.DirectorySeparatorChar + fileName;
+        }
+
         private static void ProcessRequestAttributes<Attribute>(object o, Action<Attribute, string, string, string> propAction) where Attribute : ShippingApiAttribute
         {
             foreach (var propertyInfo in o.GetType().GetProperties())
@@ -98,12 +137,12 @@ namespace PitneyBowes.Developer.ShippingApi
            );
         }
 
-        public virtual void SerializeBody( StreamWriter writer, ShippingApi.Session session)
+        public virtual void SerializeBody( StreamWriter writer, Session session)
         {
             SerializeBody(this, writer, session);
         }
 
-        public static void SerializeBody(IShippingApiRequest request, StreamWriter writer, ShippingApi.Session session)
+        public static void SerializeBody(IShippingApiRequest request, StreamWriter writer, Session session)
         {
             switch (request.ContentType)
             {
@@ -193,6 +232,11 @@ namespace PitneyBowes.Developer.ShippingApi
         public virtual IEnumerable<Tuple<ShippingApiHeaderAttribute, string, string>> GetHeaders()
         {
             return GetHeaders(this);
+        }
+
+        public string RecordingFullPath(string resource, Session session)
+        {
+            return RecordingFullPath( this, resource, session );
         }
     }
 }

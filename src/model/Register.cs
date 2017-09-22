@@ -6,7 +6,7 @@ namespace PitneyBowes.Developer.ShippingApi.Model
 {
     public static class Model
     {
-        public static void RegisterSerializationTypes( ShippingApi.Session session)
+        public static void RegisterSerializationTypes( Session session)
         {
             session.RegisterSerializationTypes<IShipment, Shipment>();
             session.RegisterSerializationTypes<IRates, Rates>();

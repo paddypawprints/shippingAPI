@@ -45,5 +45,22 @@ namespace PitneyBowes.Developer.ShippingApi.Fluent
             return this;
         }
 
+        public ShipmentOptionsArrayFluent<T> ShipperId( string shipperId)
+        {
+            return Add().Option(ShipmentOption.SHIPPER_ID, shipperId);
+        }
+        public ShipmentOptionsArrayFluent<T> AddToManifest()
+        {
+            return Add().Option(ShipmentOption.ADD_TO_MANIFEST, "true");
+        }
+        public ShipmentOptionsArrayFluent<T> MinimalAddressvalidation()
+        {
+            return Add().Option(ShipmentOption.MINIMAL_ADDRESS_VALIDATION, "true");
+        }
+        public ShipmentOptionsArrayFluent<T> AddOption(ShipmentOption option, string value)
+        {
+            return Add().Option(option, value);
+        }
+
     }
 }

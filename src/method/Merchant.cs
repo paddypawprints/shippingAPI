@@ -195,54 +195,54 @@ namespace PitneyBowes.Developer.ShippingApi.Method
 
     public static class MerchantMethods
     {
-        public async static Task<ShippingApiResponse<RenderResponse>> Render<RenderResponse>(RenderRequest request, ShippingApi.Session session = null) 
+        public async static Task<ShippingApiResponse<RenderResponse>> Render<RenderResponse>(RenderRequest request, Session session = null) 
         {
-            if (session == null) session = ShippingApi.DefaultSession;
+            if (session == null) session = SessionDefaults.DefaultSession;
             request.Authorization = new StringBuilder(session.AuthToken.AccessToken);
             return await WebMethod.Post<RenderResponse, RenderRequest>("/shippingservices/v1/payment/render", request, session);
         }
-        public async static Task<ShippingApiResponse<IMerchant>> Signup<IMerchant>(MerchantSignupRequest request, ShippingApi.Session session = null)
+        public async static Task<ShippingApiResponse<IMerchant>> Signup<IMerchant>(MerchantSignupRequest request, Session session = null)
         {
-            if (session == null) session = ShippingApi.DefaultSession;
+            if (session == null) session = SessionDefaults.DefaultSession;
             request.Authorization = new StringBuilder(session.AuthToken.AccessToken);
             return await WebMethod.Post<IMerchant, MerchantSignupRequest>("/shippingservices/v1", request, session);
         }
 
-        public async static Task<ShippingApiResponse<IMerchant>> Credentials<IMerchant>(MerchantCredentialsRequest request, ShippingApi.Session session = null)
+        public async static Task<ShippingApiResponse<IMerchant>> Credentials<IMerchant>(MerchantCredentialsRequest request, Session session = null)
         {
-            if (session == null) session = ShippingApi.DefaultSession;
+            if (session == null) session = SessionDefaults.DefaultSession;
             request.Authorization = new StringBuilder(session.AuthToken.AccessToken);
             return await WebMethod.Post<IMerchant, MerchantCredentialsRequest>("/shippingservices/v1", request, session);
         }
-        public async static Task<ShippingApiResponse<IMerchant>> Register<IMerchant>(MerchantRegisterRequest request, ShippingApi.Session session = null)
+        public async static Task<ShippingApiResponse<IMerchant>> Register<IMerchant>(MerchantRegisterRequest request, Session session = null)
         {
-            if (session == null) session = ShippingApi.DefaultSession;
+            if (session == null) session = SessionDefaults.DefaultSession;
             request.Authorization = new StringBuilder(session.AuthToken.AccessToken);
             return await WebMethod.Post<IMerchant, MerchantRegisterRequest>("/shippingservices/v1/" , request, session);
         }
 
-        public async static Task<ShippingApiResponse<IAutoRefill>> AutoRefillRule<IAutoRefill>(MerchantAutoRefillRuleRequest request, ShippingApi.Session session = null)
+        public async static Task<ShippingApiResponse<IAutoRefill>> AutoRefillRule<IAutoRefill>(MerchantAutoRefillRuleRequest request, Session session = null)
         {
-            if (session == null) session = ShippingApi.DefaultSession;
+            if (session == null) session = SessionDefaults.DefaultSession;
             request.Authorization = new StringBuilder(session.AuthToken.AccessToken);
             return await WebMethod.Get<IAutoRefill, MerchantAutoRefillRuleRequest>("/shippingservices/v1/", request, session);
         }
 
-        public async static Task<ShippingApiResponse<IAutoRefill>> UpdateAutoRefill<IAutoRefill>(MerchantAutoRefillRuleRequest request, ShippingApi.Session session = null)
+        public async static Task<ShippingApiResponse<IAutoRefill>> UpdateAutoRefill<IAutoRefill>(MerchantAutoRefillRuleRequest request, Session session = null)
         {
-            if (session == null) session = ShippingApi.DefaultSession;
+            if (session == null) session = SessionDefaults.DefaultSession;
             request.Authorization = new StringBuilder(session.AuthToken.AccessToken);
             return await WebMethod.Post<IAutoRefill, MerchantAutoRefillRuleRequest>("/shippingservices/v1/", request, session);
         }
-        public async static Task<ShippingApiResponse<AccountBalanceResponse>> UpdateAutoRefill<AccountBalanceResponse>(AccountBalanceRequest request, ShippingApi.Session session = null)
+        public async static Task<ShippingApiResponse<AccountBalanceResponse>> UpdateAutoRefill<AccountBalanceResponse>(AccountBalanceRequest request, Session session = null)
         {
-            if (session == null) session = ShippingApi.DefaultSession;
+            if (session == null) session = SessionDefaults.DefaultSession;
             request.Authorization = new StringBuilder(session.AuthToken.AccessToken);
             return await WebMethod.Get<AccountBalanceResponse, AccountBalanceRequest>("/shippingservices/v1/ledger", request, session);
         }
-        public async static Task<ShippingApiResponse<IMerchant>> MerchantDeactivateAccount<IMerchant>(MerchantDeactivateRequest request, ShippingApi.Session session = null)
+        public async static Task<ShippingApiResponse<IMerchant>> MerchantDeactivateAccount<IMerchant>(MerchantDeactivateRequest request, Session session = null)
         {
-            if (session == null) session = ShippingApi.DefaultSession;
+            if (session == null) session = SessionDefaults.DefaultSession;
             request.Authorization = new StringBuilder(session.AuthToken.AccessToken);
             return await WebMethod.Get<IMerchant, MerchantDeactivateRequest>("/shippingservices/v1/ledger", request, session);
         }

@@ -16,7 +16,7 @@ namespace PitneyBowes.Developer.ShippingApi.Rules
         public static Dictionary<string, string> Rules = new Dictionary<string, string>();
         public static DateTimeOffset? LastUpdate { get; set; }
 
-        private static void Load(ShippingApi.Session session = null)
+        private static void Load(Session session = null)
         {
             if (LastUpdate == null || DateTimeOffset.Now - LastUpdate > TimeSpan.FromHours(1))
             {
@@ -45,7 +45,7 @@ namespace PitneyBowes.Developer.ShippingApi.Rules
                 }
             }
         }
-        public static bool Validate(string countryCode, ShippingApi.Session session)
+        public static bool Validate(string countryCode, Session session)
         {
             Load(session);
             lock (_lock)

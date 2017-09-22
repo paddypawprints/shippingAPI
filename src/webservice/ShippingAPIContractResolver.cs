@@ -9,7 +9,7 @@ namespace PitneyBowes.Developer.ShippingApi
     {
 
         public static readonly ShippingApiContractResolver Instance = new ShippingApiContractResolver();
-        public ShippingApi.Session Session { get; set; }
+        public Session Session { get; set; }
 
         protected override JsonContract CreateContract(Type objectType )
         {

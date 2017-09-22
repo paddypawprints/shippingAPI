@@ -11,6 +11,8 @@ namespace PitneyBowes.Developer.ShippingApi
         StringBuilder Authorization {get;set;}
         string GetUri(string baseUrl);
         IEnumerable<Tuple<ShippingApiHeaderAttribute, string, string>> GetHeaders();
-        void SerializeBody(StreamWriter writer, ShippingApi.Session session);
+        void SerializeBody(StreamWriter writer, Session session);
+        string RecordingSuffix { get; }
+        string RecordingFullPath(string resource, Session session);
     }
 }

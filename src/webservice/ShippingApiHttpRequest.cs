@@ -24,13 +24,13 @@ namespace PitneyBowes.Developer.ShippingApi
             }
         }
 
-        public async Task<ShippingApiResponse<Response>> HttpRequest<Response, Request>(string resource, HttpVerb verb, Request request, ShippingApi.Session session = null) where Request : IShippingApiRequest
+        public async Task<ShippingApiResponse<Response>> HttpRequest<Response, Request>(string resource, HttpVerb verb, Request request, Session session = null) where Request : IShippingApiRequest
         {
             return await HttpRequestStatic<Response, Request>(resource, verb, request, session);
         }
-        internal async static Task<ShippingApiResponse<Response>> HttpRequestStatic<Response, Request>(string resource, HttpVerb verb, Request request, ShippingApi.Session session = null) where Request : IShippingApiRequest
+        internal async static Task<ShippingApiResponse<Response>> HttpRequestStatic<Response, Request>(string resource, HttpVerb verb, Request request, Session session = null) where Request : IShippingApiRequest
         {
-            if (session == null) session = ShippingApi.DefaultSession;
+            if (session == null) session = SessionDefaults.DefaultSession;
             var client = session.Client(session.EndPoint);
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -72,25 +72,29 @@ namespace PitneyBowes.Developer.ShippingApi
 
             using (var respStream = await httpResponseMessage.Content.ReadAsStreamAsync())
             {
-                if (httpResponseMessage.IsSuccessStatusCode)
+                using (var recordingStream = new RecordingStream(respStream, request.RecordingFullPath(resource, session), FileMode.Create))
                 {
-                    var apiResponse = new ShippingApiResponse<Response> { HttpStatus = httpResponseMessage.StatusCode, Success = httpResponseMessage.IsSuccessStatusCode };
-                    ShippingApiResponse<Response>.Deserialize(session, respStream, apiResponse);
-                    foreach (var h in httpResponseMessage.Headers)
+                    if (session.Record ) recordingStream.RecordAfterSeek = true; 
+
+                    if (httpResponseMessage.IsSuccessStatusCode)
                     {
-                        apiResponse.ProcessResponseAttribute(h.Key, h.Value);
+                        var apiResponse = new ShippingApiResponse<Response> { HttpStatus = httpResponseMessage.StatusCode, Success = httpResponseMessage.IsSuccessStatusCode };
+                        ShippingApiResponse<Response>.Deserialize(session, recordingStream, apiResponse);
+                        foreach (var h in httpResponseMessage.Headers)
+                        {
+                            apiResponse.ProcessResponseAttribute(h.Key, h.Value);
+                        }
+                        return apiResponse;
                     }
-                    return apiResponse;
+                    else
+                    {
+                        session.LogWarning(String.Format("http {0} request to {1} failed with error {2}", verb.ToString(), uriBuilder, httpResponseMessage.StatusCode));
+                        var apiResponse = new ShippingApiResponse<Response> { HttpStatus = httpResponseMessage.StatusCode, Success = httpResponseMessage.IsSuccessStatusCode };
 
-                }
-                else
-                {
-                    session.LogWarning(String.Format("http {0} request to {1} failed with error {2}", verb.ToString(), uriBuilder, httpResponseMessage.StatusCode));
-                    var apiResponse = new ShippingApiResponse<Response> { HttpStatus = httpResponseMessage.StatusCode, Success = httpResponseMessage.IsSuccessStatusCode };
+                        apiResponse.Errors.Add(new ErrorDetail() { ErrorCode = "HTTP " + httpResponseMessage.Version + " " + httpResponseMessage.StatusCode.ToString(), Message = httpResponseMessage.ReasonPhrase });
+                        return apiResponse;
 
-                    apiResponse.Errors.Add(new ErrorDetail() { ErrorCode = "HTTP " + httpResponseMessage.Version + " " + httpResponseMessage.StatusCode.ToString(), Message = httpResponseMessage.ReasonPhrase });
-                    return apiResponse;
-
+                    }
                 }
             }
         }

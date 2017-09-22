@@ -13,6 +13,12 @@ namespace PitneyBowes.Developer.ShippingApi.Method
     [JsonObject(MemberSerialization.OptIn)]
     public class CountriesRequest<T> : IShippingApiRequest where T : ICountry, new()
     {
+        public string RecordingSuffix => "";
+        public string RecordingFullPath(string resource, Session session)
+        {
+            return ShippingApiRequest.RecordingFullPath(this, resource, session);
+        }
+
         [ShippingApiQuery("carrier")]
         public Carrier Carrier { get; set; }
 
@@ -32,7 +38,7 @@ namespace PitneyBowes.Developer.ShippingApi.Method
             return ShippingApiRequest.GetHeaders(this);
         }
 
-        public void SerializeBody(StreamWriter writer, ShippingApi.Session session)
+        public void SerializeBody(StreamWriter writer, Session session)
         {
             ShippingApiRequest.SerializeBody(this, writer, session);
         }
@@ -48,9 +54,9 @@ namespace PitneyBowes.Developer.ShippingApi.Method
     public static class CountriesMethods
     {
 
-        public async static Task<ShippingApiResponse<IEnumerable<T>>> Countries<T>(CountriesRequest<T> request, ShippingApi.Session session = null) where T : ICountry, new()
+        public async static Task<ShippingApiResponse<IEnumerable<T>>> Countries<T>(CountriesRequest<T> request, Session session = null) where T : ICountry, new()
         {
-            if (session == null) session = ShippingApi.DefaultSession;
+            if (session == null) session = SessionDefaults.DefaultSession;
             request.Authorization = new StringBuilder(session.AuthToken.AccessToken);
             return await WebMethod.Get<IEnumerable<T>, CountriesRequest<T>>("/shippingservices/v1/countries", request, session);
         }

@@ -13,6 +13,7 @@ namespace PitneyBowes.Developer.ShippingApi
 
     public class ReportRequest : ShippingApiRequest, IReportRequest
     {
+        public override string RecordingSuffix => DeveloperId+"-Page"+Page;
         [ShippingApiResource("developers", true, PathSuffix ="/transactions/reports")]
         public string DeveloperId { get; set; }
         [ShippingApiQuery("fromDate",Format = "{0:yyyy-MM-ddTHH:mm:ssZ}")]
@@ -76,31 +77,31 @@ namespace PitneyBowes.Developer.ShippingApi
     {
 
         public string DeveloperId { get; set; }
-        private ShippingApi.Session _session;
+        private Session _session;
 
-        public TransactionsReport( string developerId, ShippingApi.Session session = null) : base()
+        public TransactionsReport( string developerId, Session session = null) : base()
         {
             Provider = new TransactionsReportProvider(developerId, session);
             DeveloperId = developerId;
             _session = session;
         }
 
-        public TransactionsReport( TransactionsReportProvider provider, Expression expression, string developerId, ShippingApi.Session session = null) : base(provider,expression)
+        public TransactionsReport( TransactionsReportProvider provider, Expression expression, string developerId, Session session = null) : base(provider,expression)
         {
             DeveloperId = developerId;
             _session = session;
         }
 
-        public async static Task<ShippingApiResponse<TransactionPageResponse>> TransactionPage(ReportRequest request, ShippingApi.Session session = null)
+        public async static Task<ShippingApiResponse<TransactionPageResponse>> TransactionPage(ReportRequest request, Session session = null)
         {
-            if (session == null) session = ShippingApi.DefaultSession;
+            if (session == null) session = SessionDefaults.DefaultSession;
             request.Authorization = new StringBuilder(session.AuthToken.AccessToken);
             return await WebMethod.Get<TransactionPageResponse, ReportRequest>("/shippingservices/v2/ledger", request, session);
         }
 
-        public static IEnumerable<Transaction> Report(ReportRequest request, Func<Transaction, bool> filter = null, ShippingApi.Session session = null)
+        public static IEnumerable<Transaction> Report(ReportRequest request, Func<Transaction, bool> filter = null, Session session = null)
         {
-            if (session == null) session = ShippingApi.DefaultSession;
+            if (session == null) session = SessionDefaults.DefaultSession;
             request.Page = 0;
             TransactionPageResponse page;
             do
@@ -120,9 +121,9 @@ namespace PitneyBowes.Developer.ShippingApi
     public class TransactionsReportProvider : ReportProviderBase, IQueryProvider
     {
         private string _developerId;
-        internal ShippingApi.Session _session;
+        internal Session _session;
 
-        public TransactionsReportProvider( string developerId, ShippingApi.Session session) :base()
+        public TransactionsReportProvider( string developerId, Session session) :base()
         {
             _developerId = developerId;
             _session = session;

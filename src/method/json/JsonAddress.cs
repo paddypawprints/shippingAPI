@@ -18,6 +18,12 @@ namespace PitneyBowes.Developer.ShippingApi.Json
 
         public JsonAddress(T t) : base(t) {}
 
+        public string RecordingSuffix => PostalCode;
+        public string RecordingFullPath(string resource, Session session)
+        {
+            return ShippingApiRequest.RecordingFullPath(this, resource, session);
+        }
+
         [ShippingApiQuery("returnSuggestions", true)]
         public bool? Suggest { get; set; }
 
@@ -112,7 +118,7 @@ namespace PitneyBowes.Developer.ShippingApi.Json
             return ShippingApiRequest.GetHeaders(this);
         }
 
-        public void SerializeBody(StreamWriter writer, ShippingApi.Session session)
+        public void SerializeBody(StreamWriter writer, Session session)
         {
             ShippingApiRequest.SerializeBody(this, writer, session);
         }

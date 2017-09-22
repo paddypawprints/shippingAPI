@@ -91,5 +91,9 @@ namespace PitneyBowes.Developer.ShippingApi.Fluent
             _current.CurrencyCode = s;
             return this;
         }
+        public RatesArrayFluent<T> Insurance(decimal amount)
+        {
+            return SpecialService<SpecialServices>(SpecialServiceCodes.Ins, 0M, new Parameter("INPUT_VALUE", amount.ToString()));
+        }
     }
 }
