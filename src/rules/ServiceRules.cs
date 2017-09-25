@@ -103,15 +103,15 @@ namespace PitneyBowes.Developer.ShippingApi.Rules
 
         public static void Add(Carrier carrier, ICarrierRule carrierRule)
         {
-            foreach (var p in c.ParcelTypeRules)
+            foreach (var p in carrierRule.ParcelTypeRules)
             {
-                ParcelTypeRulesCache.Add(p);
+                //ParcelTypeRulesCache.Add(p);
                 foreach (var s in p.SpecialServiceRules)
                 {
-                    SpecialServicesRulesCache.Add(s);
-                    CarrierRulesCache.Associate(c, p, s);
-                    ParcelTypeRulesCache.Associate(c, p, s);
-                    SpecialServicesRulesCache.Associate(c, p, s);
+                    //SpecialServicesRulesCache.Add(s);
+                    CarrierRulesCache.Associate(carrierRule, p, s);
+                    //ParcelTypeRulesCache.Associate(carrierRule, p, s);
+                    //SpecialServicesRulesCache.Associate(carrierRule, p, s);
                 }
             }
 
