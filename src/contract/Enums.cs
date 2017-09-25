@@ -158,7 +158,15 @@ namespace PitneyBowes.Developer.ShippingApi
         /// <summary>
         /// Package (not eligible for special package rate).
         /// </summary>
-        PKG
+        PKG,
+        LP,
+        FLAT,
+        EMMTB,
+        FTB,
+        HTB,
+        SACK,
+        FTTB,
+        SOFTPACK
 
     }
     public enum PaymentMethod
@@ -423,8 +431,9 @@ namespace PitneyBowes.Developer.ShippingApi
         /// <summary>
         /// Sunday and holidaqy delivery.
         /// </summary>
-        sunday_holiday 
-
+        sunday_holiday,
+        
+        noWeekend
     }
     public enum TransactionType
     {

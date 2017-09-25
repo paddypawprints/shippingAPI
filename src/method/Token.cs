@@ -33,15 +33,10 @@ namespace PitneyBowes.Developer.ShippingApi.Method
             Convert.ToBase64CharArray(bytes, 0, bytes.Length, base64array, 0);
             if (Authorization == null) Authorization = new StringBuilder(base64array.Length);
             else Authorization.Clear();
-            bool firstEqual = false;
             foreach( var c in base64array)
             {
                 Authorization.Append(c);
-                if (c == '=') // end with 2 = chars
-                {
-                    if (firstEqual) break;
-                    firstEqual = true;
-                }
+                if (c == '=') break;
             }
             bytes.Initialize();
             buffer.Initialize();

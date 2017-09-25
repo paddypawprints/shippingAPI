@@ -1,10 +1,7 @@
 using PitneyBowes.Developer.ShippingApi;
 using PitneyBowes.Developer.ShippingApi.Fluent;
 using PitneyBowes.Developer.ShippingApi.Model;
-using PitneyBowes.Developer.ShippingApi.Method;
-using System;
 using System.Collections.Generic;
-using System.IO;
 using Xunit;
 
 using static PitneyBowes.Developer.ShippingApi.SessionDefaults;
@@ -13,38 +10,12 @@ namespace tests
 {
     public class Addresses
     {
-        static private bool _initialized = false;
-        static void Initialize()
-        {
-            // Initialize framework
-            if (_initialized) return;
-            _initialized = true;
-            Init();
-            Model.RegisterSerializationTypes(DefaultSession);
 
-            // Configuration
-            DefaultSession = "sandbox";
-            DefaultSession.Requestor = new ShippingAPIMock();
-            DefaultSession.RecordPath = string.Format("..{0}..{0}..{0}testData", Path.DirectorySeparatorChar);
-            DefaultSession.AuthToken = new Token();
-            DefaultSession.AuthToken.TokenType = "Bearer";
-            DefaultSession.AuthToken.AccessToken = "1234567-";
-
-            //*****************************************
-            // Replace these with your own values
-            //
-            AddConfigItem("ApiKey", "Ci4vEAgBP8Aww7TBwGOKhr43uKTPNyfO");
-            DefaultSession.GetAPISecret = () => "wgNEtZkNbP0iV8h0".ToCharArray();
-            AddConfigItem("RatePlan", "PP_SRP_NEWBLUE");
-            AddConfigItem("ShipperID", "9014888410");
-            AddConfigItem("DeveloperID", "46841939");
-            //******************************************
-        }
         [Fact]
         public void HappyPath()
         {
             // $(SolutionDir)\tests\testData\shippingservices\v1\addresses\verify\1234567828607.http
-            Initialize();
+            Session.Initialize();
             var warnings = new List<string>();
             DefaultSession.LogWarning = (s) => warnings.Add(s);
             var errors = new List<string>();

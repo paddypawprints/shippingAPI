@@ -16,4 +16,8 @@
     <ProjectReference Include="..\src\shippingapi.core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="testData\shippingservices\v1\information\rules\rating-services\" />
+  </ItemGroup>
+
 </Project>

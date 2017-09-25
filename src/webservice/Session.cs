@@ -47,11 +47,15 @@ namespace PitneyBowes.Developer.ShippingApi
             Record = false;
             RecordPath = string.Format("{0}{1}recordings{1}shippingApi", Path.GetTempPath(), Path.DirectorySeparatorChar);
             RecordOverwrite = false;
+            SerializationRegistry.Add(typeof(SpecialServiceCodes), new SpecialServiceCodesConverter());
+            SerializationRegistry.Add(typeof(PackageLocation), new PackageLocationConverter());
+            SerializationRegistry.Add(typeof(TrackingStatusCode), new TrackingStatusConverter());
+            SerializationRegistry.Add(typeof(TransactionType), new TransactionTypeConverter());
         }
 
 #if NET_45
 #else
-    public DebugTraceWriter NewtonSoftTrace { get; set; }
+        public DebugTraceWriter NewtonSoftTrace { get; set; }
         public bool TraceSerialization
         {
             get { return NewtonSoftTrace == null; }

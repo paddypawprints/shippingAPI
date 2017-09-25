@@ -1,0 +1,6 @@
+Connection:keep-alive
+Date:Fri, 22 Sep 2017 21:28:43 GMT
+Server:ApigeeRouter
+Access-Control-Allow-Origin:*
+
+{"access_token":"1234567-","tokenType":"BearerToken","issuedAt":"1506115723099","expiresIn":"35999","clientID":"Ci4vEAgBP8Aww7TBwGOKhr43uKTPNyfO","org":"pitneybowes"}

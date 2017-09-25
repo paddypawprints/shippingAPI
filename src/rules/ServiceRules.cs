@@ -55,24 +55,75 @@ namespace PitneyBowes.Developer.ShippingApi.Rules
         }
     }
 
-    public class Service
+    public class CarrierRulesLookupResult
     {
-
+        Carrier Carrier { get; set; }
+        Services Service { get; set; }
+        ParcelType ParcelType { get; set; }
+        SpecialServiceCodes SpecialServiceCodes { get; set; }
     }
-    public class PackageTypeRules
-    {
 
-    }
+    public class CarrierRulesCache
+    {
+        public Carrier Carrier { get; set; }
+        public Dictionary<Carrier, ICarrierRule> CarrierLookup { get; set; }
+        public ICarrierRule CarrierRule { get; set; }
+        public Dictionary<Services, ICarrierRule> ServiceLookup { get; set; }
+        public Dictionary<ParcelType, List<ICarrierRule>> ParcelCarrierLookup { get; set; }
+        public Dictionary<SpecialServiceCodes, List<ICarrierRule>> SpecialServiceCarrierLookup { get; set; }
+        public Dictionary<Services, List<IParcelTypeRule>> ServiceParcelTypeLookup { get; set; }
+        public Dictionary<ParcelType, IParcelTypeRule> ParcelLookup { get; set; }
+        public Dictionary<SpecialServiceCodes, List<IParcelTypeRule>> SpecialServiceParcelLookup { get; set; }
+        public Dictionary<Services, List<ISpecialServicesRule>> ServiceSpecialServicesLookup { get; set; }
+        public Dictionary<ParcelType, List<ISpecialServicesRule>> ParcelSpecialServicesLookup { get; set; }
+        public Dictionary<SpecialServiceCodes, ISpecialServicesRule> SpecialServicesLookup { get; set; }
 
-    public class SpecialservicesRules
-    {
-        public static Dictionary<string, ISpecialServicesRule> SpecialServicesRule = new Dictionary<string, ISpecialServicesRule>();
-    }
-    public class CarrierRules
-    {
-        public static void Add(ICarrierRule carrierRule)
+        public bool IsEqual(ICarrierRule r1, ICarrierRule r2)
+        {
+            return r1.BrandedName == r2.BrandedName 
+                && r1.ServiceId == r2.ServiceId;
+        }
+
+        public bool IsEqual(IParcelTypeRule r1, IParcelTypeRule r2)
+        {
+            return r1.BrandedName.Equals(r2.BrandedName)
+                && r1.ParcelType == r2.ParcelType
+                && r1.RateTypeBrandedName.Equals(r2.RateTypeBrandedName)
+                && r1.RateTypeId.Equals(r2.RateTypeId);
+        }
+
+        public bool IsEqual(ISpecialServicesRule r1, ISpecialServicesRule r2)
+        {
+            return r1.BrandedName.Equals(r2.BrandedName)
+                && r1.CategoryId.Equals(r2.CategoryId)
+                && r1.CategoryName.Equals(r2.CategoryName)
+                && r1.SpecialServiceId == r2.SpecialServiceId;
+        }
+
+
+        public static void Add(Carrier carrier, ICarrierRule carrierRule)
+        {
+            foreach (var p in c.ParcelTypeRules)
+            {
+                ParcelTypeRulesCache.Add(p);
+                foreach (var s in p.SpecialServiceRules)
+                {
+                    SpecialServicesRulesCache.Add(s);
+                    CarrierRulesCache.Associate(c, p, s);
+                    ParcelTypeRulesCache.Associate(c, p, s);
+                    SpecialServicesRulesCache.Associate(c, p, s);
+                }
+            }
+
+        }
+
+        public static void Associate(ICarrierRule carrierRule, IParcelTypeRule parcelTypeRule, ISpecialServicesRule specialServicesRule)
         {
 
+        }
+        public static IEnumerable<ICarrierRule> Lookup( IEnumerable<IParcelTypeRule> parcels, IEnumerable<ISpecialServicesRule> services)
+        {
+            throw new NotImplementedException();
         }
     }
 }

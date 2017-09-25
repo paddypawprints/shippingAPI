@@ -67,7 +67,7 @@ namespace example
             if (label.Success) Console.WriteLine(label.APIResponse.ParcelTrackingNumber);
 
             // Transaction report
-
+            /*
             var transactionsReportRequest = new ReportRequest()
             {
                 FromDate = DateTimeOffset.Parse("6/30/2017"),
@@ -86,6 +86,16 @@ namespace example
 
             foreach (var obj in query)
                 Console.WriteLine(obj);
+                */
+            var req = new RatingServicesRequest()
+            {
+
+                Carrier = Carrier.USPS,
+                OriginCountryCode = "US",
+                DestinationCountryCode = "US"
+            };
+            var res = CarrierRulesMethods.RatingServices<CarrierRule[]>(req).GetAwaiter().GetResult();
+
         }
 
         static void Initialize()
@@ -101,7 +111,7 @@ namespace example
             DefaultSession.LogConfigError = (s) => Console.WriteLine("Bad code:" + s);
             DefaultSession.LogDebug = (s) => Console.WriteLine(s);
             //DefaultSession.Requestor = new ShippingAPIMock();
-            //DefaultSession.Record = true;
+            DefaultSession.Record = true;
 #if NET_45
 #else
             DefaultSession.TraceSerialization = true;

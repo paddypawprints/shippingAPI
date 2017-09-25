@@ -13,21 +13,29 @@ namespace PitneyBowes.Developer.ShippingApi.Method
         public override StringBuilder Authorization {get;set;}
 
         [ShippingApiQuery("carrier")]
-        Carrier Carrier { get; set; }
+        public Carrier Carrier { get; set; }
         [ShippingApiQuery("originCountryCode")]
-        string OriginCountryCode { get; set; }
+        public string OriginCountryCode { get; set; }
         [ShippingApiQuery("destinationCountryCode")]
-        string DestinationCountryCode { get; set; }
+        public string DestinationCountryCode { get; set; }
     }
 
-    public static class CarrierRules
+    public static class CarrierRulesMethods
     {
 
-        public async static Task<ShippingApiResponse<T>> RatingServices<T>(RatingServicesRequest request, Session session = null) where T : ICarrierRule, new()
+        public async static Task<ShippingApiResponse<T>> RatingServices<T>(RatingServicesRequest request, Session session = null) where T : IEnumerable<ICarrierRule>
         {
             if (session == null) session = SessionDefaults.DefaultSession;
             request.Authorization = new StringBuilder(session.AuthToken.AccessToken);
-            return await WebMethod.Get<T, RatingServicesRequest>("/v1/information/rules/rating-services", request, session);
+            var response =  await WebMethod.Get<T, RatingServicesRequest>("/shippingservices/v1/information/rules/rating-services", request, session);
+            if (response.Success)
+            {
+                foreach ( var rule in response.APIResponse )
+                {
+                    rule.Carrier = request.Carrier;
+                }
+            }
+            return response;
         }
     }
 

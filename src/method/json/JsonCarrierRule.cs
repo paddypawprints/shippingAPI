@@ -11,6 +11,14 @@ namespace PitneyBowes.Developer.ShippingApi.Json
         public JsonCarrierRule() : base() { }
         public JsonCarrierRule(T t) : base(t) { }
 
+        public bool ShouldSerializeCarrier() => false;
+
+        public Carrier Carrier
+        {
+            get => Wrapped.Carrier;
+            set { Wrapped.Carrier = value; }
+        }
+
         [JsonProperty("serviceId")]
         public string ServiceId
         {

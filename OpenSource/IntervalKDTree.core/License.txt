@@ -1,0 +1,4 @@
+﻿https://www.codeproject.com/Articles/36300/D-Interval-KD-Tree
+
+License
+This article, along with any associated source code and files, is licensed under The Code Project Open License (CPOL)
