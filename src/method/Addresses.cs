@@ -40,8 +40,8 @@ namespace PitneyBowes.Developer.ShippingApi.Method
         {
             var verifyRequest = new JsonAddress<T>(request);
             if (session == null) session = SessionDefaults.DefaultSession;
-            verifyRequest.Authorization = new StringBuilder(session.AuthToken.AccessToken);
             verifyRequest.Suggest = true;
+            verifyRequest.Authorization = new StringBuilder(session.AuthToken.AccessToken);
             return await WebMethod.Post<VerifySuggestResponse, JsonAddress<T>>("/shippingservices/v1/addresses/verify-suggest", verifyRequest, session);
         }
     }

@@ -36,7 +36,7 @@ namespace tests
                 }
                 else
                 {
-                    DefaultSession.Requestor = new ShippingAPIMock();
+                    DefaultSession.Requester = new ShippingAPIMock();
                 }
                 DefaultSession.RecordPath = string.Format("..{0}..{0}..{0}testData", Path.DirectorySeparatorChar);
 

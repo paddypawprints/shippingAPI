@@ -33,7 +33,7 @@ namespace PitneyBowes.Developer.ShippingApi
     /// </summary>
     public class Session
     {
-        public IHttpRequest Requestor { get; set; } // to allow mocking
+        public IHttpRequest Requester { get; set; } // to allow mocking
 
         public static implicit operator Session(string name)
         {
@@ -41,6 +41,7 @@ namespace PitneyBowes.Developer.ShippingApi
         }
         public string Name { get; set; }
         public IToken AuthToken { get; set; }
+        public int Retries { get; set; }
 
         public Session()
         {
@@ -51,6 +52,7 @@ namespace PitneyBowes.Developer.ShippingApi
             SerializationRegistry.Add(typeof(PackageLocation), new PackageLocationConverter());
             SerializationRegistry.Add(typeof(TrackingStatusCode), new TrackingStatusConverter());
             SerializationRegistry.Add(typeof(TransactionType), new TransactionTypeConverter());
+            Retries = 3;
         }
 
 #if NET_45

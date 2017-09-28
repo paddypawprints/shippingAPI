@@ -6,7 +6,7 @@ using System.Text;
 using System.Net;
 
 
-namespace PitneyBowes.Developer.ShippingApi.Method
+namespace PitneyBowes.Developer.ShippingApi
 {
 
     [JsonObject(MemberSerialization.OptIn)]
@@ -69,11 +69,7 @@ namespace PitneyBowes.Developer.ShippingApi.Method
                 if (session == null) session = SessionDefaults.DefaultSession;
                 request.BasicAuth(session.GetConfigItem("ApiKey"), session.GetAPISecret());
                 var jsonResponse = await WebMethod.Post<JsonToken<T>, TokenRequest>("/oauth/token", request, session);
-                if (jsonResponse.HttpStatus == HttpStatusCode.OK)
-                {
-                    session.AuthToken = jsonResponse.APIResponse;
-                }
-                if (jsonResponse.APIResponse != null)
+                 if (jsonResponse.APIResponse != null)
                     return new ShippingApiResponse<T>() { APIResponse = jsonResponse.APIResponse.Wrapped, Errors = jsonResponse.Errors, HttpStatus = jsonResponse.HttpStatus, Success = jsonResponse.Success };
                 else
                     return new ShippingApiResponse<T>() { APIResponse = default(T), Errors = jsonResponse.Errors, HttpStatus = jsonResponse.HttpStatus, Success = jsonResponse.Success };

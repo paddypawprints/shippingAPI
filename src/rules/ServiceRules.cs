@@ -55,6 +55,18 @@ namespace PitneyBowes.Developer.ShippingApi.Rules
         }
     }
 
+    public static class DictionaryConvenienceExtensions
+    {
+        public static void CreateAndAdd<K,V>( this Dictionary<K,List<V>> dictionary, K key, V value)
+        {
+            if (!dictionary.ContainsKey(key))
+            {
+                dictionary.Add(key, new List<V>());
+            }
+            dictionary[key].Add(value);
+        }
+    }
+
     public class CarrierRulesLookupResult
     {
         Carrier Carrier { get; set; }
@@ -65,9 +77,7 @@ namespace PitneyBowes.Developer.ShippingApi.Rules
 
     public class CarrierRulesCache
     {
-        public Carrier Carrier { get; set; }
         public Dictionary<Carrier, ICarrierRule> CarrierLookup { get; set; }
-        public ICarrierRule CarrierRule { get; set; }
         public Dictionary<Services, ICarrierRule> ServiceLookup { get; set; }
         public Dictionary<ParcelType, List<ICarrierRule>> ParcelCarrierLookup { get; set; }
         public Dictionary<SpecialServiceCodes, List<ICarrierRule>> SpecialServiceCarrierLookup { get; set; }
@@ -101,13 +111,27 @@ namespace PitneyBowes.Developer.ShippingApi.Rules
         }
 
 
-        public static void Add(Carrier carrier, ICarrierRule carrierRule)
+        public void Add(Carrier carrier, ICarrierRule carrierRule)
         {
+            CarrierLookup.Add(carrierRule.Carrier, carrierRule);
+            //ServiceLookup.Add(carrierRule.ServiceId, carrierRule);
+            
+        //public Dictionary<SpecialServiceCodes, List<ICarrierRule>> SpecialServiceCarrierLookup { get; set; }
+        //public Dictionary<Services, List<IParcelTypeRule>> ServiceParcelTypeLookup { get; set; }
+        //public Dictionary<ParcelType, IParcelTypeRule> ParcelLookup { get; set; }
+        //public Dictionary<SpecialServiceCodes, List<IParcelTypeRule>> SpecialServiceParcelLookup { get; set; }
+        //public Dictionary<Services, List<ISpecialServicesRule>> ServiceSpecialServicesLookup { get; set; }
+        //public Dictionary<ParcelType, List<ISpecialServicesRule>> ParcelSpecialServicesLookup { get; set; }
+        //public Dictionary<SpecialServiceCodes, ISpecialServicesRule> SpecialServicesLookup { get; set; }
+
+
+
             foreach (var p in carrierRule.ParcelTypeRules)
             {
-                //ParcelTypeRulesCache.Add(p);
+                ParcelCarrierLookup.CreateAndAdd(p.ParcelType, carrierRule);
                 foreach (var s in p.SpecialServiceRules)
                 {
+                    //SpecialServiceCarrierLookup.CreateAndAdd<SpecialServiceCodes, ICarrierRule>(s.SpecialServiceId, carrierRule);
                     //SpecialServicesRulesCache.Add(s);
                     CarrierRulesCache.Associate(carrierRule, p, s);
                     //ParcelTypeRulesCache.Associate(carrierRule, p, s);

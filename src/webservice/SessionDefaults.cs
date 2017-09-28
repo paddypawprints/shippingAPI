@@ -31,8 +31,8 @@ namespace PitneyBowes.Developer.ShippingApi
                 _defaultConfigs.Add("SANDBOX_ENDPOINT", "https://api-sandbox.pitneybowes.com");
                 _defaultConfigs.Add("PRODUCTION_ENDPOINT", "https://api-sandbox.pitneybowes.com");
 
-                var sandbox = new Session() { Name = "sandbox", EndPoint = GetConfigItem("SANDBOX_ENDPOINT"), Requestor = new ShippingApiHttpRequest()};
-                var production = new Session() { Name= "production", EndPoint = GetConfigItem("PRODUCTION_ENDPOINT"), Requestor = new ShippingApiHttpRequest() };
+                var sandbox = new Session() { Name = "sandbox", EndPoint = GetConfigItem("SANDBOX_ENDPOINT"), Requester = new ShippingApiHttpRequest()};
+                var production = new Session() { Name= "production", EndPoint = GetConfigItem("PRODUCTION_ENDPOINT"), Requester = new ShippingApiHttpRequest() };
                 _defaultSessions.Add("sandbox", sandbox );
                 _defaultSessions.Add("production", production );
                 DefaultSession = sandbox;

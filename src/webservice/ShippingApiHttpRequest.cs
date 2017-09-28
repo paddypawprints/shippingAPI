@@ -4,6 +4,7 @@ using System.Text;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace PitneyBowes.Developer.ShippingApi
 {
@@ -96,18 +97,24 @@ namespace PitneyBowes.Developer.ShippingApi
                             sb.Clear();
                         }
                         recordingStream.WriteRecordCRLF("");
-
                         ShippingApiResponse<Response>.Deserialize(session, recordingStream, apiResponse);
                         return apiResponse;
                     }
                     else
                     {
-                        session.LogWarning(String.Format("http {0} request to {1} failed with error {2}", verb.ToString(), uriBuilder, httpResponseMessage.StatusCode));
                         var apiResponse = new ShippingApiResponse<Response> { HttpStatus = httpResponseMessage.StatusCode, Success = httpResponseMessage.IsSuccessStatusCode };
-
-                        apiResponse.Errors.Add(new ErrorDetail() { ErrorCode = "HTTP " + httpResponseMessage.Version + " " + httpResponseMessage.StatusCode.ToString(), Message = httpResponseMessage.ReasonPhrase });
+                        recordingStream.IsRecording = true;
+                        recordingStream.WriteRecordCRLF("");
+                        try
+                        {
+                            ShippingApiResponse<Response>.Deserialize(session, recordingStream, apiResponse);
+                        }
+                        catch (JsonException)
+                        {
+                            session.LogWarning(String.Format("http {0} request to {1} failed to deserialize with error {2}", verb.ToString(), uriBuilder, httpResponseMessage.StatusCode));
+                            apiResponse.Errors.Add(new ErrorDetail() { ErrorCode = "HTTP " + httpResponseMessage.Version + " " + httpResponseMessage.StatusCode.ToString(), Message = httpResponseMessage.ReasonPhrase });
+                        }
                         return apiResponse;
-
                     }
                 }
             }
