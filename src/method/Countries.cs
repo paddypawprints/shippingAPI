@@ -56,8 +56,6 @@ namespace PitneyBowes.Developer.ShippingApi.Method
 
         public async static Task<ShippingApiResponse<IEnumerable<T>>> Countries<T>(CountriesRequest<T> request, Session session = null) where T : ICountry, new()
         {
-            if (session == null) session = SessionDefaults.DefaultSession;
-            request.Authorization = new StringBuilder(session.AuthToken.AccessToken);
             return await WebMethod.Get<IEnumerable<T>, CountriesRequest<T>>("/shippingservices/v1/countries", request, session);
         }
 

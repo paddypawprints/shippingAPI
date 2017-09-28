@@ -176,21 +176,15 @@ namespace PitneyBowes.Developer.ShippingApi.Method
 
         public async static Task<ShippingApiResponse<T>> CreateShipment<T>(CreateShipmentRequest<T> request, Session session = null) where T:IShipment, new()
         {
-            if (session == null) session = SessionDefaults.DefaultSession;
-            request.Authorization = new StringBuilder(session.AuthToken.AccessToken);
             return await WebMethod.Post< T, CreateShipmentRequest<T>>( "/shippingservices/v1/shipments", request, session );
         }
         public async static Task<ShippingApiResponse<CancelShipmentResponse>> CancelShipment( CancelShipmentRequest request, Session session = null)
         {
-            if (session == null) session = SessionDefaults.DefaultSession;
-            request.Authorization = new StringBuilder(session.AuthToken.AccessToken);
             return await WebMethod.Delete<CancelShipmentResponse, CancelShipmentRequest>( "/shippingservices/v1/shipments", request, session );
         }
 
         public async static Task<ShippingApiResponse<T>>  ReprintShipment<T>(ReprintShipmentRequest request, Session session = null) where T : IShipment, new()
         {
-            if (session == null) session = SessionDefaults.DefaultSession;
-            request.Authorization = new StringBuilder(session.AuthToken.AccessToken);
             return  await WebMethod.Get<T, ReprintShipmentRequest>( "/shippingservices/v1/shipments", request, session );
         }
 

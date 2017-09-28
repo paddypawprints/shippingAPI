@@ -29,8 +29,6 @@ namespace PitneyBowes.Developer.ShippingApi.Method
     {
         public async static Task<ShippingApiResponse<T>> Tracking<T>(TrackingRequest request, Session session = null) where T : IRates, new()
         {
-            if (session == null) session = SessionDefaults.DefaultSession;
-            request.Authorization = new StringBuilder(session.AuthToken.AccessToken);
             return await WebMethod.Get<T, TrackingRequest>("/shippingservices/v1/", request, session);
         }
     }

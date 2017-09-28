@@ -68,8 +68,8 @@ namespace PitneyBowes.Developer.ShippingApi
             {
                 if (session == null) session = SessionDefaults.DefaultSession;
                 request.BasicAuth(session.GetConfigItem("ApiKey"), session.GetAPISecret());
-                var jsonResponse = await WebMethod.Post<JsonToken<T>, TokenRequest>("/oauth/token", request, session);
-                 if (jsonResponse.APIResponse != null)
+                var jsonResponse = await session.Requester.HttpRequest<JsonToken<T>, TokenRequest>("/oauth/token", HttpVerb.POST, request, session);
+                if (jsonResponse.APIResponse != null)
                     return new ShippingApiResponse<T>() { APIResponse = jsonResponse.APIResponse.Wrapped, Errors = jsonResponse.Errors, HttpStatus = jsonResponse.HttpStatus, Success = jsonResponse.Success };
                 else
                     return new ShippingApiResponse<T>() { APIResponse = default(T), Errors = jsonResponse.Errors, HttpStatus = jsonResponse.HttpStatus, Success = jsonResponse.Success };

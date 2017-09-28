@@ -16,7 +16,7 @@ namespace example
             Initialize();
 
             // Authenticate
-            var tokenResponse = TokenMethods.token<Token>().GetAwaiter().GetResult();
+            //var tokenResponse = TokenMethods.token<Token>().GetAwaiter().GetResult();
 
             // Create shipment
             var shipment = new CreateShipmentRequest<Shipment>()

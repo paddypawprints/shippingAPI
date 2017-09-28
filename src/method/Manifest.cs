@@ -38,20 +38,14 @@ namespace PitneyBowes.Developer.ShippingApi.Method
         public async static Task<ShippingApiResponse<T>> Create<T>(T request, Session session = null) where T : IManifest, new()
         {
             var manifestRequest = new JsonManifest<T>(request);
-            if (session == null) session = SessionDefaults.DefaultSession;
-            manifestRequest.Authorization = new StringBuilder(session.AuthToken.AccessToken);
             return await WebMethod.Post<T, JsonManifest<T>>("/shippingservices/v1/manifests", manifestRequest, session);
         }
         public async static Task<ShippingApiResponse<T>> Reprint<T>(ReprintManifestRequest request, Session session = null) where T : IManifest, new()
         {
-            if (session == null) session = SessionDefaults.DefaultSession;
-            request.Authorization = new StringBuilder(session.AuthToken.AccessToken);
             return await WebMethod.Post<T, ReprintManifestRequest> ("/shippingservices/v1", request, session);
         }
         public async static Task<ShippingApiResponse<T>> Retry<T>(RetryManifestRequest request, Session session = null) where T : IManifest, new()
         {
-            if (session == null) session = SessionDefaults.DefaultSession;
-            request.Authorization = new StringBuilder(session.AuthToken.AccessToken);
             return await WebMethod.Post<T, RetryManifestRequest>("/shippingservices/v1", request, session);
         }
 

@@ -29,15 +29,11 @@ namespace PitneyBowes.Developer.ShippingApi.Method
         public async static Task<ShippingApiResponse<T>> Schedule<T>(T request, Session session = null) where T : IPickup, new()
         {
             var scheduleRequest = new JsonPickup<T>(request);
-            if (session == null) session = SessionDefaults.DefaultSession;
-            scheduleRequest.Authorization = new StringBuilder(session.AuthToken.AccessToken);
             return await WebMethod.Post<T, JsonPickup<T>>("/shippingservices/v1/pickups/schedule", scheduleRequest, session);
         }
         public async static Task<ShippingApiResponse<PickupCancelRequest>> CancelPickup(PickupCancelRequest request, Session session = null)
         {
             request.Status = "Success";
-            if (session == null) session = SessionDefaults.DefaultSession;
-            request.Authorization = new StringBuilder(session.AuthToken.AccessToken);
             return await WebMethod.Post<PickupCancelRequest, PickupCancelRequest>("/shippingservices/v1/pickups", request, session);
         }
     }

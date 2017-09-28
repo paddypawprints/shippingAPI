@@ -25,8 +25,6 @@ namespace PitneyBowes.Developer.ShippingApi.Method
 
         public async static Task<ShippingApiResponse<T>> RatingServices<T>(RatingServicesRequest request, Session session = null) where T : IEnumerable<ICarrierRule>
         {
-            if (session == null) session = SessionDefaults.DefaultSession;
-            request.Authorization = new StringBuilder(session.AuthToken.AccessToken);
             var response =  await WebMethod.Get<T, RatingServicesRequest>("/shippingservices/v1/information/rules/rating-services", request, session);
             if (response.Success)
             {

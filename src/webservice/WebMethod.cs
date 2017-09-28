@@ -35,7 +35,7 @@ namespace PitneyBowes.Developer.ShippingApi
 
             for (int retries = session.Retries;  retries > 0; retries--)
             {
-                if (session.AuthToken.AccessToken == null ) //TODO: Check if token should have expired
+                if (session.AuthToken == null || session.AuthToken.AccessToken == null ) //TODO: Check if token should have expired
                 {
                     var tokenResponse = TokenMethods.token<Token>().GetAwaiter().GetResult();
                     if (!tokenResponse.Success)
@@ -55,7 +55,7 @@ namespace PitneyBowes.Developer.ShippingApi
         }
         internal async static Task<ShippingApiResponse<Response>> Post<Response, Request>(string uri, Request request, Session session = null) where Request : IShippingApiRequest
         {
-            return await Request<Response, Request>(uri, HttpVerb.PUT, request, session);
+            return await Request<Response, Request>(uri, HttpVerb.POST, request, session);
         }
         internal async static Task<ShippingApiResponse<Response>> Put<Response, Request>(string uri, Request request, Session session = null) where Request : IShippingApiRequest
         {

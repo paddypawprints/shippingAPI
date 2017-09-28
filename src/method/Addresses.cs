@@ -32,16 +32,11 @@ namespace PitneyBowes.Developer.ShippingApi.Method
         public async static Task<ShippingApiResponse<T>> VerifyAddress<T>(T request, Session session = null) where T : IAddress, new()
         {
             var verifyRequest = new JsonAddress<T>(request);
-            if (session == null) session = SessionDefaults.DefaultSession;
-            verifyRequest.Authorization = new StringBuilder(session.AuthToken.AccessToken);
             return await WebMethod.Post<T, JsonAddress<T>>("/shippingservices/v1/addresses/verify", verifyRequest, session);
         }
         public async static Task<ShippingApiResponse<VerifySuggestResponse>> VerifySuggestAddress<T>(T request, Session session = null) where T : IAddress, new()
         {
-            var verifyRequest = new JsonAddress<T>(request);
-            if (session == null) session = SessionDefaults.DefaultSession;
-            verifyRequest.Suggest = true;
-            verifyRequest.Authorization = new StringBuilder(session.AuthToken.AccessToken);
+            var verifyRequest = new JsonAddress<T>(request) { Suggest = true };
             return await WebMethod.Post<VerifySuggestResponse, JsonAddress<T>>("/shippingservices/v1/addresses/verify-suggest", verifyRequest, session);
         }
     }
