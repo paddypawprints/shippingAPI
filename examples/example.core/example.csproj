@@ -10,11 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="shippingapi" Version="1.0.4-beta" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\OpenSource\AddressParser\AddressParser.Core\AddressParser.Core.csproj" />
+    <ProjectReference Include="..\..\src\shippingapi.csproj" />
   </ItemGroup>
 
 </Project>

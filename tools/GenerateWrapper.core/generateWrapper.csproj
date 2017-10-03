@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="shippingapi" Version="1.0.4-beta" />
+    <ProjectReference Include="..\..\src\shippingapi.csproj" />
   </ItemGroup>
 
 </Project>
