@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Threading.Tasks;
 using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using Newtonsoft.Json;
 using System.IO;
 using System.Reflection;
 using System.Text;
-using System.Globalization;
 using System.Collections.Generic;
 
 namespace PitneyBowes.Developer.ShippingApi
@@ -151,10 +147,6 @@ namespace PitneyBowes.Developer.ShippingApi
                     ((ShippingApiContractResolver)serializer.ContractResolver).Session = session;
                     serializer.NullValueHandling = NullValueHandling.Ignore;
                     serializer.Formatting = Formatting.Indented;
-#if NET_45
-#else
-                    if (session.TraceSerialization) serializer.TraceWriter = session.NewtonSoftTrace;
-#endif
                     serializer.Serialize(writer, request);
                     writer.Flush();
                     return;
@@ -180,7 +172,7 @@ namespace PitneyBowes.Developer.ShippingApi
                     return;
                 default:
                     session.LogConfigError("Unrecognized request content type:" + request.ContentType);
-                    throw new ApplicationException("Unrecognized request content type:" + request.ContentType); 
+                    throw new InvalidOperationException("Unrecognized request content type:" + request.ContentType); 
             }
         }
         public virtual string GetUri(string baseUrl)

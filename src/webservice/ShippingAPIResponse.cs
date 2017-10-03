@@ -3,6 +3,7 @@ using System.Net;
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
+using System.Reflection;
 using Newtonsoft.Json;
 
 namespace PitneyBowes.Developer.ShippingApi
@@ -41,7 +42,7 @@ namespace PitneyBowes.Developer.ShippingApi
 
         private static void DeserializationError(object sender, Newtonsoft.Json.Serialization.ErrorEventArgs e)
         {
-            throw new ApplicationException("Error deserializing", e.ErrorContext.Error);
+            throw new JsonSerializationException("Error deserializing", e.ErrorContext.Error);
         }
 
         public static void Deserialize(Session session, RecordingStream respStream, ShippingApiResponse<Response> apiResponse, long streamPos = 0)
@@ -86,10 +87,6 @@ namespace PitneyBowes.Developer.ShippingApi
             }
             else
             {
-#if NET_45
-#else
-                if (session.TraceSerialization) deserializer.TraceWriter = session.NewtonSoftTrace;
-#endif
                 apiResponse.APIResponse = (Response)deserializer.Deserialize(new StreamReader(respStream), t);
             }
         }

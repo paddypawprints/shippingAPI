@@ -33,8 +33,8 @@ namespace PitneyBowes.Developer.ShippingApi
                 }
             }
 
-            Type[] ifaces = seqType.GetInterfaces();
-            if (ifaces != null && ifaces.Length > 0)
+            var ifaces = seqType.GetInterfaces();
+            if (ifaces != null )
             {
                 foreach (Type iface in ifaces)
                 {

@@ -8,26 +8,7 @@ using Newtonsoft.Json.Serialization;
 
 namespace PitneyBowes.Developer.ShippingApi
 {
-#if NET_45
-    // Differences in net_45 aqnd net_core Newtonsoft
-#else
-    public class DebugTraceWriter : ITraceWriter
-    {
-        private Action<string> _writer;
 
-        public DebugTraceWriter(Action<string> writer)
-        {
-            _writer = writer;
-        }
-
-        public TraceLevel LevelFilter => throw new NotImplementedException("JsonConvert TraceLevel");
-        TraceLevel ITraceWriter.LevelFilter => throw new NotImplementedException("JsonConvert TraceLevelFilter");
-        public void Trace(TraceLevel level, string message, Exception ex)
-        {
-            _writer("== " + level.ToString() + " " + message + " " + ex.Message);
-        }
-    }
-#endif
     /// <summary>
     /// Various environmental items that get injected into most methods. They can be overridden to configure the system.
     /// </summary>
@@ -54,20 +35,6 @@ namespace PitneyBowes.Developer.ShippingApi
             SerializationRegistry.Add(typeof(TransactionType), new TransactionTypeConverter());
             Retries = 3;
         }
-
-#if NET_45
-#else
-        public DebugTraceWriter NewtonSoftTrace { get; set; }
-        public bool TraceSerialization
-        {
-            get { return NewtonSoftTrace == null; }
-            set
-            {
-                if (value && (NewtonSoftTrace == null)) NewtonSoftTrace = new DebugTraceWriter(LogDebug);
-                if (!value) NewtonSoftTrace = null;
-            }
-        }
-#endif
 
         internal Dictionary<Type, JsonConverter> SerializationRegistry = new Dictionary<Type, JsonConverter>();
         internal Dictionary<Type, Type> WrapperRegistry = new Dictionary<Type, Type>();

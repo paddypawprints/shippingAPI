@@ -46,7 +46,10 @@ namespace PitneyBowes.Developer.ShippingApi
             if ( _recorder != null)
             {
                 _recording = false;
+#if !NETSTANDARD1_3
+
                 _recorder.Close();
+#endif
                 _recorder.Dispose();
                 _recorder = null;
             }

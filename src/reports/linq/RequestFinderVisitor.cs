@@ -67,7 +67,7 @@ namespace PitneyBowes.Developer.ShippingApi
             }
 
             // We should have returned by now. 
-            throw new ApplicationException("GetValueFromBinaryExpression: There is a bug in this program - expression is messed up.");
+            throw new InvalidProgramException("GetValueFromBinaryExpression: There is a bug in this program - expression is messed up.");
         }
 
         internal T GetValueFromExpression<T>(Expression expression)
@@ -75,7 +75,7 @@ namespace PitneyBowes.Developer.ShippingApi
             if (expression.NodeType == ExpressionType.Constant)
                 return (T)(((ConstantExpression)expression).Value);
             else
-                throw new ApplicationException(
+                throw new ArgumentException(
                     String.Format("GetValueFromExpression: The expression type {0} is not supported to obtain a value.", expression.NodeType)); 
         }
         internal bool IsMemberValueExpression(Expression exp, ExpressionType expressionType, string memberName)
@@ -88,7 +88,7 @@ namespace PitneyBowes.Developer.ShippingApi
             // Assert. 
             if (IsSpecificMemberExpression(be.Left, declaringType, memberName) &&
                 IsSpecificMemberExpression(be.Right, declaringType, memberName))
-                throw new ApplicationException("IsMemberValueExpression: Cannot have 'member' == 'member' in an expression!");
+                throw new ArgumentException("IsMemberValueExpression: Cannot have 'member' == 'member' in an expression!");
 
             return (IsSpecificMemberExpression(be.Left, declaringType, memberName) ||
                 IsSpecificMemberExpression(be.Right, declaringType, memberName));
