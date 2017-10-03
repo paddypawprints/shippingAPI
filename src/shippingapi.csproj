@@ -7,6 +7,10 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <AssemblyVersion>1.0.3.0</AssemblyVersion>
     <FileVersion>1.0.3.0</FileVersion>
+    <Authors>Patrick Farry</Authors>
+    <Company />
+    <Description>Package that provides a local interface to the Pitney Bowes Shipping API. Features and fluent API, strong type support, mocking, linq interface to transaction reports.</Description>
+    <Copyright>Pitney Bowes 2017</Copyright>
   </PropertyGroup>
 
   <ItemGroup>
