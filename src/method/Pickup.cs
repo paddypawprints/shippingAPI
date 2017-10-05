@@ -26,12 +26,12 @@ namespace PitneyBowes.Developer.ShippingApi.Method
 
     public static class PickupMethods
     {
-        public async static Task<ShippingApiResponse<T>> Schedule<T>(T request, Session session = null) where T : IPickup, new()
+        public async static Task<ShippingApiResponse<T>> Schedule<T>(T request, ISession session = null) where T : IPickup, new()
         {
             var scheduleRequest = new JsonPickup<T>(request);
             return await WebMethod.Post<T, JsonPickup<T>>("/shippingservices/v1/pickups/schedule", scheduleRequest, session);
         }
-        public async static Task<ShippingApiResponse<PickupCancelRequest>> CancelPickup(PickupCancelRequest request, Session session = null)
+        public async static Task<ShippingApiResponse<PickupCancelRequest>> CancelPickup(PickupCancelRequest request, ISession session = null)
         {
             request.Status = "Success";
             return await WebMethod.Post<PickupCancelRequest, PickupCancelRequest>("/shippingservices/v1/pickups", request, session);

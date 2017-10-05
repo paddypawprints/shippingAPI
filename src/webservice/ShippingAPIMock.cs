@@ -14,7 +14,7 @@ namespace PitneyBowes.Developer.ShippingApi
 
         public string Dirname { get; set; }
 
-        public async Task<ShippingApiResponse<Response>> HttpRequest<Response, Request>(string resource, HttpVerb verb, Request request, Session session = null) where Request : IShippingApiRequest
+        public async Task<ShippingApiResponse<Response>> HttpRequest<Response, Request>(string resource, HttpVerb verb, Request request, bool deleteBody, ISession session = null) where Request : IShippingApiRequest
         {
             string fullPath = request.RecordingFullPath(resource, session);
             string cwd = Directory.GetCurrentDirectory();

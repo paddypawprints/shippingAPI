@@ -18,7 +18,7 @@ namespace PitneyBowes.Developer.ShippingApi
         /// </summary>
         virtual public string RecordingSuffix => "";
 
-        public static string RecordingFullPath(IShippingApiRequest request, string resource, Session session)
+        public static string RecordingFullPath(IShippingApiRequest request, string resource, ISession session)
         { 
             string dirname = session.RecordPath;
             StringBuilder uriBuilder = new StringBuilder(resource);
@@ -31,7 +31,7 @@ namespace PitneyBowes.Developer.ShippingApi
                 .Replace('=', '-');
             string fileName = "default";
 
-            if (session == null) session = SessionDefaults.DefaultSession;
+            if (session == null) session = Globals.DefaultSession;
 
             foreach (var h in request.GetHeaders())
             {
@@ -133,18 +133,18 @@ namespace PitneyBowes.Developer.ShippingApi
            );
         }
 
-        public virtual void SerializeBody( StreamWriter writer, Session session)
+        public virtual void SerializeBody( StreamWriter writer, ISession session)
         {
             SerializeBody(this, writer, session);
         }
 
-        public static void SerializeBody(IShippingApiRequest request, StreamWriter writer, Session session)
+        public static void SerializeBody(IShippingApiRequest request, StreamWriter writer, ISession session)
         {
             switch (request.ContentType)
             {
                 case "application/json":
                     var serializer = new JsonSerializer() { ContractResolver = new ShippingApiContractResolver() };
-                    ((ShippingApiContractResolver)serializer.ContractResolver).Session = session;
+                    ((ShippingApiContractResolver)serializer.ContractResolver).Registry = session.SerializationRegistry;
                     serializer.NullValueHandling = NullValueHandling.Ignore;
                     serializer.Formatting = Formatting.Indented;
                     serializer.Serialize(writer, request);
@@ -226,7 +226,7 @@ namespace PitneyBowes.Developer.ShippingApi
             return GetHeaders(this);
         }
 
-        public string RecordingFullPath(string resource, Session session)
+        public string RecordingFullPath(string resource, ISession session)
         {
             return RecordingFullPath( this, resource, session );
         }

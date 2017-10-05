@@ -23,7 +23,7 @@ namespace PitneyBowes.Developer.ShippingApi.Method
     public static class CarrierRulesMethods
     {
 
-        public async static Task<ShippingApiResponse<T>> RatingServices<T>(RatingServicesRequest request, Session session = null) where T : IEnumerable<ICarrierRule>
+        public async static Task<ShippingApiResponse<T>> RatingServices<T>(RatingServicesRequest request, ISession session = null) where T : IEnumerable<ICarrierRule>
         {
             var response =  await WebMethod.Get<T, RatingServicesRequest>("/shippingservices/v1/information/rules/rating-services", request, session);
             if (response.Success)

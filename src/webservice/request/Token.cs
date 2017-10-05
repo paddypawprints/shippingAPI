@@ -21,10 +21,11 @@ namespace PitneyBowes.Developer.ShippingApi
 
         public override string ContentType  => "application/x-www-form-urlencoded"; 
 
-        public void BasicAuth(string key, char[] secret ) //TODO: make this better
+        public void BasicAuth(string key, StringBuilder secret ) //TODO: make this better
         {
             var authHeader = new StringBuilder();
             authHeader.Append( key).Append(':').Append( secret);
+            secret.Clear();
             var buffer = new char[authHeader.Length];
             authHeader.CopyTo(0, buffer, 0, buffer.Length);
             authHeader.Clear();
@@ -60,15 +61,15 @@ namespace PitneyBowes.Developer.ShippingApi
     public static class TokenMethods
     {
 #pragma warning disable IDE1006 // Naming Styles
-        public static async Task<ShippingApiResponse<T>> token<T>(Session session = null) where T : IToken, new()
+        public static async Task<ShippingApiResponse<T>> token<T>(ISession session = null) where T : IToken, new()
 
 #pragma warning restore IDE1006 // Naming Styles
         {
             using (var request = new TokenRequest())
             {
-                if (session == null) session = SessionDefaults.DefaultSession;
+                if (session == null) session = Globals.DefaultSession;
                 request.BasicAuth(session.GetConfigItem("ApiKey"), session.GetAPISecret());
-                var jsonResponse = await session.Requester.HttpRequest<JsonToken<T>, TokenRequest>("/oauth/token", HttpVerb.POST, request, session);
+                var jsonResponse = await session.Requester.HttpRequest<JsonToken<T>, TokenRequest>("/oauth/token", HttpVerb.POST, request, false, session);
                 if (jsonResponse.APIResponse != null)
                     return new ShippingApiResponse<T>() { APIResponse = jsonResponse.APIResponse.Wrapped, Errors = jsonResponse.Errors, HttpStatus = jsonResponse.HttpStatus, Success = jsonResponse.Success };
                 else

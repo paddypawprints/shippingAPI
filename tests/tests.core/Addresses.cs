@@ -4,7 +4,6 @@ using PitneyBowes.Developer.ShippingApi.Model;
 using System.Collections.Generic;
 using Xunit;
 
-using static PitneyBowes.Developer.ShippingApi.SessionDefaults;
 
 namespace tests
 {
@@ -15,11 +14,11 @@ namespace tests
         public void HappyPath()
         {
             // $(SolutionDir)\tests\testData\shippingservices\v1\addresses\verify\1234567828607.http
-            Session.Initialize();
+            TestSession.Initialize();
             var warnings = new List<string>();
-            DefaultSession.LogWarning = (s) => warnings.Add(s);
+            Globals.DefaultSession.LogWarning = (s) => warnings.Add(s);
             var errors = new List<string>();
-            DefaultSession.LogError = (s) => errors.Add(s);
+            Globals.DefaultSession.LogError = (s) => errors.Add(s);
 
             var company = "ABC Company";
             var name = "Rufous Sirius Canid";

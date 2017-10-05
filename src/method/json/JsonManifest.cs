@@ -15,7 +15,7 @@ namespace PitneyBowes.Developer.ShippingApi.Json
         public JsonManifest(T t) : base(t) { }
 
         public string RecordingSuffix => "";
-        public string RecordingFullPath(string resource, Session session)
+        public string RecordingFullPath(string resource, ISession session)
         {
             return ShippingApiRequest.RecordingFullPath(this, resource, session);
         }
@@ -111,7 +111,7 @@ namespace PitneyBowes.Developer.ShippingApi.Json
         {
             return ShippingApiRequest.GetHeaders(this);
         }
-        public void SerializeBody(StreamWriter writer, Session session)
+        public void SerializeBody(StreamWriter writer, ISession session)
         {
             ShippingApiRequest.SerializeBody(this, writer, session);
         }

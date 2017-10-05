@@ -14,7 +14,7 @@ namespace PitneyBowes.Developer.ShippingApi.Method
     public class CountriesRequest<T> : IShippingApiRequest where T : ICountry, new()
     {
         public string RecordingSuffix => "";
-        public string RecordingFullPath(string resource, Session session)
+        public string RecordingFullPath(string resource, ISession session)
         {
             return ShippingApiRequest.RecordingFullPath(this, resource, session);
         }
@@ -38,7 +38,7 @@ namespace PitneyBowes.Developer.ShippingApi.Method
             return ShippingApiRequest.GetHeaders(this);
         }
 
-        public void SerializeBody(StreamWriter writer, Session session)
+        public void SerializeBody(StreamWriter writer, ISession session)
         {
             ShippingApiRequest.SerializeBody(this, writer, session);
         }
@@ -54,7 +54,7 @@ namespace PitneyBowes.Developer.ShippingApi.Method
     public static class CountriesMethods
     {
 
-        public async static Task<ShippingApiResponse<IEnumerable<T>>> Countries<T>(CountriesRequest<T> request, Session session = null) where T : ICountry, new()
+        public async static Task<ShippingApiResponse<IEnumerable<T>>> Countries<T>(CountriesRequest<T> request, ISession session = null) where T : ICountry, new()
         {
             return await WebMethod.Get<IEnumerable<T>, CountriesRequest<T>>("/shippingservices/v1/countries", request, session);
         }

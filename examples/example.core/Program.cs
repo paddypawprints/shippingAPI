@@ -1,22 +1,61 @@
-﻿using PitneyBowes.Developer.ShippingApi;
+﻿
+using System;
+using System.Text;
+using System.Linq;
+using PitneyBowes.Developer.ShippingApi;
 using PitneyBowes.Developer.ShippingApi.Fluent;
 using PitneyBowes.Developer.ShippingApi.Model;
 using PitneyBowes.Developer.ShippingApi.Method;
-using System;
-using System.Linq;
+using System.Collections.Generic;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Configuration;
+using System.Security;
+using System.Runtime.InteropServices;
 
-using static PitneyBowes.Developer.ShippingApi.SessionDefaults;
 
 namespace example
 {
+    public static class ApplicationLogging
+    {
+        public static ILoggerFactory LoggerFactory { get; } = new LoggerFactory();
+        public static ILogger CreateLogger<T>() =>
+          LoggerFactory.CreateLogger<T>();
+    }
+
     class Program
     {
+        private static ILogger Logger { get; } =  ApplicationLogging.CreateLogger<Program>();
+        private static IConfiguration Configuration { get; set; }
+        private static SecureString ApiKey;
+
         static void Main(string[] args)
         {
-            Initialize();
+            SetupConfigProvider();
+            SetupApiKey();
 
-            // Authenticate
-            //var tokenResponse = TokenMethods.token<Token>().GetAwaiter().GetResult();
+            var sandbox = new Session() { EndPoint = "https://api-sandbox.pitneybowes.com", Requester = new ShippingApiHttpRequest() };
+
+            // Initialize framework
+
+            // Hook in your concrete classes
+            Model.RegisterSerializationTypes(sandbox.SerializationRegistry);
+
+            // Hook in your config provider
+            sandbox.GetConfigItem = (s) => Configuration[s];
+
+            // Hook in your logger
+            sandbox.LogWarning = (s) => Logger.LogWarning(s);
+            sandbox.LogError = (s) => Logger.LogError(s);
+            sandbox.LogConfigError = (s) => Logger.LogCritical(s);
+            sandbox.LogDebug = (s) => Logger.LogInformation(s);
+
+            // Hook in your secure API key decryption
+            sandbox.GetAPISecret = () => GetApiKey();
+
+            //sandbox.Requester = new ShippingAPIMock();
+            //sandbox.Record = true;
+
+            Globals.DefaultSession = sandbox;
 
             // Create shipment
             var shipment = new CreateShipmentRequest<Shipment>()
@@ -33,7 +72,7 @@ namespace example
             };
 
             shipment.MinimalAddressValidation = "true";
-            shipment.ShipperRatePlan = DefaultSession.GetConfigItem("RatePlan");
+            shipment.ShipperRatePlan = Globals.DefaultSession.GetConfigItem("RatePlan");
 
             shipment.FromAddress = (Address)AddressFluent<Address>.Create()
                 .Company("Pitney Bowes Inc.")
@@ -57,36 +96,49 @@ namespace example
                 .ShippingLabel();
 
             shipment.ShipmentOptions = ShipmentOptionsArrayFluent<ShipmentOptions>.Create()
-                .ShipperId(DefaultSession.GetConfigItem("ShipperID"))
+                .ShipperId(Globals.DefaultSession.GetConfigItem("ShipperID"))
                 .AddToManifest();
 
             shipment.TransactionId = Guid.NewGuid().ToString().Substring(15);
 
             var label = ShipmentsMethods.CreateShipment(shipment).GetAwaiter().GetResult();
 
-            if (label.Success) Console.WriteLine(label.APIResponse.ParcelTrackingNumber);
+            if (label.Success)
+            {
+                Console.WriteLine(label.APIResponse.ParcelTrackingNumber);
+                var cancelRequest = new CancelShipmentRequest
+                {
+                    Carrier = "USPS",
+                    CancelInitiator = "SHIPPER",
+                    TransactionId = Guid.NewGuid().ToString().Substring(15),
+                    ShipmentToCancel = label.APIResponse.ShipmentId
+                };
+
+                var cancelResponse = ShipmentsMethods.CancelShipment(cancelRequest).GetAwaiter().GetResult();
+
+            }
 
             // Transaction report
-            /*
+ 
             var transactionsReportRequest = new ReportRequest()
             {
                 FromDate = DateTimeOffset.Parse("6/30/2017"),
                 ToDate = DateTimeOffset.Now,
-                DeveloperId = DefaultSession.GetConfigItem("DeveloperID")
+                DeveloperId = sandbox.GetConfigItem("DeveloperID")
             };
             foreach (var t in TransactionsReport<Transaction>.Report(transactionsReportRequest, x => x.CreditCardFee == null || x.CreditCardFee > 10.0M ))
             {
                 Console.WriteLine(t.DestinationAddress);
             }
 
-            TransactionsReport<Transaction> report = new TransactionsReport<Transaction>(DefaultSession.GetConfigItem("DeveloperID"));
+            TransactionsReport<Transaction> report = new TransactionsReport<Transaction>(sandbox.GetConfigItem("DeveloperID"));
             var query = from transaction in report
-                        where transaction.TransactionDateTime >= DateTimeOffset.Parse("6/30/2017") && transaction.TransactionDateTime <= DateTimeOffset.Now
-                        select new { transaction.DestinationCountry };
+                        where transaction.TransactionDateTime >= DateTimeOffset.Parse("6/30/2017") && transaction.TransactionDateTime <= DateTimeOffset.Now && transaction.TransactionType == TransactionType.POSTAGE_PRINT
+                        select new { transaction.TransactionId };
 
             foreach (var obj in query)
                 Console.WriteLine(obj);
-                */
+                
             var req = new RatingServicesRequest()
             {
 
@@ -98,30 +150,48 @@ namespace example
 
         }
 
-        static void Initialize()
+
+        private static void SetupApiKey()
         {
-            // Initialize framework
-            Init();
-            Model.RegisterSerializationTypes(DefaultSession);
+            ApiKey = new SecureString();
+            // This is not secure (obviously) - store your key encrypted. This is just to demonstrate the use of the session.
+            foreach (var c in "wgNEtZkNbP0iV8h0".ToCharArray()) ApiKey.AppendChar(c);
+        }
 
-            // Configuration
-            DefaultSession = "sandbox";
-            DefaultSession.LogWarning = (s) => Console.WriteLine("Warning:" + s);
-            DefaultSession.LogError = (s) => Console.WriteLine("Error:" + s);
-            DefaultSession.LogConfigError = (s) => Console.WriteLine("Bad code:" + s);
-            DefaultSession.LogDebug = (s) => Console.WriteLine(s);
-            //DefaultSession.Requestor = new ShippingAPIMock();
-            DefaultSession.Record = true;
+        private static StringBuilder GetApiKey()
+        {
+            var valuePtr = IntPtr.Zero;
+            var s = new StringBuilder();
+            try
+            {
+                valuePtr = Marshal.SecureStringToGlobalAllocUnicode(ApiKey);
+                for (int i = 0; i < ApiKey.Length; i++)
+                {
+                    short unicodeChar = Marshal.ReadInt16(valuePtr, i * 2);
+                    s.Append(Convert.ToChar(unicodeChar));
+                }
+            }
+            finally
+            {
+                Marshal.ZeroFreeGlobalAllocUnicode(valuePtr);
+            }
+            return s;
+        }
 
-            //*****************************************
-            // Replace these with your own values
-            //
-            AddConfigItem("ApiKey", "Ci4vEAgBP8Aww7TBwGOKhr43uKTPNyfO");
-            DefaultSession.GetAPISecret = () => "wgNEtZkNbP0iV8h0".ToCharArray();
-            AddConfigItem("RatePlan", "PP_SRP_NEWBLUE");
-            AddConfigItem("ShipperID", "9014888410");
-            AddConfigItem("DeveloperID", "46841939");
-            //******************************************
+        private static void SetupConfigProvider()
+        {
+            var configs = new Dictionary<string, string>
+            {
+                { "ApiKey", "Ci4vEAgBP8Aww7TBwGOKhr43uKTPNyfO" },
+                { "RatePlan", "PP_SRP_NEWBLUE" },
+                { "ShipperID", "9014888410" },
+                { "DeveloperID", "46841939" }
+            };
+
+            var configurationBuilder = new ConfigurationBuilder();
+
+            configurationBuilder.AddInMemoryCollection(configs);
+            Configuration = configurationBuilder.Build();
         }
     }
 }

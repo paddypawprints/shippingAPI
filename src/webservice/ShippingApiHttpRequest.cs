@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 
 namespace PitneyBowes.Developer.ShippingApi
 {
-    internal class ShippingApiHttpRequest : IHttpRequest
+    public class ShippingApiHttpRequest : IHttpRequest
     {
         internal static void AddRequestHeaders(HttpClient client, ShippingApiHeaderAttribute attribute, string propValue, string propName)
         {
@@ -26,14 +26,15 @@ namespace PitneyBowes.Developer.ShippingApi
             }
         }
 
-        public async Task<ShippingApiResponse<Response>> HttpRequest<Response, Request>(string resource, HttpVerb verb, Request request, Session session = null) where Request : IShippingApiRequest
+        public async Task<ShippingApiResponse<Response>> HttpRequest<Response, Request>(string resource, HttpVerb verb, Request request, bool deleteBody = false, ISession session = null) where Request : IShippingApiRequest
         {
-            return await HttpRequestStatic<Response, Request>(resource, verb, request, session);
+            return await HttpRequestStatic<Response, Request>(resource, verb, request, deleteBody, session);
         }
-        internal async static Task<ShippingApiResponse<Response>> HttpRequestStatic<Response, Request>(string resource, HttpVerb verb, Request request, Session session = null) where Request : IShippingApiRequest
+        internal async static Task<ShippingApiResponse<Response>> HttpRequestStatic<Response, Request>(string resource, HttpVerb verb, Request request, bool deleteBody = false, ISession session = null) where Request : IShippingApiRequest
         {
-            if (session == null) session = SessionDefaults.DefaultSession;
-            var client = session.Client(session.EndPoint);
+            if (session == null) session = Globals.DefaultSession;
+            var client = Globals.Client(session.EndPoint);
+            client.DefaultRequestHeaders.Clear();
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             client.DefaultRequestHeaders.Add("user-agent", "Ps API Client Proxy");
@@ -46,7 +47,7 @@ namespace PitneyBowes.Developer.ShippingApi
 
             HttpResponseMessage httpResponseMessage;
 
-            if (verb == HttpVerb.PUT || verb == HttpVerb.POST)
+            if (verb == HttpVerb.PUT || verb == HttpVerb.POST || (verb == HttpVerb.DELETE && deleteBody))
             {
                 using (var stream = new MemoryStream())
                 using (var writer = new StreamWriter(stream))
@@ -57,9 +58,23 @@ namespace PitneyBowes.Developer.ShippingApi
                     {
                         reqContent.Headers.ContentType = new MediaTypeHeaderValue(request.ContentType);
                         if (verb == HttpVerb.PUT)
+                        {
                             httpResponseMessage = await client.PutAsync(uriBuilder, reqContent);
+                        }
+                        else if (verb == HttpVerb.DELETE)
+                        {
+                            HttpRequestMessage deleteReq = new HttpRequestMessage
+                            {
+                                Content = reqContent,
+                                Method = HttpMethod.Delete,
+                                RequestUri = new Uri(client.BaseAddress + uriBuilder)
+                            };
+                            httpResponseMessage = await client.SendAsync(deleteReq);
+                        }
                         else
+                        {
                             httpResponseMessage = await client.PostAsync(uriBuilder, reqContent);
+                        }
                     }
                 }
             }

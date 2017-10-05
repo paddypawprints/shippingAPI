@@ -27,7 +27,7 @@ namespace PitneyBowes.Developer.ShippingApi.Method
 
     public static class TrackingMethods
     {
-        public async static Task<ShippingApiResponse<T>> Tracking<T>(TrackingRequest request, Session session = null) where T : IRates, new()
+        public async static Task<ShippingApiResponse<T>> Tracking<T>(TrackingRequest request, ISession session = null) where T : IRates, new()
         {
             return await WebMethod.Get<T, TrackingRequest>("/shippingservices/v1/", request, session);
         }

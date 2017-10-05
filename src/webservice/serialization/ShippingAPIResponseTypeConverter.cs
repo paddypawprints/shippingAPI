@@ -110,7 +110,7 @@ namespace PitneyBowes.Developer.ShippingApi
                 if (i > MAX_TOKENS) throw new InvalidOperationException("ShippingApiResponseTypeConverter only looks at " + MAX_TOKENS + " tokens");
             }
 
-            throw new InvalidOperationException("ShippingApiResponseTypeConverter type not found - stream ran out of tokens");
+            throw new InvalidOperationException("ShippingApiResponseTypeConverter type not found - unexpected end of stream");
         }
 
         public override bool CanConvert(Type objectType)

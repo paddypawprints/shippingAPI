@@ -12,7 +12,7 @@ namespace tests
         [Fact]
         void ParseCarrierRules()
         {
-            Session.Initialize(true);
+            TestSession.Initialize(true);
 
             var req = new RatingServicesRequest()
             {

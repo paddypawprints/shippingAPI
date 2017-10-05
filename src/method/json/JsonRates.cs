@@ -15,7 +15,7 @@ namespace PitneyBowes.Developer.ShippingApi.Json
         public JsonRates(T t) : base(t) { }
 
         public string RecordingSuffix => Carrier.ToString()+ServiceId.ToString()+ParcelType.ToString();
-        public string RecordingFullPath(string resource, Session session)
+        public string RecordingFullPath(string resource, ISession session)
         {
             return ShippingApiRequest.RecordingFullPath(this, resource, session);
         }
@@ -127,7 +127,7 @@ namespace PitneyBowes.Developer.ShippingApi.Json
             return ShippingApiRequest.GetHeaders(this);
         }
 
-        public void SerializeBody(StreamWriter writer, Session session)
+        public void SerializeBody(StreamWriter writer, ISession session)
         {
             ShippingApiRequest.SerializeBody(this, writer, session);
         }

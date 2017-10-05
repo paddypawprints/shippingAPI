@@ -63,31 +63,31 @@ namespace PitneyBowes.Developer.ShippingApi
     {
 
         public string DeveloperId { get; set; }
-        private Session _session;
+        private ISession _session;
 
-        public MerchantsReport( string developerId, Session session = null) : base()
+        public MerchantsReport( string developerId, ISession session = null) : base()
         {
             Provider = new MerchantsReportProvider(developerId, session);
             DeveloperId = developerId;
             _session = session;
         }
 
-        public MerchantsReport(  MerchantsReportProvider provider, Expression expression, string developerId, Session session = null) : base(provider,expression)
+        public MerchantsReport(  MerchantsReportProvider provider, Expression expression, string developerId, ISession session = null) : base(provider,expression)
         {
             DeveloperId = developerId;
             _session = session;
         }
 
-        public async static Task<ShippingApiResponse<MerchantsPageResponse>> MerchantsPage(MerchantsReportRequest request, Session session = null)
+        public async static Task<ShippingApiResponse<MerchantsPageResponse>> MerchantsPage(MerchantsReportRequest request, ISession session = null)
         {
-            if (session == null) session = SessionDefaults.DefaultSession;
+            if (session == null) session = Globals.DefaultSession;
             request.Authorization = new StringBuilder(session.AuthToken.AccessToken);
             return await WebMethod.Get<MerchantsPageResponse, MerchantsReportRequest>("/shippingservices/v2/ledger", request, session);
         }
 
-        public static IEnumerable<Merchant> Report(MerchantsReportRequest request, Func<Merchant, bool> filter = null, Session session = null)
+        public static IEnumerable<Merchant> Report(MerchantsReportRequest request, Func<Merchant, bool> filter = null, ISession session = null)
         {
-            if (session == null) session = SessionDefaults.DefaultSession;
+            if (session == null) session = Globals.DefaultSession;
             request.Page = 0;
             MerchantsPageResponse page;
             do
@@ -107,9 +107,9 @@ namespace PitneyBowes.Developer.ShippingApi
     public class MerchantsReportProvider : ReportProviderBase, IQueryProvider
     {
         private string _developerId;
-        internal Session _session;
+        internal ISession _session;
 
-        public MerchantsReportProvider( string developerId, Session session) :base()
+        public MerchantsReportProvider( string developerId, ISession session) :base()
         {
             _developerId = developerId;
             _session = session;

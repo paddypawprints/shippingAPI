@@ -29,12 +29,12 @@ namespace PitneyBowes.Developer.ShippingApi.Method
 
     public static class AddressessMethods
     {
-        public async static Task<ShippingApiResponse<T>> VerifyAddress<T>(T request, Session session = null) where T : IAddress, new()
+        public async static Task<ShippingApiResponse<T>> VerifyAddress<T>(T request, ISession session = null) where T : IAddress, new()
         {
             var verifyRequest = new JsonAddress<T>(request);
             return await WebMethod.Post<T, JsonAddress<T>>("/shippingservices/v1/addresses/verify", verifyRequest, session);
         }
-        public async static Task<ShippingApiResponse<VerifySuggestResponse>> VerifySuggestAddress<T>(T request, Session session = null) where T : IAddress, new()
+        public async static Task<ShippingApiResponse<VerifySuggestResponse>> VerifySuggestAddress<T>(T request, ISession session = null) where T : IAddress, new()
         {
             var verifyRequest = new JsonAddress<T>(request) { Suggest = true };
             return await WebMethod.Post<VerifySuggestResponse, JsonAddress<T>>("/shippingservices/v1/addresses/verify-suggest", verifyRequest, session);

@@ -6,45 +6,45 @@ namespace PitneyBowes.Developer.ShippingApi.Model
 {
     public static class Model
     {
-        public static void RegisterSerializationTypes( Session session)
+        public static void RegisterSerializationTypes( SerializationRegistry registry)
         {
-            session.RegisterSerializationTypes<IAddress, Address>();
-            session.RegisterSerializationTypes<IAutoRefill, AutoRefill>();
-            session.RegisterSerializationTypes<ICarrierPickup, CarrierPickup>();
-            session.RegisterSerializationTypes<ICarrierRule, CarrierRule>();
-            session.RegisterSerializationTypes<ICcPaymentDetails, CcPaymentDetails>();
-            session.RegisterSerializationTypes<ICountry, Country>();
-            session.RegisterSerializationTypes<ICustoms, Customs>();
-            session.RegisterSerializationTypes<ICustomsItems, CustomsItems>();
-            session.RegisterSerializationTypes<ICustomsInfo, CustomsInfo>();
-            session.RegisterSerializationTypes<IDeliveryCommitment, DeliveryCommitment>();
-            session.RegisterSerializationTypes<IDocument, Document>();
-            session.RegisterSerializationTypes<IDimensionRule, DimensionRule>();
-            session.RegisterSerializationTypes<IManifest, Manifest>();
-            session.RegisterSerializationTypes<IMerchant, Merchant>();
-            session.RegisterSerializationTypes<IParameter, Parameter>();
-            session.RegisterSerializationTypes<IParcel, Parcel>();
-            session.RegisterSerializationTypes<IParcelDimension, ParcelDimension>();
-            session.RegisterSerializationTypes<IParcelTypeRule, ParcelTypeRule>();
-            session.RegisterSerializationTypes<IParcelWeight, ParcelWeight>();
-            session.RegisterSerializationTypes<IPaymentInfo, PaymentInfo>();
-            session.RegisterSerializationTypes<IPickup, Pickup>();
-            session.RegisterSerializationTypes<IPickupCount, PickupCount>();
-            session.RegisterSerializationTypes<IPpPaymentDetails, PpPaymentDetails>();
-            session.RegisterSerializationTypes<IRates, Rates>();
-            session.RegisterSerializationTypes<IServicesParameterRule, ServicesParameterRule>();
-            session.RegisterSerializationTypes<IServicesPrerequisiteRule, ServicesPrerequisiteRule>();
-            session.RegisterSerializationTypes<IShipment, Shipment>();
-            session.RegisterSerializationTypes<IShipmentOptions, ShipmentOptions>();
-            session.RegisterSerializationTypes<ISpecialServices, SpecialServices>();
-            session.RegisterSerializationTypes<ISpecialServicesRule, SpecialServicesRule>();
-            session.RegisterSerializationTypes<IToken, Token>();
-            session.RegisterSerializationTypes<ITrackingEvent, TrackingEvent>();
-            session.RegisterSerializationTypes<ITrackingStatus, TrackingStatus>();
-            session.RegisterSerializationTypes<ITransaction, Transaction>();
-            session.RegisterSerializationTypes<ITransactionSort, TransactionSort>();
-            session.RegisterSerializationTypes<IUserInfo, UserInfo>();
-            session.RegisterSerializationTypes<IWeightRule, WeightRule>();
+            registry.RegisterSerializationTypes<IAddress, Address>();
+            registry.RegisterSerializationTypes<IAutoRefill, AutoRefill>();
+            registry.RegisterSerializationTypes<ICarrierPickup, CarrierPickup>();
+            registry.RegisterSerializationTypes<ICarrierRule, CarrierRule>();
+            registry.RegisterSerializationTypes<ICcPaymentDetails, CcPaymentDetails>();
+            registry.RegisterSerializationTypes<ICountry, Country>();
+            registry.RegisterSerializationTypes<ICustoms, Customs>();
+            registry.RegisterSerializationTypes<ICustomsItems, CustomsItems>();
+            registry.RegisterSerializationTypes<ICustomsInfo, CustomsInfo>();
+            registry.RegisterSerializationTypes<IDeliveryCommitment, DeliveryCommitment>();
+            registry.RegisterSerializationTypes<IDocument, Document>();
+            registry.RegisterSerializationTypes<IDimensionRule, DimensionRule>();
+            registry.RegisterSerializationTypes<IManifest, Manifest>();
+            registry.RegisterSerializationTypes<IMerchant, Merchant>();
+            registry.RegisterSerializationTypes<IParameter, Parameter>();
+            registry.RegisterSerializationTypes<IParcel, Parcel>();
+            registry.RegisterSerializationTypes<IParcelDimension, ParcelDimension>();
+            registry.RegisterSerializationTypes<IParcelTypeRule, ParcelTypeRule>();
+            registry.RegisterSerializationTypes<IParcelWeight, ParcelWeight>();
+            registry.RegisterSerializationTypes<IPaymentInfo, PaymentInfo>();
+            registry.RegisterSerializationTypes<IPickup, Pickup>();
+            registry.RegisterSerializationTypes<IPickupCount, PickupCount>();
+            registry.RegisterSerializationTypes<IPpPaymentDetails, PpPaymentDetails>();
+            registry.RegisterSerializationTypes<IRates, Rates>();
+            registry.RegisterSerializationTypes<IServicesParameterRule, ServicesParameterRule>();
+            registry.RegisterSerializationTypes<IServicesPrerequisiteRule, ServicesPrerequisiteRule>();
+            registry.RegisterSerializationTypes<IShipment, Shipment>();
+            registry.RegisterSerializationTypes<IShipmentOptions, ShipmentOptions>();
+            registry.RegisterSerializationTypes<ISpecialServices, SpecialServices>();
+            registry.RegisterSerializationTypes<ISpecialServicesRule, SpecialServicesRule>();
+            registry.RegisterSerializationTypes<IToken, Token>();
+            registry.RegisterSerializationTypes<ITrackingEvent, TrackingEvent>();
+            registry.RegisterSerializationTypes<ITrackingStatus, TrackingStatus>();
+            registry.RegisterSerializationTypes<ITransaction, Transaction>();
+            registry.RegisterSerializationTypes<ITransactionSort, TransactionSort>();
+            registry.RegisterSerializationTypes<IUserInfo, UserInfo>();
+            registry.RegisterSerializationTypes<IWeightRule, WeightRule>();
         }
     }
 }

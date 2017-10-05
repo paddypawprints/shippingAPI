@@ -35,16 +35,16 @@ namespace PitneyBowes.Developer.ShippingApi.Method
     }
     public static class ManifestMethods
     {
-        public async static Task<ShippingApiResponse<T>> Create<T>(T request, Session session = null) where T : IManifest, new()
+        public async static Task<ShippingApiResponse<T>> Create<T>(T request, ISession session = null) where T : IManifest, new()
         {
             var manifestRequest = new JsonManifest<T>(request);
             return await WebMethod.Post<T, JsonManifest<T>>("/shippingservices/v1/manifests", manifestRequest, session);
         }
-        public async static Task<ShippingApiResponse<T>> Reprint<T>(ReprintManifestRequest request, Session session = null) where T : IManifest, new()
+        public async static Task<ShippingApiResponse<T>> Reprint<T>(ReprintManifestRequest request, ISession session = null) where T : IManifest, new()
         {
             return await WebMethod.Post<T, ReprintManifestRequest> ("/shippingservices/v1", request, session);
         }
-        public async static Task<ShippingApiResponse<T>> Retry<T>(RetryManifestRequest request, Session session = null) where T : IManifest, new()
+        public async static Task<ShippingApiResponse<T>> Retry<T>(RetryManifestRequest request, ISession session = null) where T : IManifest, new()
         {
             return await WebMethod.Post<T, RetryManifestRequest>("/shippingservices/v1", request, session);
         }

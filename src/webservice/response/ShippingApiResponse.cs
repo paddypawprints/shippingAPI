@@ -45,12 +45,12 @@ namespace PitneyBowes.Developer.ShippingApi
             throw new JsonSerializationException("Error deserializing", e.ErrorContext.Error);
         }
 
-        public static void Deserialize(Session session, RecordingStream respStream, ShippingApiResponse<Response> apiResponse, long streamPos = 0)
+        public static void Deserialize(ISession session, RecordingStream respStream, ShippingApiResponse<Response> apiResponse, long streamPos = 0)
         {
             var deserializer = new JsonSerializer();
             deserializer.Error += DeserializationError;
             deserializer.ContractResolver = new ShippingApiContractResolver();
-            ((ShippingApiContractResolver)deserializer.ContractResolver).Session = session;
+            ((ShippingApiContractResolver)deserializer.ContractResolver).Registry = session.SerializationRegistry;
             var recording = respStream.IsRecording;
             respStream.IsRecording = false;
             respStream.Seek(streamPos, SeekOrigin.Begin);

@@ -77,31 +77,31 @@ namespace PitneyBowes.Developer.ShippingApi
     {
 
         public string DeveloperId { get; set; }
-        private Session _session;
+        private ISession _session;
 
-        public TransactionsReport( string developerId, Session session = null) : base()
+        public TransactionsReport( string developerId, ISession session = null) : base()
         {
             Provider = new TransactionsReportProvider(developerId, session);
             DeveloperId = developerId;
             _session = session;
         }
 
-        public TransactionsReport( TransactionsReportProvider provider, Expression expression, string developerId, Session session = null) : base(provider,expression)
+        public TransactionsReport( TransactionsReportProvider provider, Expression expression, string developerId, ISession session = null) : base(provider,expression)
         {
             DeveloperId = developerId;
             _session = session;
         }
 
-        public async static Task<ShippingApiResponse<TransactionPageResponse>> TransactionPage(ReportRequest request, Session session = null)
+        public async static Task<ShippingApiResponse<TransactionPageResponse>> TransactionPage(ReportRequest request, ISession session = null)
         {
-            if (session == null) session = SessionDefaults.DefaultSession;
+            if (session == null) session = Globals.DefaultSession;
             request.Authorization = new StringBuilder(session.AuthToken.AccessToken);
             return await WebMethod.Get<TransactionPageResponse, ReportRequest>("/shippingservices/v2/ledger", request, session);
         }
 
-        public static IEnumerable<Transaction> Report(ReportRequest request, Func<Transaction, bool> filter = null, Session session = null)
+        public static IEnumerable<Transaction> Report(ReportRequest request, Func<Transaction, bool> filter = null, ISession session = null)
         {
-            if (session == null) session = SessionDefaults.DefaultSession;
+            if (session == null) session = Globals.DefaultSession;
             request.Page = 0;
             TransactionPageResponse page;
             do
@@ -121,9 +121,9 @@ namespace PitneyBowes.Developer.ShippingApi
     public class TransactionsReportProvider : ReportProviderBase, IQueryProvider
     {
         private string _developerId;
-        internal Session _session;
+        internal ISession _session;
 
-        public TransactionsReportProvider( string developerId, Session session) :base()
+        public TransactionsReportProvider( string developerId, ISession session) :base()
         {
             _developerId = developerId;
             _session = session;
