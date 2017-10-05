@@ -4,7 +4,7 @@ using PitneyBowes.Developer.ShippingApi.Method;
 
 namespace PitneyBowes.Developer.ShippingApi.Fluent
 {
-    class ManifestFluent<T> where T : IManifest, new()
+    public class ManifestFluent<T> where T : IManifest, new()
     {
         private T _manifest;
 
@@ -23,7 +23,7 @@ namespace PitneyBowes.Developer.ShippingApi.Fluent
             return (T)m._manifest;
         }
 
-        ManifestFluent<T> Submit()
+        public ManifestFluent<T> Submit()
         {
             var response = ManifestMethods.Create(_manifest).GetAwaiter().GetResult();
             if (response.Success)
@@ -33,7 +33,7 @@ namespace PitneyBowes.Developer.ShippingApi.Fluent
             return this;
         }
 
-        ManifestFluent<T> Reprint(string manifestId)
+        public ManifestFluent<T> Reprint(string manifestId)
         {
             var request = new ReprintManifestRequest() { ManifestId = manifestId };
             var response = ManifestMethods.Reprint<T>(request).GetAwaiter().GetResult();
@@ -44,7 +44,7 @@ namespace PitneyBowes.Developer.ShippingApi.Fluent
             return this;
         }
 
-        ManifestFluent<T> Retry(string originalId)
+        public ManifestFluent<T> Retry(string originalId)
         {
             var request = new RetryManifestRequest() { OriginalTransactionId = originalId };
             var response = ManifestMethods.Retry<T>(request).GetAwaiter().GetResult();
@@ -55,49 +55,69 @@ namespace PitneyBowes.Developer.ShippingApi.Fluent
             return this;
         }
 
-        ManifestFluent<T> Carrier(Carrier c)
+        public ManifestFluent<T> Carrier(Carrier c)
         {
             _manifest.Carrier = c;
             return this;
         }
-        ManifestFluent<T> SubmissionDate(DateTimeOffset s)
+        public ManifestFluent<T> SubmissionDate(DateTime s)
         {
             _manifest.SubmissionDate = s;
             return this;
         }
-        ManifestFluent<T> FromAddress(IAddress a)
+        public ManifestFluent<T> FromAddress(IAddress a)
         {
             _manifest.FromAddress = a;
             return this;
         }
-        ManifestFluent<T> InductionPostalCode(string p)
+        public ManifestFluent<T> InductionPostalCode(string p)
         {
             _manifest.InductionPostalCode = p;
             return this;
         }
-        ManifestFluent<T> ParcelTrackingNumbers(IEnumerable<string> tl)
+        public ManifestFluent<T> ParcelTrackingNumbers(IEnumerable<string> tl)
         {
-            foreach (var t in tl )
+            foreach (var t in tl)
                 _manifest.AddParcelTrackingNumber(t);
             return this;
         }
-        ManifestFluent<T> AddParcelTrackingNumber(string t)
+        public ManifestFluent<T> AddParcelTrackingNumber(string t)
         {
             _manifest.AddParcelTrackingNumber(t);
             return this;
         }
-        ManifestFluent<T> Parameters(IEnumerable<IParameter> pl)
+        public ManifestFluent<T> Parameters(IEnumerable<IParameter> pl)
         {
-            foreach( var p in pl )
+            foreach (var p in pl)
                 _manifest.AddParameter(p);
             return this;
         }
-        ManifestFluent<T> AddParameter(IParameter p)
+        public ManifestFluent<T> AddParameter(IParameter p)
         {
             _manifest.AddParameter(p);
             return this;
         }
-    }
+        public ManifestFluent<T> AddParameter<P>(string name, string value) where P : IParameter, new()
+        {
+            var p = new P
+            {
+                Name = name,
+                Value = value
+            };
+            _manifest.AddParameter(p);
+            return this;
+        }
+        public ManifestFluent<T> AddParameter<P>(ManifestParameter param, string value) where P : IParameter, new()
+        {
+            AddParameter<P>(param.ToString(), value);
+            return this;
+        }
+        public ManifestFluent<T> TransactionId(string t)
+        {
+            _manifest.TransactionId = t;
+            return this;
+        }
 
+    }
 }
 

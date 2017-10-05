@@ -11,29 +11,30 @@ namespace PitneyBowes.Developer.ShippingApi.Model
             //Parameters = new List<Parameter>();
             //Documents = new List<Document>();
         }
+        virtual public string TransactionId { get; set; }
         virtual public Carrier Carrier { get;set;}
         virtual public DateTimeOffset SubmissionDate {get;set;}
         virtual public IAddress FromAddress {get;set;}
         virtual public string InductionPostalCode {get;set;}
         virtual public string ManifestId {get;set;}
         virtual public string ManifestTrackingNumber {get;set;}
-        virtual public IEnumerable<string> ParcelTrackingNumbers { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        virtual public IEnumerable<IParameter> Parameters { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        virtual public IEnumerable<IDocument> Documents { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        virtual public IEnumerable<string> ParcelTrackingNumbers { get; set; }
+        virtual public IEnumerable<IParameter> Parameters { get; set; }
+        virtual public IEnumerable<IDocument> Documents { get; set; }
 
         virtual  public IDocument AddDocument(IDocument d)
         {
-            throw new NotImplementedException();
+            return ModelHelper.AddToEnumerable<IDocument, Document>(d, () => Documents, (v) => Documents = v );
         }
 
         public IParameter AddParameter(IParameter p)
         {
-            throw new NotImplementedException();
+            return ModelHelper.AddToEnumerable<IParameter, Parameter>(p, () => Parameters, (v) => Parameters = v);
         }
 
         public void AddParcelTrackingNumber(string t)
         {
-            throw new NotImplementedException();
+            ModelHelper.AddToEnumerable<string, string>(t, () => ParcelTrackingNumbers, (v) => ParcelTrackingNumbers = v);
         }
     }
 }

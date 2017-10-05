@@ -136,17 +136,17 @@ namespace PitneyBowes.Developer.ShippingApi.Method
         [ShippingApiResource("shipments", AddId = true)]
         public string ShipmentToCancel {get;set;}
         [JsonProperty("carrier")]
-        public string Carrier {get;set;}
+        public Carrier Carrier {get;set;}
         [JsonProperty("cancelInitiator")]
-        public string CancelInitiator {get;set;}
+        public CancelInitiator CancelInitiator {get;set;}
     }
 
    public class CancelShipmentResponse 
     {
         [JsonProperty("carrier")]
-        public string Carrier {get;set;}
+        public Carrier Carrier {get;set;}
         [JsonProperty("cancelInitiator")]
-        public string CancelInitiator {get;set;}
+        public CancelInitiator CancelInitiator {get;set;}
         [JsonProperty("totalCarrierCharge")]
         public decimal TotalCarrierCharge {get;set;}
         [JsonProperty("parcelTrackingNumber")]
@@ -161,12 +161,8 @@ namespace PitneyBowes.Developer.ShippingApi.Method
         public override string ContentType { get => "application/json"; }
         [ShippingApiHeader("Bearer")]
         public override StringBuilder Authorization { get; set; }
-        [ShippingApiResource("shipments")]
-        public string ShipmentToCancel {get;set;}
-        [JsonProperty("carrier")]
-        public string Carrier;
-        [JsonProperty("cancelInitiator")]
-        public string CancelInitiator;
+        [ShippingApiResource("shipments", AddId = true)]
+        public string Shipment {get;set;}
     }
 
     public static class ShipmentsMethods
@@ -181,7 +177,7 @@ namespace PitneyBowes.Developer.ShippingApi.Method
         }
         public async static Task<ShippingApiResponse<T>>  ReprintShipment<T>(ReprintShipmentRequest request, ISession session = null) where T : IShipment, new()
         {
-            return  await WebMethod.Get<T, ReprintShipmentRequest>( "/shippingservices/v1/shipments", request, session );
+            return  await WebMethod.Get<T, ReprintShipmentRequest>( "/shippingservices/v1", request, session );
         }
     }
 }

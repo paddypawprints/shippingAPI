@@ -5,6 +5,7 @@ namespace PitneyBowes.Developer.ShippingApi
 {
     public interface IManifest
     {
+        string TransactionId { get; set; }
         Carrier Carrier { get; set; }
         DateTimeOffset SubmissionDate { get; set; }
         IAddress FromAddress { get; set; }

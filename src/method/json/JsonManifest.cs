@@ -20,6 +20,13 @@ namespace PitneyBowes.Developer.ShippingApi.Json
             return ShippingApiRequest.RecordingFullPath(this, resource, session);
         }
 
+        [ShippingApiHeader("x-pb-transactionId", true)]
+        public string TransactionId
+        {
+            get => Wrapped.TransactionId;
+            set { Wrapped.TransactionId = value; }
+        }
+
         [JsonProperty("carrier")]
         [JsonConverter(typeof(StringEnumConverter))]
         public Carrier Carrier
@@ -29,7 +36,7 @@ namespace PitneyBowes.Developer.ShippingApi.Json
         }
 
         [JsonProperty("submissionDate")]
-        [JsonConverter(typeof(IsoDateTimeConverter))]
+        [JsonConverter(typeof(YMDDDateConverter))]
         public DateTimeOffset SubmissionDate
         {
             get => Wrapped.SubmissionDate;

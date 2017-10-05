@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Text;
 using System.Linq;
 using PitneyBowes.Developer.ShippingApi;
@@ -11,7 +10,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
 using System.Security;
 using System.Runtime.InteropServices;
-
 
 namespace example
 {
@@ -96,7 +94,7 @@ namespace example
                 .ShippingLabel();
 
             shipment.ShipmentOptions = ShipmentOptionsArrayFluent<ShipmentOptions>.Create()
-                .ShipperId(Globals.DefaultSession.GetConfigItem("ShipperID"))
+                .ShipperId(sandbox.GetConfigItem("ShipperID"))
                 .AddToManifest();
 
             shipment.TransactionId = Guid.NewGuid().ToString().Substring(15);
@@ -106,17 +104,37 @@ namespace example
             if (label.Success)
             {
                 Console.WriteLine(label.APIResponse.ParcelTrackingNumber);
-                var cancelRequest = new CancelShipmentRequest
+
+                var reprintRequest = new ReprintShipmentRequest
                 {
-                    Carrier = "USPS",
-                    CancelInitiator = "SHIPPER",
+                    Shipment = label.APIResponse.ShipmentId
+                };
+
+                var reprintResponse = ShipmentsMethods.ReprintShipment<Shipment>(reprintRequest).GetAwaiter().GetResult();
+
+                /*var cancelRequest = new CancelShipmentRequest
+                {
+                    Carrier = Carrier.USPS,
+                    CancelInitiator = CancelInitiator.SHIPPER,
                     TransactionId = Guid.NewGuid().ToString().Substring(15),
                     ShipmentToCancel = label.APIResponse.ShipmentId
                 };
 
                 var cancelResponse = ShipmentsMethods.CancelShipment(cancelRequest).GetAwaiter().GetResult();
+                */
+
 
             }
+
+            var manifest = ManifestFluent<Manifest>.Create()
+                .Carrier(Carrier.USPS)
+                .FromAddress(shipment.FromAddress)
+                .InductionPostalCode("06484")
+                .SubmissionDate(DateTime.Now)
+                .AddParameter<Parameter>( ManifestParameter.SHIPPER_ID, sandbox.GetConfigItem("ShipperID"))
+                .TransactionId(Guid.NewGuid().ToString().Substring(15));
+
+            var manifestResponse = ManifestMethods.Create<Manifest>(manifest).GetAwaiter().GetResult();
 
             // Transaction report
  
@@ -141,7 +159,6 @@ namespace example
                 
             var req = new RatingServicesRequest()
             {
-
                 Carrier = Carrier.USPS,
                 OriginCountryCode = "US",
                 DestinationCountryCode = "US"
@@ -149,7 +166,6 @@ namespace example
             var res = CarrierRulesMethods.RatingServices<CarrierRule[]>(req).GetAwaiter().GetResult();
 
         }
-
 
         private static void SetupApiKey()
         {

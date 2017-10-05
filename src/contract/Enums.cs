@@ -32,6 +32,12 @@ namespace PitneyBowes.Developer.ShippingApi
         /// </summary>
         PBPS
     }
+
+    public enum CancelInitiator
+    {
+        SHIPPER
+    }
+
     public enum CreditCardType
     {
         Amex,
@@ -63,6 +69,12 @@ namespace PitneyBowes.Developer.ShippingApi
         /// Zebra thermal printer language.
         /// </summary>
         ZPL2
+    }
+
+    public enum ManifestParameter
+    {
+        SHIPPER_ID,
+        MANIFEST_TYPE
     }
 
     public enum MerchantStatus
