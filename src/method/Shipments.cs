@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using PitneyBowes.Developer.ShippingApi.Json;
 using System.Text;
 using System.Collections.Generic;
@@ -136,8 +137,10 @@ namespace PitneyBowes.Developer.ShippingApi.Method
         [ShippingApiResource("shipments", AddId = true)]
         public string ShipmentToCancel {get;set;}
         [JsonProperty("carrier")]
+        [JsonConverter(typeof(StringEnumConverter))]
         public Carrier Carrier {get;set;}
         [JsonProperty("cancelInitiator")]
+        [JsonConverter(typeof(StringEnumConverter))]
         public CancelInitiator CancelInitiator {get;set;}
     }
 

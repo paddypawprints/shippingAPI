@@ -37,21 +37,27 @@ namespace PitneyBowes.Developer.ShippingApi.Fluent
             _pickup = (T)a;
         }
 
-        public PickupFluent<T> Schedule()
+        public PickupFluent<T> TransactionId(string id)
         {
-            var response = PickupMethods.Schedule<T>(_pickup).GetAwaiter().GetResult();
+            _pickup.TransactionId = id;
+            return this;
+        }
+
+        public PickupFluent<T> Schedule(Session session = null)
+        {
+            var response = PickupMethods.Schedule<T>(_pickup, session).GetAwaiter().GetResult();
             _pickup = response.APIResponse;
             return this;
         }
 
-        public string Cancel()
+        public string Cancel(Session session = null)
         {
             var cancel = new PickupCancelRequest()
             {
                 PickupId = _pickup.PickupId
             };
 
-            var response = PickupMethods.CancelPickup(cancel).GetAwaiter().GetResult();
+            var response = PickupMethods.CancelPickup(cancel, session).GetAwaiter().GetResult();
             var status = response.APIResponse.Status;
             return status;
         }
@@ -75,11 +81,24 @@ namespace PitneyBowes.Developer.ShippingApi.Fluent
             }
             return this;
         }
-        public PickupFluent<T> PickupSummary(IPickupCount s)
+        public PickupFluent<T> AddPickupSummary(IPickupCount s)
         {
             _pickup.AddPickupCount(s);
             return this;
         }
+
+        public PickupFluent<T> AddPickupSummary<C,W>(Services s, int c, decimal w, UnitOfWeight u ) where C : IPickupCount, new() where W: IParcelWeight, new()
+        {
+            var ct = new C
+            {
+                ServiceId = s,
+                TotalWeight = new W { UnitOfMeasurement = u, Weight = w },
+                Count = c
+            };
+            _pickup.AddPickupCount(ct);
+            return this;
+        }
+
 
         public PickupFluent<T> Reference(string s)
         {

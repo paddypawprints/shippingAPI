@@ -19,6 +19,13 @@ namespace PitneyBowes.Developer.ShippingApi.Json
             return ShippingApiRequest.RecordingFullPath(this, resource, session);
         }
 
+        [ShippingApiHeader("x-pb-transactionId", true)]
+        public string TransactionId
+        {
+            get => Wrapped.TransactionId;
+            set { Wrapped.TransactionId = value; }
+        }
+
         [JsonProperty("pickupAddress")]
         public IAddress PickupAddress
         {

@@ -5,6 +5,7 @@ namespace PitneyBowes.Developer.ShippingApi
 {
     public interface IPickup
     {
+        string TransactionId { get; set; }
         IAddress PickupAddress { get; set; }
         Carrier Carrier { get; set; }
         IEnumerable<IPickupCount> PickupSummary { get; set; }

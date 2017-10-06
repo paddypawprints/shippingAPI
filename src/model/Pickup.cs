@@ -7,6 +7,7 @@ namespace PitneyBowes.Developer.ShippingApi.Model
 {
     public class Pickup : IPickup
     {
+        virtual public string TransactionId { get; set; }
         virtual public IAddress PickupAddress{get; set;}
         virtual public Carrier Carrier{get; set;}
         virtual public IEnumerable<IPickupCount> PickupSummary{get; set;}

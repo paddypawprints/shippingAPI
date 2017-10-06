@@ -89,6 +89,11 @@ namespace PitneyBowes.Developer.ShippingApi
         abandon,
         redirect
     }
+
+    public enum PackageIdentifierType
+    {
+        TrackingNumber
+    }
     public enum PackageLocation
     {
         FrontDoor,
