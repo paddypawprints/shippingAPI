@@ -10,6 +10,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
 using System.Security;
 using System.Runtime.InteropServices;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace example
 {
@@ -105,6 +107,17 @@ namespace example
             {
                 Console.WriteLine(label.APIResponse.ParcelTrackingNumber);
 
+                // Tracking
+
+                var trackingRequest = new TrackingRequest
+                {
+                    Carrier = Carrier.USPS,
+                    TrackingNumber = label.APIResponse.ParcelTrackingNumber
+                };
+
+                var trackingResponse = TrackingMethods.Tracking<TrackingStatus>(trackingRequest).GetAwaiter().GetResult();
+
+                    // Parcel Reprint
                 var reprintRequest = new ReprintShipmentRequest
                 {
                     Shipment = label.APIResponse.ShipmentId
@@ -112,19 +125,36 @@ namespace example
 
                 var reprintResponse = ShipmentsMethods.ReprintShipment<Shipment>(reprintRequest).GetAwaiter().GetResult();
 
-                /*var cancelRequest = new CancelShipmentRequest
+                // Write the label to disk
+
+                foreach (var d in reprintResponse.APIResponse.Documents)
                 {
-                    Carrier = Carrier.USPS,
-                    CancelInitiator = CancelInitiator.SHIPPER,
-                    TransactionId = Guid.NewGuid().ToString().Substring(15),
-                    ShipmentToCancel = label.APIResponse.ShipmentId
-                };
+                    if (d.ContentType == ContentType.BASE64 && d.FileFormat == FileFormat.PNG)
+                    {
+                        // Multiple page png document
+                        DocumentsMethods.WriteToStream(d, null,
+                            (stream, page) =>
+                            {
+                                if (stream != null) stream.Dispose();
+                                string fileName = string.Format("{0}{1}p{2}.{3}", Path.GetTempPath(), reprintResponse.APIResponse.ShipmentId, page.ToString(), d.FileFormat.ToString());
+                                Console.WriteLine("Document written to " + fileName);
+                                return new FileStream(fileName, FileMode.OpenOrCreate);
+                            }
+                            ).GetAwaiter().GetResult();
+                    }
+                    else
+                    {
 
-                var cancelResponse = ShipmentsMethods.CancelShipment(cancelRequest).GetAwaiter().GetResult();
-                */
-
-
+                        string fileName = string.Format("{0}{1}.{2}", Path.GetTempPath(), reprintResponse.APIResponse.ShipmentId, d.FileFormat.ToString());
+                        using (StreamWriter sw = new StreamWriter(fileName))
+                        {
+                            DocumentsMethods.WriteToStream(d, sw.BaseStream).GetAwaiter().GetResult();
+                            Console.WriteLine("Document written to " + fileName);
+                        }
+                    }
+                }
             }
+
 
             var manifest = ManifestFluent<Manifest>.Create()
                 .Carrier(Carrier.USPS)
@@ -136,8 +166,52 @@ namespace example
 
             var manifestResponse = ManifestMethods.Create<Manifest>(manifest).GetAwaiter().GetResult();
 
+            foreach( var d in manifestResponse.APIResponse.Documents)
+            {
+                string fileName = string.Format("{0}{1}.{2}", Path.GetTempPath(), manifestResponse.APIResponse.ManifestId, d.FileFormat.ToString());
+                using (StreamWriter sw = new StreamWriter(fileName))
+                {
+                    Task.Run(()=>DocumentsMethods.WriteToStream(d, sw.BaseStream));
+                    Console.WriteLine("Document written to " + fileName);
+                }
+            }
+
+            // Schedule a pickup
+
+            var pickup = PickupFluent<Pickup>.Create()
+                .Carrier(Carrier.USPS)
+                .PackageLocation(PackageLocation.MailRoom)
+                .PickupAddress(shipment.FromAddress)
+                .PickupDate(DateTime.Now.AddDays(1))
+                .AddPickupSummary<PickupCount, ParcelWeight>(Services.PM, 1, 16M, UnitOfWeight.OZ)
+                .TransactionId(Guid.NewGuid().ToString().Substring(15));
+
+            var pickupResponse = PickupMethods.Schedule<Pickup>(pickup).GetAwaiter().GetResult();
+
+            // Cancel pickup
+
+            if (pickupResponse.Success)
+            {
+                pickup.Cancel();
+            }
+            // Cancel the label 
+
+            if (label.Success)
+            {
+                var cancelRequest = new CancelShipmentRequest
+                {
+                    Carrier = Carrier.USPS,
+                    CancelInitiator = CancelInitiator.SHIPPER,
+                    TransactionId = Guid.NewGuid().ToString().Substring(15),
+                    ShipmentToCancel = label.APIResponse.ShipmentId
+                };
+                var cancelResponse = ShipmentsMethods.CancelShipment(cancelRequest).GetAwaiter().GetResult();
+
+            }
+
+
             // Transaction report
- 
+
             var transactionsReportRequest = new ReportRequest()
             {
                 FromDate = DateTimeOffset.Parse("6/30/2017"),
