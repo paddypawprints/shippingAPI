@@ -57,7 +57,21 @@ namespace PitneyBowes.Developer.ShippingApi.Rules
             visitor.Visit(this);
         }
 
-        public bool IsValidParameters( ISpecialServices services)
+        public bool IsValidParameterValues(ISpecialServices services)
+        {
+            foreach (var ip in services.InputParameters)
+            {
+                if (!InputParameterRules.ContainsKey(ip.Name)) return false;
+                if (decimal.TryParse(ip.Value, out decimal value))
+                {
+                    if (value < InputParameterRules[ip.Name].MinValue) return false;
+                    if (value > InputParameterRules[ip.Name].MaxValue) return false;
+                }
+            }
+             return true;
+        }
+
+        public bool HasRequiredParameters(ISpecialServices services)
         {
             Dictionary<string, bool> foundRequired = new Dictionary<string, bool>();
             foreach (var p in InputParameterRules.Values)
@@ -68,11 +82,6 @@ namespace PitneyBowes.Developer.ShippingApi.Rules
             {
                 if (!InputParameterRules.ContainsKey(ip.Name)) return false;
                 if (foundRequired.ContainsKey(ip.Name)) foundRequired[ip.Name] = true;
-                if (decimal.TryParse(ip.Value, out decimal value))
-                {
-                    if (value < InputParameterRules[ip.Name].MinValue) return false;
-                    if (value > InputParameterRules[ip.Name].MaxValue) return false;
-                }
             }
             foreach (var f in foundRequired)
             {
@@ -80,6 +89,7 @@ namespace PitneyBowes.Developer.ShippingApi.Rules
             }
             return true;
         }
+
         public bool IsValidPrerequisites(IEnumerable<ISpecialServices> services)
         {
             foreach(var ss in services)

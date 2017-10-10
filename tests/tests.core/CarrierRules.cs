@@ -19,7 +19,7 @@ namespace tests
                 OriginCountryCode = "US",
                 DestinationCountryCode = "US"
             };
-            var res = CarrierRulesMethods.RatingServices<ServiceRule[]>(req).GetAwaiter().GetResult();
+            var res = CarrierRulesMethods.RatingServices(req).GetAwaiter().GetResult();
 
         }
 

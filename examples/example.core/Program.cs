@@ -108,6 +108,7 @@ namespace example
                 Console.WriteLine(label.APIResponse.ParcelTrackingNumber);
 
                 // Tracking
+
                 var trackingRequest = new TrackingRequest
                 {
                     Carrier = Carrier.USPS,
@@ -116,32 +117,36 @@ namespace example
                 var trackingResponse = TrackingMethods.Tracking<TrackingStatus>(trackingRequest).GetAwaiter().GetResult();
 
                 // Parcel Reprint
-                var reprintRequest = new ReprintShipmentRequest
-                {
-                    Shipment = label.APIResponse.ShipmentId
-                };
+                var reprintRequest = new ReprintShipmentRequest() { Shipment = label.APIResponse.ShipmentId };
+
                 var reprintResponse = ShipmentsMethods.ReprintShipment<Shipment>(reprintRequest).GetAwaiter().GetResult();
 
                 // Write the label to disk
                 foreach (var d in reprintResponse.APIResponse.Documents)
                 {
+
                     if (d.ContentType == ContentType.BASE64 && d.FileFormat == FileFormat.PNG)
                     {
                         // Multiple page png document
                         DocumentsMethods.WriteToStream(d, null,
+
                             (stream, page) => // callback for each page
                             {
                                 // create a new file
+
                                 if (stream != null) stream.Dispose();
                                 string fileName = string.Format("{0}{1}p{2}.{3}", Path.GetTempPath(), reprintResponse.APIResponse.ShipmentId, page.ToString(), d.FileFormat.ToString());
                                 Console.WriteLine("Document written to " + fileName);
                                 return new FileStream(fileName, FileMode.OpenOrCreate);
+
                             },
                             disposeStream: true 
+
                             ).GetAwaiter().GetResult();
                     }
                     else
                     {
+
                         string fileName = string.Format("{0}{1}.{2}", Path.GetTempPath(), reprintResponse.APIResponse.ShipmentId, d.FileFormat.ToString());
                         using (StreamWriter sw = new StreamWriter(fileName))
                         {
@@ -153,6 +158,7 @@ namespace example
             }
 
             // Create the manifest
+
             var manifest = ManifestFluent<Manifest>.Create()
                 .Carrier(Carrier.USPS)
                 .FromAddress(((Shipment)shipment).FromAddress)
@@ -162,22 +168,18 @@ namespace example
                 .TransactionId(Guid.NewGuid().ToString().Substring(15));
             var manifestResponse = ManifestMethods.Create<Manifest>(manifest).GetAwaiter().GetResult();
 
-            if (manifestResponse.Success)
+            foreach( var d in manifestResponse.APIResponse.Documents)
             {
-                // Write the manifest document to disk
-                foreach (var d in manifestResponse.APIResponse.Documents)
+                string fileName = string.Format("{0}{1}.{2}", Path.GetTempPath(), manifestResponse.APIResponse.ManifestId, d.FileFormat.ToString());
+                using (StreamWriter sw = new StreamWriter(fileName))
                 {
-                    string fileName = string.Format("{0}{1}.{2}", Path.GetTempPath(), manifestResponse.APIResponse.ManifestId, d.FileFormat.ToString());
-                    using (StreamWriter sw = new StreamWriter(fileName))
-                    {
-                        // download the doc and write on another thread
-                        Task.Run(() => DocumentsMethods.WriteToStream(d, sw.BaseStream));
-                        Console.WriteLine("Document written to " + fileName);
-                    }
+                    Task.Run(()=>DocumentsMethods.WriteToStream(d, sw.BaseStream));
+                    Console.WriteLine("Document written to " + fileName);
                 }
             }
 
             // Schedule a pickup
+
             var pickup = PickupFluent<Pickup>.Create()
                 .Carrier(Carrier.USPS)
                 .PackageLocation(PackageLocation.MailRoom)
@@ -187,13 +189,17 @@ namespace example
                 .TransactionId(Guid.NewGuid().ToString().Substring(15));
             var pickupResponse = PickupMethods.Schedule<Pickup>(pickup).GetAwaiter().GetResult();
 
+
             // Cancel pickup
+
             if (pickupResponse.Success)
             {
                 pickup.Cancel();
             }
 
+
             // Cancel the label 
+
             if (label.Success)
             {
                 var cancelRequest = new CancelShipmentRequest
@@ -204,9 +210,11 @@ namespace example
                     ShipmentToCancel = label.APIResponse.ShipmentId
                 };
                 var cancelResponse = ShipmentsMethods.CancelShipment(cancelRequest).GetAwaiter().GetResult();
+
             }
 
             // Transaction report with IEnumerable
+
             var transactionsReportRequest = new ReportRequest()
             {
                 FromDate = DateTimeOffset.Parse("6/30/2017"),
@@ -236,8 +244,11 @@ namespace example
             var res = CarrierRulesMethods.RatingServices(req).GetAwaiter().GetResult();
             if (res.Success)
             {
-                var v = new ShipmentValidator() { Shipment = (Shipment)shipment };
-                v.Visit(res.APIResponse);
+                var v = new ShipmentValidator();
+                if (!v.Validate((Shipment)shipment, res.APIResponse))
+                {
+                    Console.WriteLine("Shipment is not valid: {0}", v.Reason);
+                }
             }
         }
 
