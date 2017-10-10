@@ -47,46 +47,52 @@ AddConfigItem("DeveloperID", "46841999");
 
 To create a shipping label:
 ```csharp
-Initialize();
+            // Create shipment
+            var shipment = ShipmentFluent<Shipment>.Create()
+                .ToAddress((Address)AddressFluent<Address>.Create()
+                    .Company("ABC Company")
+                    .Person("Rufous Sirius Canid", "323 555-1212", "rs.canid@gmail.com")
+                    .Residential(false)
+                    .AddressLines("643 Greenway RD")
+                    .CityTown("Boone")
+                    .StateProvince("NC")
+                    .PostalCode("28607")
+                    .CountryCode("US")
+                    .Verify() // calls the service for address validation
+                    )
+                .MinimalAddressValidation("true")
+                .ShipperRatePlan(Globals.DefaultSession.GetConfigItem("RatePlan"))
+                .FromAddress((Address)AddressFluent<Address>.Create()
+                    .Company("Pitney Bowes Inc.")
+                    .AddressLines("27 Waterview Drive")
+                    .Residential(false)
+                    .CityTown("Shelton")
+                    .StateProvince("CT")
+                    .PostalCode("06484")
+                    .CountryCode("US")
+                    .Person("Paul Wright", "203-555-1213", "john.publica@pb.com")
+                    )
+                .Parcel((Parcel)ParcelFluent<Parcel>.Create()
+                    .Dimension(12, 12, 10)
+                    .Weight(16m, UnitOfWeight.OZ)
+                    )
+                .Rates(RatesArrayFluent<Rates>.Create()
+                    .USPSPriority<Rates, Parameter>()
+                    .InductionPostalCode("06484")
+                    )
+                .Documents(DocumentsArrayFluent<Document>.Create()
+                    .ShippingLabel()
+                    )
+                .ShipmentOptions(ShipmentOptionsArrayFluent<ShipmentOptions>.Create()
+                    .ShipperId(sandbox.GetConfigItem("ShipperID"))
+                    .AddToManifest()
+                    )
+                .TransactionId(Guid.NewGuid().ToString().Substring(15));
 
-// Authenticate
-var tokenResponse = TokenMethods.token<Token>().GetAwaiter().GetResult();
+            var label = ShipmentsMethods.CreateShipment((Shipment)shipment).GetAwaiter().GetResult();
 
-// Create shipment
-var shipment = new CreateShipmentRequest<Shipment>()
-{
-ToAddress = (Address)AddressFluent<Address>.Create().Company("ABC Company")
-.Person("Rufous Sirius Canid","323 555-1212","rs.canid@gmail.com")
-.Residential(false)
-.AddressLines("643 Greenway RD")
-.CityTown("Boone")
-.StateProvince("NC")
-.PostalCode("28607")
-.CountryCode("US")
-.Verify() // calls the service for address validation
-};
-shipment.MinimalAddressValidation = "true";
-shipment.ShipperRatePlan = DefaultSession.GetConfigItem("RatePlan");
-shipment.FromAddress = (Address)AddressFluent<Address>.Create()
-.HeadOffice()
-.Person("Paul Wright", "203-555-1213","john.publica@pb.com");
-shipment.Parcel = (Parcel)ParcelFluent<Parcel>.Create()
-.Dimension(12, 12, 10)
-.Weight(16m, UnitOfWeight.OZ);
-shipment.Rates = RatesArrayFluent<Rates>.Create()
-.USPSPriority()
-.InductionPostalCode("06484");
-shipment.Documents = DocumentsArrayFluent<Document>.Create()
-.ShippingLabel();
-shipment.ShipmentOptions = ShipmentOptionsArrayFluent<ShipmentOptions>.Create()
-.ShipperId(DefaultSession.GetConfigItem("ShipperID"))
-.AddToManifest();
-shipment.TransactionId = Guid.NewGuid().ToString().Substring(15);
-
-// call the server
-var label = ShipmentsMethods.CreateShipment(shipment).GetAwaiter().GetResult();
-
-if (label.Success) Console.WriteLine(label.APIResponse.ParcelTrackingNumber);
+            if (label.Success)
+            {
 ```
 ### Prerequisites
 
@@ -152,7 +158,11 @@ See also the list of [contributors](https://github.com/your/project/contributors
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+Copyright 2016 Pitney Bowes Inc.
+Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License.  You may obtain a copy of the License in the README file or at
+    https://opensource.org/licenses/MIT 
+Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the specific language governing permissions and limitations under the License.
+ - see the [LICENSE.md](LICENSE.md) file for details
 
 ## Acknowledgments
 

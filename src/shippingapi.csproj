@@ -10,8 +10,10 @@
     <Authors>Patrick Farry</Authors>
     <Company />
     <Description>Package that provides a local interface to the Pitney Bowes Shipping API. Features and fluent API, strong type support, mocking, linq interface to transaction reports.</Description>
-    <Copyright>Pitney Bowes 2017</Copyright>
+    <Copyright>Copyright 2016 Pitney Bowes</Copyright>
     <RootNamespace>PitneyBowes.Developer.ShippingApi</RootNamespace>
+    <PackageLicenseUrl>https://opensource.org/licenses/MIT</PackageLicenseUrl>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 
   <ItemGroup>
