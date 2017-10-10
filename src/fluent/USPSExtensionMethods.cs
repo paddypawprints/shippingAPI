@@ -41,7 +41,7 @@ namespace PitneyBowes.Developer.ShippingApi
             return f.Add().Carrier(Carrier.USPS)
                 .ParcelType(ParcelType.PKG)
                 .Service(Services.PM)
-                .SpecialService<SpecialServices>(SpecialServiceCodes.DelCon, 0M, new P { Name = "INPUT_VALUE", Value = "0M"  });
+                .SpecialService<SpecialServices>(SpecialServiceCodes.DelCon, 0M, new P { Name = "INPUT_VALUE", Value = "0"  });
         }
 
         public static ShipmentFluent<T> ReturnShipment<T>(this ShipmentFluent<T> f) where T : class, IShipment, new()
