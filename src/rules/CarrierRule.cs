@@ -1,4 +1,9 @@
-﻿namespace PitneyBowes.Developer.ShippingApi.Rules
+﻿using System;
+using System.Collections;
+using System.Linq;
+using System.Linq.Expressions;
+
+namespace PitneyBowes.Developer.ShippingApi.Rules
 {
     public class CarrierRule : IRateRule
     {

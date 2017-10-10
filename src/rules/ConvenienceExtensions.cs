@@ -20,10 +20,10 @@ namespace PitneyBowes.Developer.ShippingApi.Rules
                 return false;
             if (parcel.Height > rule.MaxParcelDimensions.Height || parcel.Length > rule.MaxParcelDimensions.Length || parcel.Width > rule.MaxParcelDimensions.Width)
                 return false;
-            if (parcel.IrregularParcelGirth < rule.MinLengthPlusGirth)
-                return false;
-            if (parcel.IrregularParcelGirth > rule.MaxLengthPlusGirth)
-                return false;
+//            if (parcel.IrregularParcelGirth < rule.MinLengthPlusGirth)
+//                return false;
+//            if (parcel.IrregularParcelGirth > rule.MaxLengthPlusGirth)
+ //               return false;
             return true;
         }
         public static bool IsWithin(this IParcelWeight parcel, WeightRule rule)

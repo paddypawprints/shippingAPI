@@ -34,7 +34,7 @@ namespace PitneyBowes.Developer.ShippingApi.Rules
             set
             {
                 if (SpecialServiceRules == null) SpecialServiceRules = new IndexedList<SpecialServiceCodes, SpecialServicesRule>();
-                foreach( var ss in value)
+                foreach (var ss in value)
                 {
                     SpecialServiceRules.Add(ss.SpecialServiceId, ss);
                 }
@@ -45,5 +45,28 @@ namespace PitneyBowes.Developer.ShippingApi.Rules
             visitor.Visit(this);
         }
 
+        public bool FitsDimensions(IParcelDimension dimensions)
+        {
+            foreach (var d in DimensionRules)
+            {
+                if (!dimensions.IsWithin(d))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public bool HoldsWeight(IParcelWeight weight)
+        {
+            foreach (var w in WeightRules)
+            {
+                if (!weight.IsWithin(w))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
     }
 }

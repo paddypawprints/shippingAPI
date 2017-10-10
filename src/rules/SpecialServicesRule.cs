@@ -92,6 +92,7 @@ namespace PitneyBowes.Developer.ShippingApi.Rules
 
         public bool IsValidPrerequisites(IEnumerable<ISpecialServices> services)
         {
+            if (PrerequisiteRules == null) return true;
             foreach(var ss in services)
             {
                 if (!PrerequisiteRules.ContainsKey(ss.SpecialServiceId)) continue;

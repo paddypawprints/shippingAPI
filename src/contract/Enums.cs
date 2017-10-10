@@ -480,8 +480,14 @@ namespace PitneyBowes.Developer.ShippingApi
         /// Sunday and holidaqy delivery.
         /// </summary>
         sunday_holiday,
+        PO_to_Addressee,
         
         noWeekend,
+
+        /// <summary>
+        /// Delivery by 10:30 AM
+        /// </summary>
+        TenThirty,
 
         PMOD_OPTIONS
     }

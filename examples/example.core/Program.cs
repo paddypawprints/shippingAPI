@@ -82,14 +82,14 @@ namespace example
                     .StateProvince("CT")
                     .PostalCode("06484")
                     .CountryCode("US")
-                    .Person("Paul Wright", "203-555-1213","john.publica@pb.com")
+                    .Person("Paul Wright", "203-555-1213", "john.publica@pb.com")
                     )
                 .Parcel((Parcel)ParcelFluent<Parcel>.Create()
                     .Dimension(12, 12, 10)
                     .Weight(16m, UnitOfWeight.OZ)
                     )
                 .Rates(RatesArrayFluent<Rates>.Create()
-                    .USPSPriority<Rates,Parameter>()
+                    .USPSPriority<Rates, Parameter>()
                     .InductionPostalCode("06484")
                     )
                 .Documents(DocumentsArrayFluent<Document>.Create()
@@ -140,7 +140,7 @@ namespace example
                                 return new FileStream(fileName, FileMode.OpenOrCreate);
 
                             },
-                            disposeStream: true 
+                            disposeStream: true
 
                             ).GetAwaiter().GetResult();
                     }
@@ -164,16 +164,16 @@ namespace example
                 .FromAddress(((Shipment)shipment).FromAddress)
                 .InductionPostalCode("06484")
                 .SubmissionDate(DateTime.Now)
-                .AddParameter<Parameter>( ManifestParameter.SHIPPER_ID, sandbox.GetConfigItem("ShipperID"))
+                .AddParameter<Parameter>(ManifestParameter.SHIPPER_ID, sandbox.GetConfigItem("ShipperID"))
                 .TransactionId(Guid.NewGuid().ToString().Substring(15));
             var manifestResponse = ManifestMethods.Create<Manifest>(manifest).GetAwaiter().GetResult();
 
-            foreach( var d in manifestResponse.APIResponse.Documents)
+            foreach (var d in manifestResponse.APIResponse.Documents)
             {
                 string fileName = string.Format("{0}{1}.{2}", Path.GetTempPath(), manifestResponse.APIResponse.ManifestId, d.FileFormat.ToString());
                 using (StreamWriter sw = new StreamWriter(fileName))
                 {
-                    Task.Run(()=>DocumentsMethods.WriteToStream(d, sw.BaseStream));
+                    Task.Run(() => DocumentsMethods.WriteToStream(d, sw.BaseStream));
                     Console.WriteLine("Document written to " + fileName);
                 }
             }
@@ -221,7 +221,7 @@ namespace example
                 ToDate = DateTimeOffset.Now,
                 DeveloperId = sandbox.GetConfigItem("DeveloperID")
             };
-            foreach (var t in TransactionsReport<Transaction>.Report(transactionsReportRequest, x => x.CreditCardFee == null || x.CreditCardFee > 10.0M ))
+            foreach (var t in TransactionsReport<Transaction>.Report(transactionsReportRequest, x => x.CreditCardFee == null || x.CreditCardFee > 10.0M))
             {
                 Console.WriteLine(t.DestinationAddress);
             }
@@ -233,8 +233,8 @@ namespace example
                         select new { transaction.TransactionId };
             foreach (var obj in query)
                 Console.WriteLine(obj);
-               
-            // Download the rate rules
+
+            // Download the carrier rules
             var req = new RatingServicesRequest()
             {
                 Carrier = Carrier.USPS,
@@ -244,11 +244,102 @@ namespace example
             var res = CarrierRulesMethods.RatingServices(req).GetAwaiter().GetResult();
             if (res.Success)
             {
+                // validate a shipment
                 var v = new ShipmentValidator();
                 if (!v.Validate((Shipment)shipment, res.APIResponse))
                 {
                     Console.WriteLine("Shipment is not valid: {0}", v.Reason);
                 }
+
+                // do some interesting things with the rules
+                var ruleRep = new RuleReport
+                {
+                    CarrierRules = new CarrierRule[1] { res.APIResponse }
+                };
+
+                // find possible services to fit a parcel
+                var to = ((Shipment)shipment).ToAddress;
+                var from = ((Shipment)shipment).FromAddress;
+                var parcel = ((Shipment)shipment).Parcel;
+
+                // match countries
+                ruleRep.CarrierRuleFilter = (rule) => rule.OriginCountry == from.CountryCode && rule.DestinationCountry == to.CountryCode;
+                // make sure parcel fits, is trackable and supports insurance, commercial base pricing
+                ruleRep.ParcelTypeRuleFilter = (rule) =>
+                    rule.FitsDimensions(parcel.Dimension) &&
+                    rule.HoldsWeight(parcel.Weight) &&
+                    !(rule.Trackable == Trackable.NON_TRACKABLE) &&
+                    rule.SpecialServiceRules.ContainsKey(SpecialServiceCodes.Ins) &&
+                    rule.RateTypeId == "CONTRACT_RATES";
+                var ruleItem = ruleRep.First();
+
+                Console.WriteLine("{0},{1},{2},{3},{4},{5},{6}",
+                    ruleItem.Item1.Carrier,
+                    ruleItem.Item1.OriginCountry,
+                    ruleItem.Item1.DestinationCountry,
+                    ruleItem.Item2.ServiceId,
+                    ruleItem.Item3.ParcelType,
+                    ruleItem.Item3.RateTypeId,
+                    ruleItem.Item4 == null ? String.Empty : ruleItem.Item4.SpecialServiceId.ToString());
+
+
+                // create special service from looked up values
+                var ss = new SpecialServices();
+                ss.SpecialServiceId = ruleItem.Item4.SpecialServiceId;
+                ss.InputParameters = new List<Parameter>();
+
+                if (ruleItem.Item4.InputParameterRules == null)
+                {
+                    ss.AddParameter(new Parameter("INPUT_VALUE", "0"));
+                }
+                else
+                { 
+                    foreach (var ip in ruleItem.Item4.InputParameterRules.Values)
+                    {
+                        ss.AddParameter(new Parameter(ip.Name, ip.MinValue.ToString()));
+                    }
+                }
+
+                // create the shipment from looked up values
+                var newShipment = ShipmentFluent<Shipment>.Create()
+                    .ToAddress(to)
+                    .MinimalAddressValidation("true")
+                    .ShipperRatePlan(Globals.DefaultSession.GetConfigItem("RatePlan"))
+                    .FromAddress(from )
+                    .Parcel(parcel)
+                    .Rates(RatesArrayFluent<Rates>.Create()
+                        .Add().Carrier(ruleItem.Item1.Carrier)
+                        .ParcelType(ruleItem.Item3.ParcelType)
+                        .Service(ruleItem.Item2.ServiceId)
+                        .SpecialService<SpecialServices>(ss)
+                        .InductionPostalCode(from.PostalCode)
+                        )
+                    .Documents(DocumentsArrayFluent<Document>.Create()
+                        .ShippingLabel()
+                        )
+                    .ShipmentOptions(ShipmentOptionsArrayFluent<ShipmentOptions>.Create()
+                        .ShipperId(sandbox.GetConfigItem("ShipperID"))
+                        .AddToManifest()
+                        )
+                    .TransactionId(Guid.NewGuid().ToString().Substring(15));
+                // make sure we are using the trackability service
+                if (ruleItem.Item3.SuggestedTrackableSpecialServiceId != ruleItem.Item4.SpecialServiceId)
+                {
+                    var trackingService = new SpecialServices();
+                    trackingService.SpecialServiceId = ruleItem.Item4.SpecialServiceId;
+                    trackingService.InputParameters = new List<Parameter>();
+                    trackingService.AddParameter(new Parameter("INPUT_VALUE", "0"));
+                    foreach( var r in ((Shipment)newShipment).Rates)
+                    {
+                        r.AddSpecialservices(trackingService);
+                    }
+                }
+                // rate the parcel
+                var ratesResponse = RatesMethods.Rates<Shipment>((Shipment)newShipment).GetAwaiter().GetResult();
+                //get the label
+                ratesResponse.APIResponse.TransactionId = Guid.NewGuid().ToString().Substring(15);
+                var newLabel = ShipmentsMethods.CreateShipment(ratesResponse.APIResponse).GetAwaiter().GetResult();
+
             }
         }
 

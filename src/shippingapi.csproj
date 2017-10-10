@@ -11,6 +11,7 @@
     <Company />
     <Description>Package that provides a local interface to the Pitney Bowes Shipping API. Features and fluent API, strong type support, mocking, linq interface to transaction reports.</Description>
     <Copyright>Pitney Bowes 2017</Copyright>
+    <RootNamespace>PitneyBowes.Developer.ShippingApi</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

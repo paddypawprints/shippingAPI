@@ -114,30 +114,17 @@
                     _state = ValidationState.INVALID;
                     return;
                 }
-                foreach( var d in parcelRule.DimensionRules)
-                {
-                    if (d.Required)
-                    {
-                        if (!_shipment.Parcel.Dimension.IsWithin(d))
-                        {
-                            Reason = string.Format("Parcel is outside of the dimension requirements for {0}", parcelRule.ParcelType);
-                            _state = ValidationState.INVALID;
-                            return;
-                        }
-                    }
+                if (!parcelRule.FitsDimensions(_shipment.Parcel.Dimension))
+                { 
+                    Reason = string.Format("Parcel is outside of the dimension requirements for {0}", parcelRule.ParcelType);
+                    _state = ValidationState.INVALID;
+                    return;
                 }
-                foreach( var w in parcelRule.WeightRules )
+                if (!parcelRule.HoldsWeight(_shipment.Parcel.Weight))
                 {
-                    if (w.Required)
-                    {
-                        if (!_shipment.Parcel.Weight.IsWithin(w))
-                        {
-                            Reason = string.Format("Parcel is outside of the weight requirements for {0}", parcelRule.ParcelType);
-                            _state = ValidationState.INVALID;
-                            return;
-                        }
-                    }
-
+                    Reason = string.Format("Parcel is outside of the weight requirements for {0}", parcelRule.ParcelType);
+                    _state = ValidationState.INVALID;
+                    return;
                 }
                 foreach (var rule in parcelRule.SpecialServiceRules[ss.SpecialServiceId])
                 {
@@ -180,7 +167,7 @@
                     }
                 }
             }
-            if (!specialServicesRule.IsValidPrerequisites(_rate.SpecialServices))
+            if (specialServicesRule.PrerequisiteRules != null && !specialServicesRule.IsValidPrerequisites(_rate.SpecialServices))
             {
                 Reason = string.Format("Special service {0} is missing prerequisites", specialServicesRule.SpecialServiceId);
                 _state = ValidationState.INVALID;

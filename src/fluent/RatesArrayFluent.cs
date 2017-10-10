@@ -69,6 +69,12 @@ namespace PitneyBowes.Developer.ShippingApi.Fluent
             return this;
         }
 
+        public RatesArrayFluent<T> SpecialService<S>(S s) where S : ISpecialServices, new()
+        {
+            _current.AddSpecialservices(s);
+            return this;
+        }
+
         public RatesArrayFluent<T> InductionPostalCode(string s) 
         {
             _current.InductionPostalCode = s;

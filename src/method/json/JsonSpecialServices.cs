@@ -18,7 +18,6 @@ namespace PitneyBowes.Developer.ShippingApi.Json
         }
 
         [JsonProperty("specialServiceId")]
-        [JsonConverter(typeof(StringEnumConverter))]
         public SpecialServiceCodes SpecialServiceId
         {
             get => Wrapped.SpecialServiceId;

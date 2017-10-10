@@ -19,6 +19,10 @@ namespace PitneyBowes.Developer.ShippingApi
                     return SpecialServiceCodes.liveanimal_poultry;
                 case "sunday-holiday":
                     return SpecialServiceCodes.sunday_holiday;
+                case "1030":
+                    return SpecialServiceCodes.TenThirty;
+                case "PO to Addressee":
+                    return SpecialServiceCodes.PO_to_Addressee;
                 default:
                     var converter = new StringEnumConverter();
                     return converter.ReadJson(reader, objectType, existingValue, serializer);
@@ -36,6 +40,12 @@ namespace PitneyBowes.Developer.ShippingApi
                     break;
                 case SpecialServiceCodes.sunday_holiday:
                     writer.WriteValue("sunday-holiday");
+                    break;
+                case SpecialServiceCodes.TenThirty:
+                    writer.WriteValue("1030");
+                    break;
+                case SpecialServiceCodes.PO_to_Addressee:
+                    writer.WriteValue("PO to Addressee");
                     break;
                 default:
                     var converter = new StringEnumConverter();
