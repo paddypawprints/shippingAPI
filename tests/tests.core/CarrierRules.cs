@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿
 using PitneyBowes.Developer.ShippingApi;
-using PitneyBowes.Developer.ShippingApi.Model;
-using PitneyBowes.Developer.ShippingApi.Method;
+using PitneyBowes.Developer.ShippingApi.Rules;
 using Xunit;
 
 namespace tests
@@ -21,7 +19,7 @@ namespace tests
                 OriginCountryCode = "US",
                 DestinationCountryCode = "US"
             };
-            var res = CarrierRulesMethods.RatingServices<CarrierRule[]>(req).GetAwaiter().GetResult();
+            var res = CarrierRulesMethods.RatingServices<ServiceRule[]>(req).GetAwaiter().GetResult();
 
         }
 

@@ -8,7 +8,7 @@ using System.IO;
 using Newtonsoft.Json.Converters;
 
 
-namespace PitneyBowes.Developer.ShippingApi.Method
+namespace PitneyBowes.Developer.ShippingApi.Rules
 {
     [JsonObject(MemberSerialization.OptIn)]
     public class CountriesRequest<T> : IShippingApiRequest where T : ICountry, new()

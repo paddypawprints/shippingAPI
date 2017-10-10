@@ -11,7 +11,6 @@ namespace PitneyBowes.Developer.ShippingApi.Model
             registry.RegisterSerializationTypes<IAddress, Address>();
             registry.RegisterSerializationTypes<IAutoRefill, AutoRefill>();
             registry.RegisterSerializationTypes<ICarrierPickup, CarrierPickup>();
-            registry.RegisterSerializationTypes<ICarrierRule, CarrierRule>();
             registry.RegisterSerializationTypes<ICcPaymentDetails, CcPaymentDetails>();
             registry.RegisterSerializationTypes<ICountry, Country>();
             registry.RegisterSerializationTypes<ICustoms, Customs>();
@@ -19,32 +18,26 @@ namespace PitneyBowes.Developer.ShippingApi.Model
             registry.RegisterSerializationTypes<ICustomsInfo, CustomsInfo>();
             registry.RegisterSerializationTypes<IDeliveryCommitment, DeliveryCommitment>();
             registry.RegisterSerializationTypes<IDocument, Document>();
-            registry.RegisterSerializationTypes<IDimensionRule, DimensionRule>();
             registry.RegisterSerializationTypes<IManifest, Manifest>();
             registry.RegisterSerializationTypes<IMerchant, Merchant>();
             registry.RegisterSerializationTypes<IParameter, Parameter>();
             registry.RegisterSerializationTypes<IParcel, Parcel>();
             registry.RegisterSerializationTypes<IParcelDimension, ParcelDimension>();
-            registry.RegisterSerializationTypes<IParcelTypeRule, ParcelTypeRule>();
             registry.RegisterSerializationTypes<IParcelWeight, ParcelWeight>();
             registry.RegisterSerializationTypes<IPaymentInfo, PaymentInfo>();
             registry.RegisterSerializationTypes<IPickup, Pickup>();
             registry.RegisterSerializationTypes<IPickupCount, PickupCount>();
             registry.RegisterSerializationTypes<IPpPaymentDetails, PpPaymentDetails>();
             registry.RegisterSerializationTypes<IRates, Rates>();
-            registry.RegisterSerializationTypes<IServicesParameterRule, ServicesParameterRule>();
-            registry.RegisterSerializationTypes<IServicesPrerequisiteRule, ServicesPrerequisiteRule>();
             registry.RegisterSerializationTypes<IShipment, Shipment>();
             registry.RegisterSerializationTypes<IShipmentOptions, ShipmentOptions>();
             registry.RegisterSerializationTypes<ISpecialServices, SpecialServices>();
-            registry.RegisterSerializationTypes<ISpecialServicesRule, SpecialServicesRule>();
             registry.RegisterSerializationTypes<IToken, Token>();
             registry.RegisterSerializationTypes<ITrackingEvent, TrackingEvent>();
             registry.RegisterSerializationTypes<ITrackingStatus, TrackingStatus>();
             registry.RegisterSerializationTypes<ITransaction, Transaction>();
             registry.RegisterSerializationTypes<ITransactionSort, TransactionSort>();
             registry.RegisterSerializationTypes<IUserInfo, UserInfo>();
-            registry.RegisterSerializationTypes<IWeightRule, WeightRule>();
         }
     }
 }

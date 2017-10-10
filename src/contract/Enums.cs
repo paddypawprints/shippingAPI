@@ -30,7 +30,7 @@ namespace PitneyBowes.Developer.ShippingApi
         /// <summary>
         /// Pitney Powes Presort Services
         /// </summary>
-        PBPS
+        PBPRESORT
     }
 
     public enum CancelInitiator
@@ -183,8 +183,11 @@ namespace PitneyBowes.Developer.ShippingApi
         HTB,
         SACK,
         FTTB,
-        SOFTPACK
-
+        SOFTPACK,
+        /// <summary>
+        /// PMOD Enclosed Package Type
+        /// </summary>
+        MIX
     }
     public enum PaymentMethod
     {
@@ -273,7 +276,24 @@ namespace PitneyBowes.Developer.ShippingApi
         /// <summary>
         /// Priority Mail International
         /// </summary>
-        PMI 
+        PMI,
+        /// <summary>
+        /// PMOD: Marketing Mail
+        /// </summary>
+        MKTMAIL,
+        /// <summary>
+        /// PMOD: Periodicals
+        /// </summary>
+        PER,
+        /// <summary>
+        /// PMOD: Only very specific combinations are allowed. The shipper is responsible for following USPS rules. PB does not provide validation.
+        /// </summary>
+        MIX,
+        /// <summary>
+        /// Priority Mail Open and Distribute
+        /// </summary>
+        PMOD
+
     }
     public enum ShipmentOption
     {
@@ -325,7 +345,18 @@ namespace PitneyBowes.Developer.ShippingApi
         SHIPPING_LABEL_SENDER_SIGNATURE,
         SHIPPING_LABEL_RECEIPT,
         SHIPPER_BASE_CHARGE,
-        SHIPPER_TOTAL_CHARGE
+        SHIPPER_TOTAL_CHARGE,
+        ORIGIN_ENTRY_FACILITY,
+        DESTINATION_ENTRY_FACILITY,
+        ENCLOSED_MAIL_CLASS,
+        ENCLOSED_PARCEL_TYPE,
+        ENCLOSED_PAYMENT_METHOD
+    }
+
+    public enum ShipmentType
+    {
+        OUTBOUND,
+        RETURN
     }
 
     public enum Trackable
@@ -450,7 +481,9 @@ namespace PitneyBowes.Developer.ShippingApi
         /// </summary>
         sunday_holiday,
         
-        noWeekend
+        noWeekend,
+
+        PMOD_OPTIONS
     }
     public enum TransactionType
     {

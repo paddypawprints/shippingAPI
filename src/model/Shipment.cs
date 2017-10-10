@@ -6,15 +6,12 @@ namespace PitneyBowes.Developer.ShippingApi.Model
 
     public class Shipment : IShipment
     {
-        virtual public string CorrelationId { get; set; }
+        virtual public string ShipperRatePlan { get; set; }
         virtual public string IntegratorCarrierId { get; set; }
         virtual public string IntegratorRatePlan { get; set; }
         virtual public string IntegratorId { get; set; }
-        virtual public string IsCharged { get; set; }
-        virtual public string MessageWeight { get; set; }
-        virtual public string PartnerId { get; set; }
+        virtual public string MinimalAddressValidation { get; set; }
         virtual public string TransactionId { get; set; }
-        virtual public string RequestId { get; set; }
         virtual public IAddress FromAddress { get; set; }
         virtual public IAddress ToAddress { get; set; }
         virtual public IAddress AltReturnAddress { get; set; }
@@ -34,6 +31,7 @@ namespace PitneyBowes.Developer.ShippingApi.Model
         {
             return ModelHelper.AddToEnumerable<IShipmentOptions, ShipmentOptions>(s, () => ShipmentOptions, (x) => ShipmentOptions = x);
         }
+        virtual public ShipmentType ShipmentType { get; set; }
         virtual public ICustoms Customs { get; set; }
         virtual public string ShipmentId { get; set; }
         virtual public string ParcelTrackingNumber { get; set; }

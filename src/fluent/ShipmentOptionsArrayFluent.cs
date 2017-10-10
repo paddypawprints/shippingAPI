@@ -49,13 +49,13 @@ namespace PitneyBowes.Developer.ShippingApi.Fluent
         {
             return Add().Option(ShipmentOption.SHIPPER_ID, shipperId);
         }
-        public ShipmentOptionsArrayFluent<T> AddToManifest()
+        public ShipmentOptionsArrayFluent<T> AddToManifest(bool value = true)
         {
-            return Add().Option(ShipmentOption.ADD_TO_MANIFEST, "true");
+            return Add().Option(ShipmentOption.ADD_TO_MANIFEST, value.ToString());
         }
-        public ShipmentOptionsArrayFluent<T> MinimalAddressvalidation()
+        public ShipmentOptionsArrayFluent<T> MinimalAddressvalidation(bool value = true)
         {
-            return Add().Option(ShipmentOption.MINIMAL_ADDRESS_VALIDATION, "true");
+            return Add().Option(ShipmentOption.MINIMAL_ADDRESS_VALIDATION, value.ToString());
         }
         public ShipmentOptionsArrayFluent<T> AddOption(ShipmentOption option, string value)
         {

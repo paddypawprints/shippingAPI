@@ -8,7 +8,7 @@ using System;
 using System.IO;
 
 namespace PitneyBowes.Developer.ShippingApi.Method
-{
+{/*
     /// <summary>
     /// Request object when getting a shipping label.
     /// <a href="https://shipping.pitneybowes.com/reference/resource-objects.html#object-shipment">address documentation</a>
@@ -124,7 +124,7 @@ namespace PitneyBowes.Developer.ShippingApi.Method
             get => Wrapped.Customs;
             set { Wrapped.Customs = value; }
         }
-    }
+    }*/
 
     [JsonObject(MemberSerialization.OptIn)]
     public class CancelShipmentRequest : ShippingApiRequest
@@ -170,9 +170,10 @@ namespace PitneyBowes.Developer.ShippingApi.Method
 
     public static class ShipmentsMethods
     {
-        public async static Task<ShippingApiResponse<T>> CreateShipment<T>(CreateShipmentRequest<T> request, ISession session = null) where T:IShipment, new()
+        public async static Task<ShippingApiResponse<T>> CreateShipment<T>(T request, ISession session = null) where T:IShipment, new()
         {
-            return await WebMethod.Post< T, CreateShipmentRequest<T>>( "/shippingservices/v1/shipments", request, session );
+            var wrapped = new JsonShipment<T>(request);
+            return await WebMethod.Post< T, JsonShipment<T>>( "/shippingservices/v1/shipments", wrapped, session );
         }
         public async static Task<ShippingApiResponse<CancelShipmentResponse>> CancelShipment( CancelShipmentRequest request, ISession session = null)
         {

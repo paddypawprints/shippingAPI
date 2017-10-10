@@ -7,8 +7,7 @@ namespace PitneyBowes.Developer.ShippingApi
         SpecialServiceCodes SpecialServiceId { get; set; }
         IEnumerable<IParameter> InputParameters { get; set; }
         void AddParameter(IParameter p);
+        decimal Value { get; set; }
         decimal Fee { get; set; }
-
     }
-
 }

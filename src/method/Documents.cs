@@ -7,14 +7,14 @@ namespace PitneyBowes.Developer.ShippingApi
 {
     public static class DocumentsMethods
     {
-        public static async Task WriteToStream(IDocument document, Stream stream, Func<Stream,int, Stream> nextPageAction = null, ISession session = null )
+        public static async Task WriteToStream(IDocument document, Stream stream, Func<Stream,int, Stream> nextPageAction = null, bool disposeStream = false, ISession session = null )
         {
             if (document.ContentType == ContentType.BASE64)
             { 
                 int pageCount = 0;
-                foreach (var page in document.Pages)
+                try
                 {
-                    try
+                    foreach (var page in document.Pages)
                     {
                         pageCount++;
                         if (nextPageAction != null)
@@ -23,12 +23,12 @@ namespace PitneyBowes.Developer.ShippingApi
                         }
                         await WriteBase64Page(page, stream, session);
                     }
-                    catch
-                    {
-                        if (stream!= null ) stream.Dispose();
-                        throw;
-                    }
                 }
+                finally
+                {
+                    if (stream != null && disposeStream) stream.Dispose();
+                }
+                
             }
             else
             {

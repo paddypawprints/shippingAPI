@@ -17,5 +17,34 @@ namespace PitneyBowes.Developer.ShippingApi.Model
             ModelHelper.AddToEnumerable<IParameter, Parameter>(p, () => InputParameters, (x) => InputParameters = x);
         }
         virtual public decimal Fee { get; set;}
+        virtual public decimal Value
+        {
+            get
+            {
+                foreach( var p in InputParameters )
+                {
+                    if (p.Name == "INPUT_VALUE")
+                    {
+                        if (decimal.TryParse(p.Value, out decimal value))
+                        {
+                            return value;
+                        }
+                    }
+                }
+                return 0M;
+            }
+            set
+            {
+                foreach (var p in InputParameters)
+                {
+                    if (p.Name == "INPUT_VALUE")
+                    {
+                        p.Value = value.ToString();
+                        return;
+                    }
+                }
+                AddParameter(new Parameter() { Name = "INPUT_VALUE", Value = "0" });
+            }
+        }
     }
 }

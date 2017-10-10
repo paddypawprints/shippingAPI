@@ -41,7 +41,25 @@ namespace PitneyBowes.Developer.ShippingApi.Json
             get => Wrapped.Fee;
             set { Wrapped.Fee = value; }
         }
-
+        public bool ShouldSerializeValue() => false;
+        public decimal Value
+        {
+            get
+            {
+                foreach (var p in InputParameters)
+                {
+                    if (p.Name == "INPUT_VALUE")
+                    {
+                        if (decimal.TryParse(p.Value, out decimal value))
+                        {
+                            return value;
+                        }
+                    }
+                }
+                return 0M;
+            }
+            set { throw new NotImplementedException(); }
+        }
     }
 
 }
