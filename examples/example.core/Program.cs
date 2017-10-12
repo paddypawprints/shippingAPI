@@ -7,6 +7,12 @@ You may obtain a copy of the License in the README file or at
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed 
 on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License 
 for the specific language governing permissions and limitations under the License.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO 
+THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS 
+OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, 
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
 */
 
 using System;
@@ -135,7 +141,6 @@ namespace example
                 // Write the label to disk
                 foreach (var d in reprintResponse.APIResponse.Documents)
                 {
-
                     if (d.ContentType == ContentType.BASE64 && d.FileFormat == FileFormat.PNG)
                     {
                         // Multiple page png document
@@ -152,12 +157,10 @@ namespace example
 
                             },
                             disposeStream: true
-
                             ).GetAwaiter().GetResult();
                     }
                     else
                     {
-
                         string fileName = string.Format("{0}{1}.{2}", Path.GetTempPath(), reprintResponse.APIResponse.ShipmentId, d.FileFormat.ToString());
                         using (StreamWriter sw = new StreamWriter(fileName))
                         {
@@ -200,14 +203,12 @@ namespace example
                 .TransactionId(Guid.NewGuid().ToString().Substring(15));
             var pickupResponse = PickupMethods.Schedule<Pickup>(pickup).GetAwaiter().GetResult();
 
-
             // Cancel pickup
 
             if (pickupResponse.Success)
             {
                 pickup.Cancel();
             }
-
 
             // Cancel the label 
 
@@ -221,7 +222,6 @@ namespace example
                     ShipmentToCancel = label.APIResponse.ShipmentId
                 };
                 var cancelResponse = ShipmentsMethods.CancelShipment(cancelRequest).GetAwaiter().GetResult();
-
             }
 
             // Transaction report with IEnumerable
@@ -293,7 +293,6 @@ namespace example
                     ruleItem.Item3.RateTypeId,
                     ruleItem.Item4 == null ? String.Empty : ruleItem.Item4.SpecialServiceId.ToString());
 
-
                 // create special service from looked up values
                 var ss = new SpecialServices();
                 ss.SpecialServiceId = ruleItem.Item4.SpecialServiceId;
@@ -350,7 +349,6 @@ namespace example
                 //get the label
                 ratesResponse.APIResponse.TransactionId = Guid.NewGuid().ToString().Substring(15);
                 var newLabel = ShipmentsMethods.CreateShipment(ratesResponse.APIResponse).GetAwaiter().GetResult();
-
             }
         }
 
@@ -390,7 +388,6 @@ namespace example
                 { "ShipperID", "9014888410" },
                 { "DeveloperID", "46841939" }
             };
-
             var configurationBuilder = new ConfigurationBuilder();
             configurationBuilder.AddInMemoryCollection(configs);
             Configuration = configurationBuilder.Build();
