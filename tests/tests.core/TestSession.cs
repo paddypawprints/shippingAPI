@@ -20,8 +20,6 @@ using PitneyBowes.Developer.ShippingApi.Model;
 using System.IO;
 using System.Text;
 
-
-
 namespace tests
 {
     class TestSession

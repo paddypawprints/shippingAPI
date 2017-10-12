@@ -44,6 +44,12 @@ namespace PitneyBowes.Developer.ShippingApi.Fluent
             return this;
         }
 
+        public T Current()
+        {
+            return _current;
+        }
+
+
         public RatesArrayFluent<T> Next()
         {
             var i = IndexOf(_current);
