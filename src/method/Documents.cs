@@ -51,6 +51,7 @@ namespace PitneyBowes.Developer.ShippingApi
             {
                 await WriteURL(document.Contents, stream, document.FileFormat, session);
             }
+            await stream.FlushAsync();
         }
 
         public static async Task WriteBase64Page(string page, Stream stream, ISession session )

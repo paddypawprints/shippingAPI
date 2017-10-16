@@ -187,7 +187,7 @@ namespace example
                 string fileName = string.Format("{0}{1}.{2}", Path.GetTempPath(), manifestResponse.APIResponse.ManifestId, d.FileFormat.ToString());
                 using (StreamWriter sw = new StreamWriter(fileName))
                 {
-                    Task.Run(() => DocumentsMethods.WriteToStream(d, sw.BaseStream));
+                    DocumentsMethods.WriteToStream(d, sw.BaseStream).GetAwaiter().GetResult();
                     Console.WriteLine("Document written to " + fileName);
                 }
             }
