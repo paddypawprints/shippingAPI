@@ -20,7 +20,7 @@ namespace PitneyBowes.Developer.ShippingApi.Model
     public class CustomsInfo : ICustomsInfo
     {
         virtual public ReasonForExport ReasonForExport { get; set;}
-        virtual public string reasonForExportExplanation { get; set;}
+        virtual public string ReasonForExportExplanation { get; set;}
         virtual public string Comments { get;set;}
         virtual public string InvoiceNumber {get;set;}
         virtual public string ImporterCustomsReference {get;set;}

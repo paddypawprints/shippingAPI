@@ -393,9 +393,11 @@ namespace example
             where T : class, IRates, new()
             where S : class, ISpecialServices, new()
         {
-            var ss = new S();
-            ss.SpecialServiceId = rule.SpecialServiceId;
-            ss.InputParameters = new List<Parameter>();
+            var ss = new S
+            {
+                SpecialServiceId = rule.SpecialServiceId,
+                InputParameters = new List<Parameter>()
+            };
 
             if (rule.InputParameterRules == null)
             {
@@ -429,9 +431,11 @@ namespace example
                 if (s.SpecialServiceId == parcelTypeRule.SuggestedTrackableSpecialServiceId)
                     return f;
             }
-            var trackingService = new S();
-            trackingService.SpecialServiceId = parcelTypeRule.SuggestedTrackableSpecialServiceId;
-            trackingService.InputParameters = new List<Parameter>();
+            var trackingService = new S
+            {
+                SpecialServiceId = parcelTypeRule.SuggestedTrackableSpecialServiceId,
+                InputParameters = new List<Parameter>()
+            };
             trackingService.AddParameter(new Parameter("INPUT_VALUE", "0"));
             r.AddSpecialservices(trackingService);
             return f;

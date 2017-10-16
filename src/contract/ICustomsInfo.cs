@@ -20,7 +20,7 @@ namespace PitneyBowes.Developer.ShippingApi
     public interface ICustomsInfo
     {
         ReasonForExport ReasonForExport { get; set; }
-        string reasonForExportExplanation { get; set; }
+        string ReasonForExportExplanation { get; set; }
         string Comments { get; set; }
         string InvoiceNumber { get; set; }
         string ImporterCustomsReference { get; set; }

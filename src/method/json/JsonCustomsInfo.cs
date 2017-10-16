@@ -35,10 +35,10 @@ namespace PitneyBowes.Developer.ShippingApi.Json
             set { Wrapped.ReasonForExport = value; }
         }
         [JsonProperty("reasonForExportExplanation")]
-        public string reasonForExportExplanation
+        public string ReasonForExportExplanation
         {
-            get => Wrapped.reasonForExportExplanation;
-            set { Wrapped.reasonForExportExplanation = value; }
+            get => Wrapped.ReasonForExportExplanation;
+            set { Wrapped.ReasonForExportExplanation = value; }
         }
         [JsonProperty("comments")]
         public string Comments
