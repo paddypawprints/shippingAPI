@@ -2,6 +2,23 @@
 # Pitney Bowes Shipping API C# Client
 
 This project has the code for a nuget package that provides a fluent C# interface to the Pitney Bowes Shipping API.
+The package uses the [.NET Standard 1.3 framework](https://docs.microsoft.com/en-us/dotnet/standard/net-standard), meaning 
+it is compatible with:
+* .NET core 1.0 and 2.0
+* .NET framework 4.6 and above
+Mono and Xamarin are also supported.
+
+Features:
+* **full wrapping of the API**. Hides (encapsulates) all protocol details, including authentication and report pagination..
+* **strong typing** – objects for all entities. Enums for all options – which really helps in visual studio intellisense.
+* **Contract via interfaces** as well as DTOs to reduce the need to copy data
+* **Linq provider** for reports
+* **Fluent interface** - less typing and really good way to extend with extension methods
+* **Support for the metadata** provided by the carrier rules method. Use this for local validation/UI options/rate shop.
+* **Mocking and recording** of live messages to disk for capture or later playback in mock mode. Mocking for unit and regression testing.
+* **Example** console app.
+* **Plug in your own configuration and log providers**
+* **Keeps the API secret out of cleartext**
 
 ## Getting Started
 If you just want to use the solution without building it is hosted [on nuget.org](https://www.nuget.org/packages/shippingapi/).
@@ -96,6 +113,40 @@ To create a shipping label:
 ```
 ### Prerequisites
 
+If you want to build the system out of the box you will need Visual Studio 2017 Community Edition is fine. At one point it 
+did build on MacOS but I moved to Windows due to the complexity of dependency management in VSCode.
+
+### Building the system
+
+In Visual studio developer command prompt. Git command line and dotnet core 2.0 have been previously installed.
+ 
+ ```
+C:\Development>mkdir apitest
+ 
+C:\Development>cd apitest
+ 
+C:\Development\apitest>git clone https://github.com/paddypawprints/shippingAPI.git
+*Cloning into 'shippingAPI'...*
+*remote: Counting objects: 1558, done.*
+*remote: Compressing objects: 100% (264/264), done.*
+*Receiving objects: 100% (1558/1558), 651.92 KiB | 9.88 MiB/s, done.d 888
+*Resolving deltas: 100% (1028/1028), done.*
+ 
+C:\Development\apitest\shippingAPI> cd shippingAPI
+ 
+C:\Development\apitest\shippingAPI > dotnet restore
+ 
+C:\Development\apitest\shippingAPI> dotnet build
+ 
+C:\Development\apitest\shippingAPI>  dotnet publish
+ 
+C:\Development\apitest\shippingAPI> cd examples\example.core\bin\Debug\netcoreapp2.0\publish
+ 
+C:\Development\apitest\examples\example.core\bin\Debug\netcoreapp2.0\publish > dotnet example.dll
+*9405509898642004103722*
+*Document written to C:\Users\patrick\AppData\Local\Temp\2\USPS2200080642743578.PDF*
+*Document written to C:\Users\patrick\AppData\Local\Temp\2\9475709899581000234042.PDF*
+```
 
 ### Installing
 
