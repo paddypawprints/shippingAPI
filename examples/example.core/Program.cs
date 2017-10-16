@@ -349,7 +349,7 @@ namespace example
         {
             ApiKey = new SecureString();
             // This is not secure (obviously) - store your key encrypted. This is just to demonstrate the use of the session.
-            foreach (var c in "wgNEtZkNbP0iV8h0".ToCharArray()) ApiKey.AppendChar(c);
+            foreach (var c in Configuration["ApiSecret"].ToCharArray()) ApiKey.AppendChar(c);
         }
 
         private static StringBuilder GetApiKey()
@@ -376,13 +376,18 @@ namespace example
         {
             var configs = new Dictionary<string, string>
             {
-                { "ApiKey", "Ci4vEAgBP8Aww7TBwGOKhr43uKTPNyfO" },
-                { "RatePlan", "PP_SRP_NEWBLUE" },
-                { "ShipperID", "9014888410" },
-                { "DeveloperID", "46841939" }
+                { "ApiKey", "YOUR_API_KEY" },
+                { "ApiSecret", "YOUR_API_SECRET" },
+                { "RatePlan", "YOUR_RATE_PLAN" },
+                { "ShipperID", "YOUR_SHIPPER_ID" },
+                { "DeveloperID", "YOUR_DEVELOPER_ID" }
             };
             var configurationBuilder = new ConfigurationBuilder();
-            configurationBuilder.AddInMemoryCollection(configs);
+            
+            configurationBuilder
+                .SetBasePath(Environment.GetEnvironmentVariable("APPDATA"))
+                .AddInMemoryCollection(configs)
+                .AddJsonFile("shippingapisettings.json", optional: true, reloadOnChange: true);
             Configuration = configurationBuilder.Build();
         }
     }

@@ -49,18 +49,28 @@ PM> install-package ShippingAPI
 ```
 Get the example program from github and replace your Program.cs file with [this one](https://github.com/paddypawprints/shippingAPI/blob/master/example/Program.cs).
 
-Add your own IDs.
+Add your own IDs. Replace the values in the code below or create a shippingapisettings.json file in %APPDATA%
 ```csharp
-//*****************************************
-// Replace these with your own values
-//
-AddConfigItem("ApiKey", "Ci4vEAgBP8Aww7TXyGOKhr43uKTPNyfO");
-DefaultSession.GetAPISecret = () => "wgXYtZkNbP0iV8h0".ToCharArray();
-AddConfigItem("RatePlan", "PP_SRP_NEWBLUE");
-AddConfigItem("ShipperID", "9014888499");
-AddConfigItem("DeveloperID", "46841999");
-//******************************************
+            var configs = new Dictionary<string, string>
+            {
+                { "ApiKey", "YOUR_API_KEY" },
+                { "ApiSecret", "YOUR_API_SECRET" },
+                { "RatePlan", "YOUR_RATE_PLAN" },
+                { "ShipperID", "YOUR_SHIPPER_ID" },
+                { "DeveloperID", "YOUR_DEVELOPER_ID" }
+            };
 ```
+shippingapisettings.json
+```json
+{ 
+    "ApiKey": "!###",
+    "ApiSecret": "###",
+    "RatePlan": "PP_SRP_NEWBLUE",
+    "ShipperID": "1234567890",
+    "DeveloperID": "1234567890" 
+}
+```
+
 
 To create a shipping label:
 ```csharp
@@ -126,11 +136,11 @@ C:\Development>mkdir apitest
 C:\Development>cd apitest
  
 C:\Development\apitest>git clone https://github.com/paddypawprints/shippingAPI.git
-*Cloning into 'shippingAPI'...*
-*remote: Counting objects: 1558, done.*
-*remote: Compressing objects: 100% (264/264), done.*
-*Receiving objects: 100% (1558/1558), 651.92 KiB | 9.88 MiB/s, done.d 888
-*Resolving deltas: 100% (1028/1028), done.*
+Cloning into 'shippingAPI'...
+remote: Counting objects: 1558, done.
+remote: Compressing objects: 100% (264/264), done.
+Receiving objects: 100% (1558/1558), 651.92 KiB | 9.88 MiB/s, done.d 888
+Resolving deltas: 100% (1028/1028), done.
  
 C:\Development\apitest\shippingAPI> cd shippingAPI
  
@@ -143,51 +153,19 @@ C:\Development\apitest\shippingAPI>  dotnet publish
 C:\Development\apitest\shippingAPI> cd examples\example.core\bin\Debug\netcoreapp2.0\publish
  
 C:\Development\apitest\examples\example.core\bin\Debug\netcoreapp2.0\publish > dotnet example.dll
-*9405509898642004103722*
-*Document written to C:\Users\patrick\AppData\Local\Temp\2\USPS2200080642743578.PDF*
-*Document written to C:\Users\patrick\AppData\Local\Temp\2\9475709899581000234042.PDF*
+9405509898642004103722
+Document written to C:\Users\patrick\AppData\Local\Temp\2\USPS2200080642743578.PDF
+Document written to C:\Users\patrick\AppData\Local\Temp\2\9475709899581000234042.PDF
 ```
-
-### Installing
-
-There are solutions for dotnet core and .net 4.5. (shippingapi.core.sln, and shippingapi.net45.sln). Open the solution in Visual Studio or VSCode and build. 
-The solution has a number of projects:
-* **shippingapi.core** - shipping API nuget package code
-* **example** - a console app that gives an example of using the api
-
-Open the Program.cs file in the example project and substitute you API key, API secret, developer ID, and shipper ID for the values in the code (init method). 
-
-```
-Give the example
-```
-
-And repeat
-
-```
-until finished
-```
-
-End with an example of getting some data out of the system or using it for a little demo
 
 ## Running the tests
 
-Explain how to run the automated tests for this system
+The tests use [xunit](https://xunit.github.io/). The API can run in either live or mocked mode. When it is in mocked mode the response to API requests are 
+read from a file. The file is identified by certain attributes of the response - transaction ID in the case of a shipment, so different test
+scenarios can be set up using the mocked interface. 
 
-### Break down into end to end tests
+There are not many tests, as yet. I had trouble running the playback in the debugger, where Visual Studio would occaisionally hang when reading from the response file. Not sure why yet. Consequently, most of the testing has been done with the example progam.
 
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
 
 ## Built With
 
