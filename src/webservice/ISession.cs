@@ -25,6 +25,7 @@ namespace PitneyBowes.Developer.ShippingApi
         Action<string, string> AddConfigItem { get; set; }
         IToken AuthToken { get; set; }
         string EndPoint { get; set; }
+        string UserAgent { get; set; }
         Func<StringBuilder> GetAPISecret { get; set; }
         Func<string, string> GetConfigItem { get; set; }
         Action<string> LogConfigError { get; set; }

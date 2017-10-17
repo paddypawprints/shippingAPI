@@ -54,7 +54,7 @@ namespace PitneyBowes.Developer.ShippingApi
             client.DefaultRequestHeaders.Clear();
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            client.DefaultRequestHeaders.Add("user-agent", "Ps API Client Proxy");
+            client.DefaultRequestHeaders.Add("user-agent", session.UserAgent);
             foreach (var h in request.GetHeaders())
             {
                 AddRequestHeaders(client, h.Item1, h.Item2, h.Item3);

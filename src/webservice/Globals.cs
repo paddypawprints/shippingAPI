@@ -47,6 +47,5 @@ namespace PitneyBowes.Developer.ShippingApi
                 return client;
             }
         }
-
     }
 }

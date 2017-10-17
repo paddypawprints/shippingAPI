@@ -79,7 +79,7 @@ namespace PitneyBowes.Developer.ShippingApi
                 default:
                     break;
             }
-            client.DefaultRequestHeaders.Add("user-agent", "Ps API Client Proxy");
+            client.DefaultRequestHeaders.Add("user-agent", session.UserAgent);
             var httpResponseMessage = await client.GetAsync(page);
             await httpResponseMessage.Content.CopyToAsync(stream);
             await stream.FlushAsync();
