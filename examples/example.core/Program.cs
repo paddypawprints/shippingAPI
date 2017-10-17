@@ -110,7 +110,7 @@ namespace example
                     .InductionPostalCode("06484")
                     )
                 .Documents(DocumentsArrayFluent<Document>.Create()
-                    .ShippingLabel()
+                    .ShippingLabel(ContentType.BASE64, Size.DOC_4X6, FileFormat.ZPL2)
                     )
                 .ShipmentOptions(ShipmentOptionsArrayFluent<ShipmentOptions>.Create()
                     .ShipperId(sandbox.GetConfigItem("ShipperID"))

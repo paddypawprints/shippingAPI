@@ -33,6 +33,7 @@ namespace PitneyBowes.Developer.ShippingApi.Model
             registry.RegisterSerializationTypes<IDocument, Document>();
             registry.RegisterSerializationTypes<IManifest, Manifest>();
             registry.RegisterSerializationTypes<IMerchant, Merchant>();
+            registry.RegisterSerializationTypes<IPage, Page>();
             registry.RegisterSerializationTypes<IParameter, Parameter>();
             registry.RegisterSerializationTypes<IParcel, Parcel>();
             registry.RegisterSerializationTypes<IParcelDimension, ParcelDimension>();

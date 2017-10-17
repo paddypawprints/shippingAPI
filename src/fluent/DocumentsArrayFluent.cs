@@ -83,14 +83,14 @@ namespace PitneyBowes.Developer.ShippingApi.Fluent
             _current.PrintDialogOption = option;
             return this;
         }
-        public DocumentsArrayFluent<T> ShippingLabel( ContentType contentType = Developer.ShippingApi.ContentType.URL, Size size = Developer.ShippingApi.Size.DOC_8X11, FileFormat fileFormat = Developer.ShippingApi.FileFormat.PDF)
+        public DocumentsArrayFluent<T> ShippingLabel( ContentType contentType = ShippingApi.ContentType.URL, Size size = ShippingApi.Size.DOC_8X11, FileFormat fileFormat = ShippingApi.FileFormat.PDF)
         {
             return Add()
-                .DocumentType(Developer.ShippingApi.DocumentType.SHIPPING_LABEL)
+                .DocumentType(ShippingApi.DocumentType.SHIPPING_LABEL)
                 .ContentType(contentType)
                 .Size(size)
                 .FileFormat(fileFormat)
-                .PrintDialogOption(Developer.ShippingApi.PrintDialogOption.NO_PRINT_DIALOG);
+                .PrintDialogOption(ShippingApi.PrintDialogOption.NO_PRINT_DIALOG);
         }
     }
 }

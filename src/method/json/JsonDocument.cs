@@ -46,8 +46,8 @@ namespace PitneyBowes.Developer.ShippingApi.Json
         [JsonConverter(typeof(StringEnumConverter))]
         public FileFormat FileFormat
         {
-            get;
-            set;
+            get => Wrapped.FileFormat;
+            set { Wrapped.FileFormat = value; }
         }
         [JsonProperty("contentType", Order = 3)]
         [JsonConverter(typeof(StringEnumConverter))]
@@ -70,12 +70,12 @@ namespace PitneyBowes.Developer.ShippingApi.Json
             set { Wrapped.Contents = value; }
         }
         [JsonProperty("pages")]
-        public IEnumerable<string> Pages
+        public IEnumerable<IPage> Pages
         {
             get => Wrapped.Pages;
             set { Wrapped.Pages = value;  }
         }
-        public void AddPage(string s)
+        public void AddPage(IPage s)
         {
             Wrapped.AddPage(s);
         }

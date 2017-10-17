@@ -27,10 +27,10 @@ namespace PitneyBowes.Developer.ShippingApi.Model
         virtual public ContentType ContentType {get;set;}
         virtual public PrintDialogOption PrintDialogOption {get;set;}
         virtual public string Contents {get;set;}
-        virtual public IEnumerable<string> Pages { get; set; }
-        virtual public void AddPage(string s)
+        virtual public IEnumerable<IPage> Pages { get; set; }
+        virtual public void AddPage(IPage s)
         {
-            ModelHelper.AddToEnumerable<string, string>(s, () => Pages, (x) => Pages = x);
+            ModelHelper.AddToEnumerable<IPage, Page>(s, () => Pages, (x) => Pages = x);
         }
     }
 

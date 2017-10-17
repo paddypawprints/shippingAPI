@@ -15,20 +15,22 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR TH
 
 */
 
-using System.Collections.Generic;
+using Newtonsoft.Json;
 
-namespace PitneyBowes.Developer.ShippingApi
+namespace PitneyBowes.Developer.ShippingApi.Json
 {
-    public interface IDocument
-    { 
-        DocumentType Type { get; set; }
-        Size Size { get; set; }
-        FileFormat FileFormat { get; set; }
-        ContentType ContentType { get; set; }
-        PrintDialogOption PrintDialogOption { get; set; }
-        string Contents { get; set; }
-        IEnumerable<IPage> Pages { get; set; }
-        void AddPage(IPage p);
-    }
+    [JsonObject(MemberSerialization.OptIn)]
+    public class JsonPage<T> : JsonWrapper<T>, IPage where T : IPage, new()
+    {
+        public JsonPage() : base() { }
 
+        public JsonPage(T t) : base(t) { }
+
+        [JsonProperty("contents")]
+        public string Contents
+        {
+            get => Wrapped.Contents;
+            set { Wrapped.Contents = value; }
+        }
+    }
 }

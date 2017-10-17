@@ -71,6 +71,7 @@ namespace PitneyBowes.Developer.ShippingApi
             _wrapperRegistry.Add(typeof(IDocument), typeof(JsonDocument<>));
             _wrapperRegistry.Add(typeof(IManifest), typeof(JsonManifest<>));
             _wrapperRegistry.Add(typeof(IMerchant), typeof(JsonMerchant<>));
+            _wrapperRegistry.Add(typeof(IPage), typeof(JsonPage<>));
             _wrapperRegistry.Add(typeof(IParameter), typeof(JsonParameter<>));
             _wrapperRegistry.Add(typeof(IParcel), typeof(JsonParcel<>));
             _wrapperRegistry.Add(typeof(IParcelDimension), typeof(JsonParcelDimension<>));

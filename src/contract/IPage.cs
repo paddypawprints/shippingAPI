@@ -15,20 +15,10 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR TH
 
 */
 
-using System.Collections.Generic;
-
 namespace PitneyBowes.Developer.ShippingApi
 {
-    public interface IDocument
-    { 
-        DocumentType Type { get; set; }
-        Size Size { get; set; }
-        FileFormat FileFormat { get; set; }
-        ContentType ContentType { get; set; }
-        PrintDialogOption PrintDialogOption { get; set; }
+    public interface IPage
+    {
         string Contents { get; set; }
-        IEnumerable<IPage> Pages { get; set; }
-        void AddPage(IPage p);
     }
-
 }

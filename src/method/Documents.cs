@@ -38,7 +38,7 @@ namespace PitneyBowes.Developer.ShippingApi
                         {
                             stream = nextPageAction(stream, pageCount);
                         }
-                        await WriteBase64Page(page, stream, session);
+                        await WriteBase64Page(page.Contents, stream, session);
                     }
                 }
                 finally
@@ -51,13 +51,13 @@ namespace PitneyBowes.Developer.ShippingApi
             {
                 await WriteURL(document.Contents, stream, document.FileFormat, session);
             }
-            await stream.FlushAsync();
         }
 
         public static async Task WriteBase64Page(string page, Stream stream, ISession session )
         {
             var buffer = Convert.FromBase64String(page);
             await stream.WriteAsync(buffer, 0, buffer.Length);
+            await stream.FlushAsync();
         }
         public static async Task WriteURL(string page, Stream stream, FileFormat format, ISession session)
         {
@@ -82,6 +82,7 @@ namespace PitneyBowes.Developer.ShippingApi
             client.DefaultRequestHeaders.Add("user-agent", "Ps API Client Proxy");
             var httpResponseMessage = await client.GetAsync(page);
             await httpResponseMessage.Content.CopyToAsync(stream);
+            await stream.FlushAsync();
         }
 
     }
