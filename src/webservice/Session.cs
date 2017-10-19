@@ -19,7 +19,6 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
-using System.Reflection;
 
 namespace PitneyBowes.Developer.ShippingApi
 {
@@ -33,7 +32,7 @@ namespace PitneyBowes.Developer.ShippingApi
         public Session()
         {
             Record = false;
-            RecordPath = string.Format("{0}{1}recordings{1}shippingApi", Path.GetTempPath(), Path.DirectorySeparatorChar);
+            RecordPath = Globals.GetPath(Path.GetTempPath(), "recordings", "shippingApi");
             RecordOverwrite = false;
             Retries = 3;
             _configs.Add("SANDBOX_ENDPOINT", "https://api-sandbox.pitneybowes.com");
@@ -47,8 +46,8 @@ namespace PitneyBowes.Developer.ShippingApi
             LogDebug = (s) => { };
             GetAPISecret = () => { return new StringBuilder(); };
             SerializationRegistry = new SerializationRegistry();
-        }
 
+        }
         public SerializationRegistry SerializationRegistry { get; }
         public IHttpRequest Requester { get; set; } // to allow mocking
         public IToken AuthToken { get; set; }

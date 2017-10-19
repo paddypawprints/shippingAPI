@@ -58,27 +58,27 @@ namespace tests
                 .CountryCode(countryCode); // calls the service for address validation
             var address = (Address)addressFluent;
             Assert.True( address != null );
-            Assert.True(address.Company.Equals(company));
-            Assert.True(address.Name.Equals(name));
-            Assert.True(address.Phone.Equals(phone));
-            Assert.True(address.Email.Equals(email));
+            Assert.Same(address.Company,company);
+            Assert.Same(address.Name,name);
+            Assert.Same(address.Phone,phone);
+            Assert.Same(address.Email,email);
             Assert.True(!address.Residential);
             int i = 0;
             for( var a = address.AddressLines.GetEnumerator(); a.MoveNext();)
             {
-                if (i == 0) Assert.True(a.Current.Equals(address1));
+                if (i == 0) Assert.Same(a.Current,address1);
                 i++;
             }
             Assert.True(i == 1);
-            Assert.True(address.CityTown.Equals(cityTown));
-            Assert.True(address.StateProvince.Equals(stateProvince));
-            Assert.True(address.PostalCode.Equals(postalCode));
-            Assert.True(address.CountryCode.Equals(countryCode));
+            Assert.Same(address.CityTown,cityTown);
+            Assert.Same(address.StateProvince,stateProvince);
+            Assert.Same(address.PostalCode,postalCode);
+            Assert.Same(address.CountryCode,countryCode);
             Assert.True(address.Status == AddressStatus.NOT_CHANGED);
 
             address = (Address)addressFluent.Verify();
             Assert.True(address.Status == AddressStatus.VALIDATED_CHANGED);
-            Assert.True(address.PostalCode.Equals("28607-4819"));
+            Assert.Same(address.PostalCode,"28607-4819");
             
 
         }

@@ -30,7 +30,8 @@ using PitneyBowes.Developer.ShippingApi.Method;
 using PitneyBowes.Developer.ShippingApi.Rules;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
-
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace example
 {
@@ -44,7 +45,11 @@ namespace example
     class Program
     {
         private static ILogger Logger { get; } = ApplicationLogging.CreateLogger<Program>();
+#if !OSX
         private static IConfiguration Configuration { get; set; }
+#else
+        private static Dictionary<string, string> Configuration { get; set; }
+#endif
         private static SecureString ApiKey;
 
         static void Main(string[] args)
@@ -156,7 +161,8 @@ namespace example
                                 return new FileStream(fileName, FileMode.OpenOrCreate);
 
                             },
-                            disposeStream: true
+                            disposeStream: true,
+                            session:sandbox
                             ).GetAwaiter().GetResult();
                     }
                     else
@@ -164,7 +170,7 @@ namespace example
                         string fileName = string.Format("{0}{1}.{2}", Path.GetTempPath(), reprintResponse.APIResponse.ShipmentId, d.FileFormat.ToString());
                         using (StreamWriter sw = new StreamWriter(fileName))
                         {
-                            DocumentsMethods.WriteToStream(d, sw.BaseStream).GetAwaiter().GetResult();
+                            DocumentsMethods.WriteToStream(d, sw.BaseStream, session: sandbox).GetAwaiter().GetResult();
                             Console.WriteLine("Document written to " + fileName);
                         }
                     }
@@ -182,13 +188,23 @@ namespace example
                 .TransactionId(Guid.NewGuid().ToString().Substring(15));
             var manifestResponse = ManifestMethods.Create<Manifest>(manifest).GetAwaiter().GetResult();
 
-            foreach (var d in manifestResponse.APIResponse.Documents)
+            if (manifestResponse.Success)
             {
-                string fileName = string.Format("{0}{1}.{2}", Path.GetTempPath(), manifestResponse.APIResponse.ManifestId, d.FileFormat.ToString());
-                using (StreamWriter sw = new StreamWriter(fileName))
+                foreach (var d in manifestResponse.APIResponse.Documents)
                 {
-                    DocumentsMethods.WriteToStream(d, sw.BaseStream).GetAwaiter().GetResult();
-                    Console.WriteLine("Document written to " + fileName);
+                    string fileName = string.Format("{0}{1}.{2}", Path.GetTempPath(), manifestResponse.APIResponse.ManifestId, d.FileFormat.ToString());
+                    try
+                    {
+                        using (StreamWriter sw = new StreamWriter(fileName))
+                        {
+                            DocumentsMethods.WriteToStream(d, sw.BaseStream, session: sandbox).GetAwaiter().GetResult();
+                            Console.WriteLine("Document written to " + fileName);
+                        }
+                    }
+                    catch( Exception e)
+                    {
+                        Console.WriteLine(e.Message);
+                    }
                 }
             }
 
@@ -374,6 +390,7 @@ namespace example
 
         private static void SetupConfigProvider()
         {
+#if !OSX
             var configs = new Dictionary<string, string>
             {
                 { "ApiKey", "YOUR_API_KEY" },
@@ -385,10 +402,25 @@ namespace example
             var configurationBuilder = new ConfigurationBuilder();
             
             configurationBuilder
-                .SetBasePath(Environment.GetEnvironmentVariable("APPDATA"))
+                .SetBasePath(Globals.GetConfigPath())
                 .AddInMemoryCollection(configs)
-                .AddJsonFile("shippingapisettings.json", optional: true, reloadOnChange: true);
+                .AddJsonFile(Globals.GetConfigFilePrefix() + "shippingapisettings.json", optional: true, reloadOnChange: true);
             Configuration = configurationBuilder.Build();
+#else
+            try
+            {
+
+                using (StreamReader file = File.OpenText(Globals.GetConfigPath() + "/.shippingapisettings.json"))
+                {
+                    var deserializer = new JsonSerializer();
+                    Configuration = (Dictionary<string, string>)deserializer.Deserialize(file, typeof(Dictionary<string, string>));
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+#endif
         }
     }
 

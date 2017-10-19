@@ -9,6 +9,12 @@
     <DefineConstants>TRACE;DEBUG;NETCOREAPP2_0,NETCORE</DefineConstants>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug OSX|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <Optimize>false</Optimize>
+    <DefineConstants>TRACE;NETCORE;DEBUG;NETCOREAPP2_0;OSX</DefineConstants>
+    <IntermediateOutputPath>obj\Debug\netcoreapp2.0</IntermediateOutputPath>
+  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="2.0.0" />

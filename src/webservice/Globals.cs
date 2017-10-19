@@ -18,6 +18,9 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR TH
 using System.Net.Http;
 using System;
 using System.Collections.Generic;
+using System.Text;
+using System.IO;
+using System.Runtime.InteropServices;
 
 
 namespace PitneyBowes.Developer.ShippingApi
@@ -46,6 +49,39 @@ namespace PitneyBowes.Developer.ShippingApi
             {
                 return client;
             }
+        }
+        // there is undoutedly a better place to put this, just cant think of it
+        public static string GetPath(params string[] folders)
+        {
+            var sb = new StringBuilder();
+            foreach (var s in folders)
+            {
+                sb.Append(s);
+                sb.Append(Path.DirectorySeparatorChar);
+            }
+            return sb.ToString();
+        }
+        public static string GetConfigPath()
+        {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                return Environment.GetEnvironmentVariable("APPDATA");
+            }
+            else
+            {
+                return Environment.GetEnvironmentVariable("HOME");
+            }
+        }
+        public static string GetConfigFilePrefix()
+        {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                return "";
+            }
+            else
+            {
+                return ".";
+            }            
         }
     }
 }
