@@ -23,7 +23,7 @@ using System;
 namespace PitneyBowes.Developer.ShippingApi.Json
 {
     [JsonObject(MemberSerialization.OptIn)]
-    public class JsonSpecialServices<T> : JsonWrapper<T>, ISpecialServices where T:ISpecialServices,new()
+    internal class JsonSpecialServices<T> : JsonWrapper<T>, ISpecialServices where T:ISpecialServices,new()
     {
         public JsonSpecialServices() : base() { }
 

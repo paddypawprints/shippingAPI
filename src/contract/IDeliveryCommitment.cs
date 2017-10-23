@@ -17,13 +17,41 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR TH
 
 namespace PitneyBowes.Developer.ShippingApi
 {
+    /// <summary>
+    /// Time in transit for the shipment.
+    /// </summary>
     public interface IDeliveryCommitment
     {
+        /// <summary>
+        /// The minimum number of delivery days.
+        /// </summary>
+        /// <value>The minimum estimated number of days.</value>
         string MinEstimatedNumberOfDays { get; set; }
+        /// <summary>
+        /// Gets or sets the max estimated number of days.
+        /// </summary>
+        /// <value>The max estimated number of days.</value>
         string MaxEstimatedNumberOfDays { get; set; }
+        /// <summary>
+        /// Gets or sets the estimated delivery date time.
+        /// </summary>
+        /// <value>The estimated delivery date time.</value>
         string EstimatedDeliveryDateTime { get; set; }
+        /// <summary>
+        /// Whether the delivery is guaranteed by the carrier.
+        /// </summary>
+        /// <value>The guarantee.</value>
         string Guarantee { get; set; }
+        /// <summary>
+        /// These are carrier specific details that may be provided.
+        /// </summary>
+        /// <value>The additional details.</value>
         string AdditionalDetails { get; set; }
      }
+
+    public static class IDeliveryCommitmentExtensions
+    {
+        public static bool IsValid(IDeliveryCommitment d) => true;
+    }
 
 }

@@ -17,14 +17,48 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR TH
 
 namespace PitneyBowes.Developer.ShippingApi
 {
+    /// <summary>
+    /// The commodity information about each item in an international shipment
+    ///   used for customs clearance.
+    ///   The maximum number of objects in the array is **30**.
+    /// </summary>
     public interface ICustomsItems
     {
+        /// <summary>
+        /// Gets or sets the description.
+        /// </summary>
+        /// <value>The description.</value>
         string Description { get; set; }
+        /// <summary>
+        /// Gets or sets the quantity.
+        /// </summary>
+        /// <value>The quantity.</value>
         int Quantity { get; set; }
+        /// <summary>
+        /// Gets or sets the unit price.
+        /// </summary>
+        /// <value>The unit price.</value>
         decimal UnitPrice { get; set; }
+        /// <summary>
+        /// Gets or sets the unit weight.
+        /// </summary>
+        /// <value>The unit weight.</value>
         IParcelWeight UnitWeight { get; set; }
+        /// <summary>
+        /// Harmonized Tariff associated with the commodity.
+        /// </summary>
+        /// <value>Harmonized Tariff associated with the commodity.</value>
         string HSTariffCode { get; set; }
+        /// <summary>
+        /// The county code of the shipment origin. Use ISO 3166-1 alpha-2 standard values.
+        /// </summary>
+        /// <value>The origin country code.</value>
         string OriginCountryCode { get; set; }
+    }
+
+    public static class ICustomsItemsExtensions
+    {
+        public static bool IsValid(this ICustomsItems i) => true;
     }
 
 }

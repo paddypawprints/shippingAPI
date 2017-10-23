@@ -19,7 +19,15 @@ namespace PitneyBowes.Developer.ShippingApi
 {
     public interface ICountry
     {
+        /// <summary>
+        /// Gets or sets the country code.
+        /// </summary>
+        /// <value>The country code.</value>
         string CountryCode { get; set; }
+        /// <summary>
+        /// Gets or sets the name of the country.
+        /// </summary>
+        /// <value>The name of the country.</value>
         string CountryName { get; set; }
     }
 

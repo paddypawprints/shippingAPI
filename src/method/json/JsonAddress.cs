@@ -29,7 +29,7 @@ namespace PitneyBowes.Developer.ShippingApi.Json
     /// </summary>
    
     [JsonObject(MemberSerialization.OptIn)]
-    public class JsonAddress<T> : JsonWrapper<T>, IAddress, IShippingApiRequest where T : IAddress, new()
+    internal class JsonAddress<T> : JsonWrapper<T>, IAddress, IShippingApiRequest where T : IAddress, new()
     {
         public JsonAddress() : base() {}
 

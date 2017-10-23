@@ -24,6 +24,18 @@ namespace PitneyBowes.Developer.ShippingApi
 {
     public static class DocumentsMethods
     {
+        /// <summary>
+        /// Writes a document to a stream. Figures out file format and content type and performs the appropriate action to get the document. 
+        /// The stream will have the actual document contents.
+        /// </summary>
+        /// <returns>The to stream.</returns>
+        /// <param name="document">Document to stram.</param>
+        /// <param name="stream">Stream.</param>
+        /// <param name="nextPageAction">Next page action. In the event there are multiple pages, this method allows the caller to close the current stream and open \
+        /// a new one - to copy each document to a separate file, for instance. </param>
+        /// <param name="disposeStream">If set to <c>true</c> dispose stream. This should be set for multipage documents because an exception might leave the stream open
+        /// </param>
+        /// <param name="session">Session.</param>
         public static async Task WriteToStream(IDocument document, Stream stream, Func<Stream,int, Stream> nextPageAction = null, bool disposeStream = false, ISession session = null )
         {
             if (document.ContentType == ContentType.BASE64)
@@ -53,13 +65,13 @@ namespace PitneyBowes.Developer.ShippingApi
             }
         }
 
-        public static async Task WriteBase64Page(string page, Stream stream, ISession session )
+        private static async Task WriteBase64Page(string page, Stream stream, ISession session )
         {
             var buffer = Convert.FromBase64String(page);
             await stream.WriteAsync(buffer, 0, buffer.Length);
             await stream.FlushAsync();
         }
-        public static async Task WriteURL(string page, Stream stream, FileFormat format, ISession session)
+        private static async Task WriteURL(string page, Stream stream, FileFormat format, ISession session)
         {
             var uri = new Uri(page);
             var client = Globals.Client(uri.GetComponents(UriComponents.SchemeAndServer,UriFormat.Unescaped));

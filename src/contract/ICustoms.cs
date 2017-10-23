@@ -19,10 +19,35 @@ using System.Collections.Generic;
 
 namespace PitneyBowes.Developer.ShippingApi
 {
+    /// <summary>
+    /// Customs clearance information that is used to fill out a commercial invoice
+    /// </summary>
     public interface ICustoms
     {
         ICustomsInfo CustomsInfo { get; set; }
+        /// <summary>
+        /// The commodity information about each item in an international shipment
+        ///used for customs clearance.
+        ///The maximum number of objects in the array is **30**.
+        /// </summary>
+        /// <value>The customs items.</value>
         IEnumerable<ICustomsItems> CustomsItems { get; set; }
         ICustomsItems AddCustomsItems(ICustomsItems c);
+    }
+
+    public static class ICustomsExtensions
+    {
+        public static bool IsValid(this ICustoms customs)
+        {
+            if (!customs.CustomsInfo.IsValid()) return false;
+            if (customs.CustomsItems == null) return true;
+            int count = 0;
+            foreach( var i in customs.CustomsItems )
+            {
+                count++;
+                if (!i.IsValid()) return false;
+            }
+            return count <= 30;
+        }
     }
 }

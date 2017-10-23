@@ -114,7 +114,7 @@ namespace example
                     .USPSPriority<Rates, Parameter>()
                     .InductionPostalCode("06484")
                     )
-                .Documents(DocumentsArrayFluent<Document>.Create()
+                .Documents((IEnumerable<IDocument>)DocumentsArrayFluent<Document>.Create()
                     .ShippingLabel(ContentType.BASE64, Size.DOC_4X6, FileFormat.ZPL2)
                     )
                 .ShipmentOptions(ShipmentOptionsArrayFluent<ShipmentOptions>.Create()
@@ -215,7 +215,7 @@ namespace example
                 .PackageLocation(PackageLocation.MailRoom)
                 .PickupAddress(((Shipment)shipment).FromAddress)
                 .PickupDate(DateTime.Now.AddDays(1))
-                .AddPickupSummary<PickupCount, ParcelWeight>(Services.PM, 1, 16M, UnitOfWeight.OZ)
+                .AddPickupSummary<PickupCount, ParcelWeight>(PickupService.PM, 1, 16M, UnitOfWeight.OZ)
                 .TransactionId(Guid.NewGuid().ToString().Substring(15));
             var pickupResponse = PickupMethods.Schedule<Pickup>(pickup).GetAwaiter().GetResult();
 
@@ -317,7 +317,7 @@ namespace example
                             .SuggestedTrackingServiceFromRule<Rates, SpecialServices>(ruleItem.Item3)
                             .InductionPostalCode(from.PostalCode)
                             )
-                        .Documents(DocumentsArrayFluent<Document>.Create()
+                        .Documents((IEnumerable<IDocument>)DocumentsArrayFluent<Document>.Create()
                             .ShippingLabel()
                             )
                         .ShipmentOptions(ShipmentOptionsArrayFluent<ShipmentOptions>.Create()

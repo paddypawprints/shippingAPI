@@ -17,12 +17,35 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR TH
 
 namespace PitneyBowes.Developer.ShippingApi.Model
 {
+    /// <summary>
+    /// Time in transit for the shipment.
+    /// </summary>
     public class DeliveryCommitment : IDeliveryCommitment
     {
+        /// <summary>
+        /// Gets or sets the minimum estimated number of days.
+        /// </summary>
+        /// <value>The minimum estimated number of days.</value>
         virtual public string MinEstimatedNumberOfDays { get; set;}
+        /// <summary>
+        /// Gets or sets the max estimated number of days.
+        /// </summary>
+        /// <value>The max estimated number of days.</value>
         virtual public string MaxEstimatedNumberOfDays { get; set;}
+        /// <summary>
+        /// Gets or sets the estimated delivery date time.
+        /// </summary>
+        /// <value>The estimated delivery date time.</value>
         virtual public string EstimatedDeliveryDateTime { get;set;}
+        /// <summary>
+        /// Whether the shipment is guaranteed by the carrier.
+        /// </summary>
+        /// <value>The guarantee.</value>
         virtual public string Guarantee {get;set;}
+        /// <summary>
+        /// These are carrier specific details that may be provided.
+        /// </summary>
+        /// <value>The additional details.</value>
         virtual public string AdditionalDetails {get;set;}        
     }
 

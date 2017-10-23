@@ -26,14 +26,29 @@ namespace PitneyBowes.Developer.ShippingApi.Model
         public SpecialServices()
         {
         }
-
+        /// <summary>
+        /// Gets or sets the special service identifier.
+        /// </summary>
+        /// <value>The special service identifier.</value>
         virtual public SpecialServiceCodes SpecialServiceId { get; set;}
+        /// <summary>
+        /// Gets or sets the input parameters.
+        /// </summary>
+        /// <value>The input parameters.</value>
         virtual public IEnumerable<IParameter> InputParameters { get; set; }
         virtual public void AddParameter(IParameter p)
         {
             ModelHelper.AddToEnumerable<IParameter, Parameter>(p, () => InputParameters, (x) => InputParameters = x);
         }
+        /// <summary>
+        /// Gets or sets the fee.
+        /// </summary>
+        /// <value>The fee.</value>
         virtual public decimal Fee { get; set;}
+        /// <summary>
+        /// Gets or sets the value.
+        /// </summary>
+        /// <value>The value.</value>
         virtual public decimal Value
         {
             get

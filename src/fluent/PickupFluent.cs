@@ -104,7 +104,7 @@ namespace PitneyBowes.Developer.ShippingApi.Fluent
             return this;
         }
 
-        public PickupFluent<T> AddPickupSummary<C,W>(Services s, int c, decimal w, UnitOfWeight u ) where C : IPickupCount, new() where W: IParcelWeight, new()
+        public PickupFluent<T> AddPickupSummary<C,W>(PickupService s, int c, decimal w, UnitOfWeight u ) where C : IPickupCount, new() where W: IParcelWeight, new()
         {
             var ct = new C
             {

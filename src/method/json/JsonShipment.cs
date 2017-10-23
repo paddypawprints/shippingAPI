@@ -26,7 +26,7 @@ using System.IO;
 namespace PitneyBowes.Developer.ShippingApi.Json
 {
     [JsonObject(MemberSerialization.OptIn)]
-    public class JsonShipment<T> : JsonWrapper<T>, IShipment, IShippingApiRequest where T : IShipment, new()
+    internal class JsonShipment<T> : JsonWrapper<T>, IShipment, IShippingApiRequest where T : IShipment, new()
     {
         public JsonShipment() : base() { }
 

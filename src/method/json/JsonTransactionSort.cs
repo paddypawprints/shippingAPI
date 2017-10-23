@@ -23,7 +23,7 @@ using System.Collections.Generic;
 namespace PitneyBowes.Developer.ShippingApi.Json
 {
     [JsonObject(MemberSerialization.OptIn)]
-    public class JsonTransactionSort<T> : JsonWrapper<T>, ITransactionSort where T : ITransactionSort, new()
+    internal class JsonTransactionSort<T> : JsonWrapper<T>, ITransactionSort where T : ITransactionSort, new()
     {
         public JsonTransactionSort() : base() { }
         public JsonTransactionSort(T t) : base(t) { }

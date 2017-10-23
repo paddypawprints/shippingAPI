@@ -19,6 +19,10 @@ namespace PitneyBowes.Developer.ShippingApi.Model
 {
     public class Page : IPage
     {
+        /// <summary>
+        /// Gets or sets the contents.
+        /// </summary>
+        /// <value>The contents.</value>
         public string Contents { get; set; }
     }
 }

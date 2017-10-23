@@ -17,7 +17,7 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR TH
 
 namespace PitneyBowes.Developer.ShippingApi.Json
 {
-    public abstract class JsonWrapper<T> where T: new()
+    internal abstract class JsonWrapper<T> where T: new()
     {
         public JsonWrapper()
         {

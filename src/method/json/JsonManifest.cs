@@ -25,7 +25,7 @@ using System.Text;
 namespace PitneyBowes.Developer.ShippingApi.Json
 {
     [JsonObject(MemberSerialization.OptIn)]
-    public class JsonManifest<T> : JsonWrapper<T>, IShippingApiRequest, IManifest where T : IManifest, new()
+    internal class JsonManifest<T> : JsonWrapper<T>, IShippingApiRequest, IManifest where T : IManifest, new()
     {
         public JsonManifest() : base() { }
 

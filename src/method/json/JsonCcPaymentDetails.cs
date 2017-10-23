@@ -22,7 +22,7 @@ using Newtonsoft.Json.Converters;
 namespace PitneyBowes.Developer.ShippingApi.Json
 {
     [JsonObject(MemberSerialization.OptIn)]
-    public class JsonCcPaymentDetails<T> : JsonWrapper<T>, ICcPaymentDetails where T : ICcPaymentDetails, new()
+    internal class JsonCcPaymentDetails<T> : JsonWrapper<T>, ICcPaymentDetails where T : ICcPaymentDetails, new()
     {
         public JsonCcPaymentDetails() : base() { }
         public JsonCcPaymentDetails(T t) : base(t) { }

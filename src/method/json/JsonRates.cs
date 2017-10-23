@@ -25,7 +25,7 @@ using System.IO;
 namespace PitneyBowes.Developer.ShippingApi.Json
 {
     [JsonObject(MemberSerialization.OptIn)]
-    public class JsonRates<T> : JsonWrapper<T>, IShippingApiRequest, IRates where T:IRates, new()
+    internal class JsonRates<T> : JsonWrapper<T>, IShippingApiRequest, IRates where T:IRates, new()
     {
         public JsonRates() : base() { }
 

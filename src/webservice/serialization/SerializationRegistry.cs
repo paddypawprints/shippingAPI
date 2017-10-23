@@ -61,7 +61,6 @@ namespace PitneyBowes.Developer.ShippingApi
         {
             _wrapperRegistry.Add(typeof(IAddress), typeof(JsonAddress<>));
             _wrapperRegistry.Add(typeof(IAutoRefill), typeof(JsonAutoRefill<>));
-            _wrapperRegistry.Add(typeof(ICarrierPickup), typeof(JsonCarrierPickup<>));
             _wrapperRegistry.Add(typeof(ICcPaymentDetails), typeof(JsonCcPaymentDetails<>));
             _wrapperRegistry.Add(typeof(ICountry), typeof(JsonCountry<>));
             _wrapperRegistry.Add(typeof(ICustoms), typeof(JsonCustoms<>));

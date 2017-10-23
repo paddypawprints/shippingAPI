@@ -22,7 +22,7 @@ using System.Collections.Generic;
 namespace PitneyBowes.Developer.ShippingApi.Json
 {
     [JsonObject(MemberSerialization.OptIn)]
-    public class JsonDocument<T> : JsonWrapper<T>, IDocument where T : IDocument, new()
+    internal class JsonDocument<T> : JsonWrapper<T>, IDocument where T : IDocument, new()
     {
         public JsonDocument() : base() { }
 

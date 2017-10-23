@@ -19,9 +19,30 @@ namespace PitneyBowes.Developer.ShippingApi
 {
     public interface  IPickupCount
     {
-        Services ServiceId { get; set; }
+        /// <summary>
+        /// Gets or sets the service identifier. Not that this is a subset of the full set of services.
+        /// </summary>
+        /// <value>The service identifier.</value>
+        PickupService ServiceId { get; set; }
+        /// <summary>
+        /// Gets or sets the count. The number of parcels for each service type requested. This field
+        /// is used only in the request.It is not returned in the response.
+        /// </summary>
+        /// <value>The count.</value>
         int Count { get; set; }
+        /// <summary>
+        /// Gets or sets the total weight.
+        /// </summary>
+        /// <value>The total weight.</value>
         IParcelWeight TotalWeight { get; set; }
+    }
+
+    public static class IPickupCountExtensions
+    {
+        public static bool IsValid(this IPickupCount c)
+        {
+            return c.Count > 0;
+        }
     }
 }
 

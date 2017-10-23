@@ -22,16 +22,70 @@ namespace PitneyBowes.Developer.ShippingApi
 {
     public interface IPickup
     {
+        /// <summary>
+        /// Unique transaction identifier.
+        /// </summary>
+        /// <value>The transaction identifier.</value>
         string TransactionId { get; set; }
+        /// <summary>
+        /// Gets or sets the pickup address. Required.
+        /// </summary>
+        /// <value>The pickup address.</value>
         IAddress PickupAddress { get; set; }
+        /// <summary>
+        /// Gets or sets the carrier.
+        /// </summary>
+        /// <value>The carrier. Only USPS supported.</value>
         Carrier Carrier { get; set; }
+        /// <summary>
+        /// The parcel descriptions. Each object in the array describes a group of parcels.
+        /// </summary>
+        /// <value>The pickup summary.</value>
         IEnumerable<IPickupCount> PickupSummary { get; set; }
         void AddPickupCount(IPickupCount p);
+        /// <summary>
+        /// Gets or sets the reference.
+        /// </summary>
+        /// <value>The reference.</value>
         string Reference { get; set; }
+        /// <summary>
+        /// Gets or sets the package location.
+        /// </summary>
+        /// <value>The package location.</value>
         PackageLocation PackageLocation { get; set; }
+        /// <summary>
+        /// Gets or sets the special instructions. Required if PackageLocation = Other
+        /// </summary>
+        /// <value>The special instructions.</value>
         string SpecialInstructions { get; set; }
+        /// <summary>
+        /// Gets or sets the pickup date. Response only.
+        /// </summary>
+        /// <value>The pickup date.</value>
         DateTime PickupDate { get; set; }
+        /// <summary>
+        /// Gets or sets the pickup confirmation number. Response only.
+        /// </summary>
+        /// <value>The pickup confirmation number.</value>
         string PickupConfirmationNumber { get; set; }
+        /// <summary>
+        /// Gets or sets the pickup identifier. Response only.
+        /// </summary>
+        /// <value>The pickup identifier.</value>
         string PickupId { get; set; }
     }
+
+    public static class IPickupExtensions
+    {
+        public static bool IsValid(this IPickup p)
+        {
+            if (p.PickupAddress == null) return false;
+            if (p.PackageLocation == PackageLocation.Other)
+            {
+                if (p.SpecialInstructions == null || p.SpecialInstructions == string.Empty) return false;
+            }
+            return true;
+        }
+    }
 }
+

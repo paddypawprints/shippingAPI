@@ -21,7 +21,7 @@ using Newtonsoft.Json;
  namespace PitneyBowes.Developer.ShippingApi.Json
  {
     [JsonObject(MemberSerialization.OptIn)]
-    public class JsonToken<T> : JsonWrapper<T>, IToken where T:IToken, new()
+    internal class JsonToken<T> : JsonWrapper<T>, IToken where T:IToken, new()
     {
         public JsonToken() : base() { }
 

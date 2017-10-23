@@ -19,9 +19,25 @@ namespace PitneyBowes.Developer.ShippingApi
 {
     public interface IParcel
     {
+        /// <summary>
+        /// Gets or sets the dimension.
+        /// </summary>
+        /// <value>The dimension.</value>
         IParcelDimension Dimension { get; set; }
+        /// <summary>
+        /// Gets or sets the weight.
+        /// </summary>
+        /// <value>The weight.</value>
         IParcelWeight Weight { get; set; }
+        /// <summary>
+        /// Gets or sets the value of goods.
+        /// </summary>
+        /// <value>The value of goods.</value>
         decimal ValueOfGoods { get; set; }
+        /// <summary>
+        /// Gets or sets the currency code.
+        /// </summary>
+        /// <value>The currency code.</value>
         string CurrencyCode { get; set; }
     }
 }

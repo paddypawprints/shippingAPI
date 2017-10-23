@@ -23,7 +23,7 @@ using System.Collections.Generic;
 namespace PitneyBowes.Developer.ShippingApi.Json
 {
     [JsonObject(MemberSerialization.OptIn)]
-    public class JsonPaymentInfo<T> : JsonWrapper<T>, IPaymentInfo where T : IPaymentInfo, new()
+    internal class JsonPaymentInfo<T> : JsonWrapper<T>, IPaymentInfo where T : IPaymentInfo, new()
     {
         public JsonPaymentInfo() : base() { }
         public JsonPaymentInfo(T t) : base(t) { }

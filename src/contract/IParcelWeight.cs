@@ -19,7 +19,15 @@ namespace PitneyBowes.Developer.ShippingApi
 {
     public interface IParcelWeight
     {
+        /// <summary>
+        /// Gets or sets the weight.
+        /// </summary>
+        /// <value>The weight.</value>
         decimal Weight { get; set; }
+        /// <summary>
+        /// Gets or sets the unit of measurement.
+        /// </summary>
+        /// <value>The unit of measurement.</value>
         UnitOfWeight UnitOfMeasurement { get; set; }
     }
 }

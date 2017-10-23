@@ -25,7 +25,7 @@ using System.Collections.Generic;
 namespace PitneyBowes.Developer.ShippingApi.Json
 {
     [JsonObject(MemberSerialization.OptIn)]
-    public class JsonPickup<T> : JsonWrapper<T>, IShippingApiRequest, IPickup where T : IPickup, new()
+    internal class JsonPickup<T> : JsonWrapper<T>, IShippingApiRequest, IPickup where T : IPickup, new()
     {
         public JsonPickup() : base() { }
         public JsonPickup(T t) : base(t) { }

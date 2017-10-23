@@ -21,7 +21,7 @@ using Newtonsoft.Json.Converters;
 namespace PitneyBowes.Developer.ShippingApi.Json
 {
     [JsonObject(MemberSerialization.OptIn)]
-    public class JsonParcelWeight<T> : JsonWrapper<T>, IParcelWeight where T : IParcelWeight, new()
+    internal class JsonParcelWeight<T> : JsonWrapper<T>, IParcelWeight where T : IParcelWeight, new()
     {
         public JsonParcelWeight() : base() { }
 

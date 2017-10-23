@@ -20,7 +20,7 @@ using Newtonsoft.Json;
 namespace PitneyBowes.Developer.ShippingApi.Json
 {
     [JsonObject(MemberSerialization.OptIn)]
-    public class JsonPage<T> : JsonWrapper<T>, IPage where T : IPage, new()
+    internal class JsonPage<T> : JsonWrapper<T>, IPage where T : IPage, new()
     {
         public JsonPage() : base() { }
 

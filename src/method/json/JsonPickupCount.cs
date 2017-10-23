@@ -23,14 +23,14 @@ using System.Collections.Generic;
 namespace PitneyBowes.Developer.ShippingApi.Json
 {
     [JsonObject(MemberSerialization.OptIn)]
-    public class JsonPickupCount<T> : JsonWrapper<T>, IPickupCount where T : IPickupCount, new()
+    internal class JsonPickupCount<T> : JsonWrapper<T>, IPickupCount where T : IPickupCount, new()
     {
         public JsonPickupCount() : base() { }
         public JsonPickupCount(T t) : base(t) { }
 
         [JsonProperty("serviceId")]
         [JsonConverter(typeof(StringEnumConverter))]
-        public Services ServiceId
+        public PickupService ServiceId
         {
             get => Wrapped.ServiceId;
             set { Wrapped.ServiceId = value; }

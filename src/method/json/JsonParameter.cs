@@ -21,7 +21,7 @@ namespace PitneyBowes.Developer.ShippingApi.Json
 
 {
     [JsonObject(MemberSerialization.OptIn)]
-    public class JsonParameter<T> : JsonWrapper<T>, IParameter where T:IParameter, new()
+    internal class JsonParameter<T> : JsonWrapper<T>, IParameter where T:IParameter, new()
     {
         
         public JsonParameter() : base() { }

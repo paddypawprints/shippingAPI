@@ -20,7 +20,7 @@ using Newtonsoft.Json;
 namespace PitneyBowes.Developer.ShippingApi.Json
 {
     [JsonObject(MemberSerialization.OptIn)]
-    public class JsonCustomsItems<T> : JsonWrapper<T>, ICustomsItems where T : ICustomsItems, new()
+    internal class JsonCustomsItems<T> : JsonWrapper<T>, ICustomsItems where T : ICustomsItems, new()
     {
         public JsonCustomsItems() : base() { }
 

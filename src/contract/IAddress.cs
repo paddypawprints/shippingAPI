@@ -26,17 +26,73 @@ namespace PitneyBowes.Developer.ShippingApi
 
     public interface IAddress
     {
+        /// <summary>
+        /// Street address and/or apartment and/or P.O. Box. You can specify up to
+        /// three address lines.
+        /// For USPS domestic destinations, ensure that the street address is
+        /// specified as the last of the 3 address lines.This way, the street
+        /// address is printed right above the city, state, postal zip code, per
+        /// USPS label guidelines.
+        /// 
+        /// See <a href="https://shipping.pitneybowes.com/api/post-shipments.html"/> for considerations when specifying
+        /// multiple lines in a shipment's ``fromAddress`` when
+        /// ``MINIMAL_ADDRESS_VALIDATION`` is enabled.
+        /// </summary>
+        /// <value>The address lines.</value>
         IEnumerable<string> AddressLines { get; set; }
         void AddAddressLine( string s);
+        /// <summary>
+        /// Gets or sets the city town.
+        /// </summary>
+        /// <value>The city town.</value>
         string CityTown { get; set; }
+        /// <summary>
+        /// Gets or sets the state province. For US address, use the 2-letter state code.
+        /// </summary>
+        /// <value>The state province.</value>
         string StateProvince { get; set; }
+        /// <summary>
+        /// Gets or sets the postal code. Two-character country code from the ISO country list.
+        /// </summary>
+        /// <value>The postal code.</value>
         string PostalCode { get; set; }
+        /// <summary>
+        /// Gets or sets the country code.
+        /// </summary>
+        /// <value>The country code.</value>
         string CountryCode { get; set; }
+        /// <summary>
+        /// Gets or sets the company.
+        /// </summary>
+        /// <value>The company.</value>
         string Company { get; set; }
+        /// <summary>
+        /// Gets or sets the name.
+        /// </summary>
+        /// <value>The name.</value>
         string Name { get; set; }
+        /// <summary>
+        /// Gets or sets the phone.
+        /// </summary>
+        /// <value>The phone.</value>
         string Phone { get; set; }
+        /// <summary>
+        /// Gets or sets the email.
+        /// </summary>
+        /// <value>The email.</value>
         string Email { get; set; }
+        /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="T:PitneyBowes.Developer.ShippingApi.IAddress"/> is residential. Indicates whether this is a residential address. It is recommended that
+        /// this parameter be passed in as the address verification process is more accurate with it.
+        /// </summary>
+        /// <value><c>true</c> if residential; otherwise, <c>false</c>.</value>
         bool Residential { get; set; }
+        /// <summary>
+        /// The response returns this field only if
+        /// ``MINIMAL_ADDRESS_VALIDATION`` is **NOT** enabled
+        /// This indicates whether any action has been performed on the address during cleansing.
+        /// </summary>
+        /// <value>The status.</value>
         AddressStatus Status { get; set; }
     }
 }

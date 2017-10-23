@@ -22,9 +22,25 @@ namespace PitneyBowes.Developer.ShippingApi.Model
 {
     public class Pickup : IPickup
     {
+        /// <summary>
+        /// Unique transaction identifier.
+        /// </summary>
+        /// <value>The transaction identifier.</value>
         virtual public string TransactionId { get; set; }
+        /// <summary>
+        /// Gets or sets the pickup address. Required.
+        /// </summary>
+        /// <value>The pickup address.</value>
         virtual public IAddress PickupAddress{get; set;}
+        /// <summary>
+        /// Gets or sets the carrier. Only USPS supported.
+        /// </summary>
+        /// <value>The carrier. Only USPS supported.</value>
         virtual public Carrier Carrier{get; set;}
+        /// <summary>
+        /// The parcel descriptions. Each object in the array describes a group of parcels.
+        /// </summary>
+        /// <value>The pickup summary.</value>
         virtual public IEnumerable<IPickupCount> PickupSummary{get; set;}
         virtual public string Reference{get; set;}
         virtual public PackageLocation PackageLocation{get; set;}

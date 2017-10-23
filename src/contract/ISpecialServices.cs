@@ -21,10 +21,30 @@ namespace PitneyBowes.Developer.ShippingApi
 {
     public interface ISpecialServices
     {
+        /// <summary>
+        /// Gets or sets the special service identifier.
+        /// </summary>
+        /// <value>The special service identifier.</value>
         SpecialServiceCodes SpecialServiceId { get; set; }
+        /// <summary>
+        /// Gets or sets the input parameters.
+        /// </summary>
+        /// <value>The input parameters.</value>
         IEnumerable<IParameter> InputParameters { get; set; }
+        /// <summary>
+        /// Adds the parameter.
+        /// </summary>
+        /// <param name="p">Parameter.</param>
         void AddParameter(IParameter p);
+        /// <summary>
+        /// Gets or sets the value.
+        /// </summary>
+        /// <value>The value.</value>
         decimal Value { get; set; }
+        /// <summary>
+        /// Gets or sets the fee.
+        /// </summary>
+        /// <value>The fee.</value>
         decimal Fee { get; set; }
     }
 }

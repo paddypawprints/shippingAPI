@@ -19,6 +19,9 @@ using System.Collections.Generic;
 
 namespace PitneyBowes.Developer.ShippingApi.Model
 {
+    /// <summary>
+    /// Customs clearance information that is used to fill out a commercial invoice
+    /// </summary>
     public class Customs : ICustoms
     {
         public Customs()
@@ -26,6 +29,12 @@ namespace PitneyBowes.Developer.ShippingApi.Model
             CustomsItems = new List<CustomsItems>();
         }
         virtual public ICustomsInfo CustomsInfo { get; set;}
+        /// <summary>
+        /// The commodity information about each item in an international shipment
+        /// used for customs clearance.
+        /// The maximum number of objects in the array is **30**.
+        /// </summary>
+        /// <value>The customs items.</value>
         virtual public IEnumerable<ICustomsItems> CustomsItems { get; set; }
         virtual public ICustomsItems AddCustomsItems(ICustomsItems c)
         {

@@ -213,6 +213,38 @@ namespace PitneyBowes.Developer.ShippingApi
         PurchasePower
     }
 
+    public enum PickupService
+    {
+        /// <summary>
+        /// First-Class Mail
+        /// </summary>
+        FCM,
+        /// <summary>
+        /// Priority Mail
+        /// </summary>
+        PM,
+        /// <summary>
+        /// Priority Mail Express
+        /// </summary>
+        EM,
+        /// <summary>
+        /// Parcel Select
+        /// </summary>
+        PRCLSEL,
+        /// <summary>
+        /// Use INT for all international services:
+        ///    First-Class Mail International,
+        ///    First-Class Package International Service,
+        ///    Priority Mail Express International, and
+        ///    Priority Mail International
+        /// </summary>
+        INT,
+        /// <summary>
+        /// Other Packages
+        /// </summary>
+        OTH
+    }
+
     /// <summary>
     /// PDF documents only.This defines an option to embed script that can render an interactive print dialog box for the end user within the shipment document/label.
     /// </summary>

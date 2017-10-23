@@ -21,11 +21,35 @@ namespace PitneyBowes.Developer.ShippingApi.Model
 {
     public class CustomsItems : ICustomsItems
     {
+        /// <summary>
+        /// Gets or sets the description.
+        /// </summary>
+        /// <value>The description.</value>
         virtual public string Description { get; set;}
+        /// <summary>
+        /// Gets or sets the quantity.
+        /// </summary>
+        /// <value>The quantity.</value>
         virtual public int Quantity { get; set;}
+        /// <summary>
+        /// Gets or sets the unit price.
+        /// </summary>
+        /// <value>The unit price.</value>
         virtual public decimal UnitPrice { get;set;}
+        /// <summary>
+        /// Gets or sets the unit weight.
+        /// </summary>
+        /// <value>The unit weight.</value>
         virtual public IParcelWeight UnitWeight {get;set;}
+        /// <summary>
+        /// Harmonized Tariff associated with the commodity.
+        /// </summary>
+        /// <value>Harmonized Tariff associated with the commodity.code.</value>
         virtual public string HSTariffCode {get;set;}
+        /// <summary>
+        /// The county code of the shipment origin. Use ISO 3166-1 alpha-2 standard values.
+        /// </summary>
+        /// <value>The origin country code.</value>
         virtual public string OriginCountryCode {get;set;}
     }
 

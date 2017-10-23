@@ -20,7 +20,7 @@ using Newtonsoft.Json;
 namespace PitneyBowes.Developer.ShippingApi.Json
 {
     [JsonObject(MemberSerialization.OptIn)]
-    public class JsonDeliveryCommitment<T> : JsonWrapper<T>, IDeliveryCommitment where T:IDeliveryCommitment, new()
+    internal class JsonDeliveryCommitment<T> : JsonWrapper<T>, IDeliveryCommitment where T:IDeliveryCommitment, new()
     {
         public JsonDeliveryCommitment() : base() { }
 

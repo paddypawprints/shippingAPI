@@ -19,9 +19,25 @@ namespace PitneyBowes.Developer.ShippingApi.Model
 {
     public class Parcel : IParcel
     {
+        /// <summary>
+        /// Gets or sets the dimension.
+        /// </summary>
+        /// <value>The dimension.</value>
         virtual public IParcelDimension Dimension { get; set; }
+        /// <summary>
+        /// Gets or sets the weight.
+        /// </summary>
+        /// <value>The weight.</value>
         virtual public IParcelWeight Weight { get; set; }
+        /// <summary>
+        /// Gets or sets the value of goods.
+        /// </summary>
+        /// <value>The value of goods.</value>
         virtual public decimal ValueOfGoods { get;set;}
+        /// <summary>
+        /// Gets or sets the currency code.
+        /// </summary>
+        /// <value>The currency code.</value>
         virtual public string CurrencyCode {get;set;}
     }
 }

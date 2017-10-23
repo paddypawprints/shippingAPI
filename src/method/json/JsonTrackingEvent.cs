@@ -21,7 +21,7 @@ using Newtonsoft.Json;
 namespace PitneyBowes.Developer.ShippingApi.Json
 {
     [JsonObject(MemberSerialization.OptIn)]
-    public class JsonTrackingEvent<T> : JsonWrapper<T>, ITrackingEvent where T : ITrackingEvent, new()
+    internal class JsonTrackingEvent<T> : JsonWrapper<T>, ITrackingEvent where T : ITrackingEvent, new()
     {
         public JsonTrackingEvent() : base() { }
         public JsonTrackingEvent(T t) : base(t) { }

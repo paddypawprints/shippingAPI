@@ -21,7 +21,7 @@ using Newtonsoft.Json.Converters;
 namespace PitneyBowes.Developer.ShippingApi.Json
 {
     [JsonObject(MemberSerialization.OptIn)]
-    public class JsonShipmentOptions<T> : JsonWrapper<T>, IShipmentOptions where T: IShipmentOptions, new()
+    internal class JsonShipmentOptions<T> : JsonWrapper<T>, IShipmentOptions where T: IShipmentOptions, new()
     {
         public JsonShipmentOptions() : base() { }
 

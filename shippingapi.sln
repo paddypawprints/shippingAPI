@@ -13,6 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Copyright.snippet = Copyright.snippet
 		LICENSE.md = LICENSE.md
 		README.md = README.md
+		src\docfx.json = src\docfx.json
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests", "tests\tests.core\tests.csproj", "{7AAECB19-343F-46E6-BECF-F55D52AF52B4}"

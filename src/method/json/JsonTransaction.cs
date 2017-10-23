@@ -22,7 +22,7 @@ using Newtonsoft.Json.Converters;
 namespace PitneyBowes.Developer.ShippingApi.Json
 {
     [JsonObject(MemberSerialization.OptIn)]
-    public class JsonTransaction<T> : JsonWrapper<T>, ITransaction where T : ITransaction, new()
+    internal class JsonTransaction<T> : JsonWrapper<T>, ITransaction where T : ITransaction, new()
     {
         public JsonTransaction() : base() { }
         public JsonTransaction(T t) : base(t) { }

@@ -23,7 +23,7 @@ using System.Collections.Generic;
 namespace PitneyBowes.Developer.ShippingApi.Json
 {
     [JsonObject(MemberSerialization.OptIn)]
-    public class JsonAutoRefill<T> : JsonWrapper<T>, IAutoRefill where T : IAutoRefill, new()
+    internal class JsonAutoRefill<T> : JsonWrapper<T>, IAutoRefill where T : IAutoRefill, new()
     {
         public JsonAutoRefill() : base() { }
         public JsonAutoRefill(T t) : base(t) { }

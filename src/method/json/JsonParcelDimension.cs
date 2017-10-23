@@ -21,7 +21,7 @@ using Newtonsoft.Json.Converters;
 namespace PitneyBowes.Developer.ShippingApi.Json
 {
     [JsonObject(MemberSerialization.OptIn)]
-    public class JsonParcelDimension<T> : JsonWrapper<T>, IParcelDimension where T : IParcelDimension, new()
+    internal class JsonParcelDimension<T> : JsonWrapper<T>, IParcelDimension where T : IParcelDimension, new()
     {
         public JsonParcelDimension() : base() { }
 

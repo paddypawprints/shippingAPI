@@ -19,10 +19,30 @@ namespace PitneyBowes.Developer.ShippingApi.Model
 {
     public class ParcelDimension : IParcelDimension
     {
+        /// <summary>
+        /// Gets or sets the length.
+        /// </summary>
+        /// <value>The length.</value>
         virtual public decimal Length { get; set;}
+        /// <summary>
+        /// Gets or sets the height.
+        /// </summary>
+        /// <value>The height.</value>
         virtual public decimal Height { get; set;}
+        /// <summary>
+        /// Gets or sets the width.
+        /// </summary>
+        /// <value>The width.</value>
         virtual public decimal Width { get;set;}
+        /// <summary>
+        /// Gets or sets the unit of measurement.
+        /// </summary>
+        /// <value>The unit of measurement.</value>
         virtual public UnitOfDimension UnitOfMeasurement {get;set;}
+        /// <summary>
+        /// Gets or sets the irregular parcel girth.
+        /// </summary>
+        /// <value>The irregular parcel girth.</value>
         virtual public decimal IrregularParcelGirth {get;set;}
     }
 }

@@ -21,9 +21,48 @@ namespace PitneyBowes.Developer.ShippingApi.Model
 {
     public class AutoRefill : IAutoRefill
     {
+        /// <summary>
+        /// The value of this field depends on whether the object is part of the
+        /// request or the response:
+        /// - **Request**: This field is set to the ``postalReportingNumber`` for
+        ///      the merchant, as found in the :ref:`merchant object <object-merchant>`.
+        /// - **Response**: This field is set to the ``paymentAccountNumber`` for
+        /// the merchant, as found in the :ref:`merchant object <object-merchant>`.
+        /// **Note:** The merchant's ``postalReportingNumber`` is separate from the
+        /// merchant's ``paymentAccountNumber``.
+        /// </summary>
+        /// <value>The merchant identifier.</value>
         virtual public string MerchantID{get; set;}
+        /// <summary>
+        /// This field is *required* in a request if you are doing any of the following:
+        /// - enabling automatic refill
+        /// - updating the threshold
+        /// - updating the refill amount
+        /// If you do *not* include this field, the value is set to ``null``, which
+        /// effectively disables automatic refill for the account.
+        /// For recommended settings, see :ref:`when-does-auto-refill-trigger`.
+        /// </summary>
+        /// <value>The amount at which the merchant's PB Postage Account is refilled. The
+        /// account refills when the balance falls below this value.</value>
         virtual public decimal Threshold{get; set;}
+        /// <summary>
+        /// This field is *required* in a request if you are doing any of the following:
+        /// - enabling automatic refill
+        /// - updating the threshold
+        /// - updating the refill amount
+        /// If you do *not* include this field, the value is set to ``null``, which
+        /// effectively disables automatic refill for the account.
+        ///
+        /// For recommended settings, see :ref:`when-does-auto-refill-trigger`.
+        /// </summary>
+        /// <value>The amount added to the merchant's PB Postage Account when the balance
+        /// falls below the ``threshold`` value.</value>
         virtual public decimal AddAmount{get; set;}
+        /// <summary>
+        /// Gets or sets a value indicating whether this
+        /// <see cref="T:PitneyBowes.Developer.ShippingApi.Model.AutoRefill"/> is enabled.
+        /// </summary>
+        /// <value><c>true</c> if enabled; otherwise, <c>false</c>.</value>
         virtual public Boolean Enabled{get; set;}
     }
 }

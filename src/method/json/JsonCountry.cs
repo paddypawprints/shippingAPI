@@ -21,7 +21,7 @@ using Newtonsoft.Json;
 namespace PitneyBowes.Developer.ShippingApi.Json
 {
     [JsonObject(MemberSerialization.OptIn)]
-    public class JsonCountry<T> : JsonWrapper<T>, ICountry where T : ICountry, new()
+    internal class JsonCountry<T> : JsonWrapper<T>, ICountry where T : ICountry, new()
     {
         public JsonCountry() : base() { }
 

@@ -19,15 +19,31 @@ namespace PitneyBowes.Developer.ShippingApi.Model
 {
     public class Parameter : IParameter
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="T:PitneyBowes.Developer.ShippingApi.Model.Parameter"/> class.
+        /// </summary>
         public Parameter()
         {
         }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="T:PitneyBowes.Developer.ShippingApi.Model.Parameter"/> class.
+        /// </summary>
+        /// <param name="name">Name.</param>
+        /// <param name="value">Value.</param>
         public Parameter( string name, string value)
         {
             Name = name;
             Value = value;
         }
+        /// <summary>
+        /// Gets or sets the name.
+        /// </summary>
+        /// <value>The name.</value>
         virtual public string Name {get;set;}
+        /// <summary>
+        /// Gets or sets the value.
+        /// </summary>
+        /// <value>The value.</value>
         virtual public string Value {get;set;}
     }
 

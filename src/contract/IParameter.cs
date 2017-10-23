@@ -19,7 +19,15 @@ namespace PitneyBowes.Developer.ShippingApi
 {
     public interface IParameter
     {
-        string Name { get; set; }   
+        /// <summary>
+        /// Gets or sets the name.
+        /// </summary>
+        /// <value>The name.</value>
+        string Name { get; set; } 
+        /// <summary>
+        /// Gets or sets the value.
+        /// </summary>
+        /// <value>The value.</value>
         string Value { get; set; }
     }
 

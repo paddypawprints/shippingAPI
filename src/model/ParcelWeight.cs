@@ -19,7 +19,15 @@ namespace PitneyBowes.Developer.ShippingApi.Model
 {
     public class ParcelWeight : IParcelWeight
     {
+        /// <summary>
+        /// Gets or sets the weight.
+        /// </summary>
+        /// <value>The weight.</value>
         virtual public decimal Weight { get; set;}
+        /// <summary>
+        /// Gets or sets the unit of measurement.
+        /// </summary>
+        /// <value>The unit of measurement.</value>
         virtual public UnitOfWeight UnitOfMeasurement { get; set;}
     }
 }
