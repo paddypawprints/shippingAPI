@@ -60,7 +60,7 @@ namespace PitneyBowes.Developer.ShippingApi
                 AddRequestHeaders(client, h.Item1, h.Item2, h.Item3);
             }
 
-            client.Timeout = new TimeSpan(0, 0, 0, 0, session.TimeOutMilliseconds);
+//            client.Timeout = new TimeSpan(0, 0, 0, 0, session.TimeOutMilliseconds);
 
             string uriBuilder = request.GetUri(resource);
 

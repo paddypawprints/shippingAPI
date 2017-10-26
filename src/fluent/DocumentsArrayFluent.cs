@@ -33,9 +33,9 @@ namespace PitneyBowes.Developer.ShippingApi.Fluent
         {
             return new DocumentsArrayFluent<T>();
         }
-        public static implicit operator List<T>(DocumentsArrayFluent<T> d) => d._list;
+        public static implicit operator List<IDocument>(DocumentsArrayFluent<T> d) => d._list;
 
-        protected List<T> _list = new List<T>();
+        protected List<IDocument> _list = new List<IDocument>();
         protected T _current = default(T);
         /// <summary>
         /// Add a new document to the end of the list. Current will point to it.
@@ -44,7 +44,7 @@ namespace PitneyBowes.Developer.ShippingApi.Fluent
         public DocumentsArrayFluent<T> Add() 
         {
             _list.Add(new T());
-            _current = _list.FindLast((x) => true);
+            _current = (T)_list.FindLast((x) => true);
             return this;
         }
         /// <summary>
@@ -53,7 +53,7 @@ namespace PitneyBowes.Developer.ShippingApi.Fluent
         /// <returns>The first.</returns>
         public DocumentsArrayFluent<T> First()
         {
-            _current = _list.Find((x) => true);
+            _current = (T)_list.Find((x) => true);
             return this;
         }
         /// <summary>
@@ -63,7 +63,7 @@ namespace PitneyBowes.Developer.ShippingApi.Fluent
         public DocumentsArrayFluent<T> Next()
         {
             var i = _list.IndexOf(_current);
-            _current = _list[i + 1];
+            _current = (T)_list[i + 1];
             return this;
         }
         /// <summary>
