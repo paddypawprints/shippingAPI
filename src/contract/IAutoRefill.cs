@@ -21,6 +21,9 @@ using System.Text;
 
 namespace PitneyBowes.Developer.ShippingApi
 {
+    /// <summary>
+    /// Root object for customer account Auto Refill functionality.
+    /// </summary>
     public interface IAutoRefill
     {
         /// <summary>
@@ -68,7 +71,7 @@ namespace PitneyBowes.Developer.ShippingApi
         bool Enabled { get; set; }
     }
 
-    public static class IAutoRefillExtensions
+    public static partial class InterfaceExtensions
     {
         public static bool IsValid(this IAutoRefill a) => true;
     }

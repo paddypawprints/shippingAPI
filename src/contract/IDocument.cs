@@ -76,7 +76,8 @@ namespace PitneyBowes.Developer.ShippingApi
         IEnumerable<IPage> Pages { get; set; }
         void AddPage(IPage p);
     }
-    public static class IDocumentExtensions
+
+    public static partial class InterfaceExtensions
     {
         /// <summary>
         /// File Format Content type   Size       Label Type

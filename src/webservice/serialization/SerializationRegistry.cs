@@ -62,7 +62,6 @@ namespace PitneyBowes.Developer.ShippingApi
             _wrapperRegistry.Add(typeof(IAddress), typeof(JsonAddress<>));
             _wrapperRegistry.Add(typeof(IAutoRefill), typeof(JsonAutoRefill<>));
             _wrapperRegistry.Add(typeof(ICcPaymentDetails), typeof(JsonCcPaymentDetails<>));
-            _wrapperRegistry.Add(typeof(ICountry), typeof(JsonCountry<>));
             _wrapperRegistry.Add(typeof(ICustoms), typeof(JsonCustoms<>));
             _wrapperRegistry.Add(typeof(ICustomsInfo), typeof(JsonCustomsInfo<>));
             _wrapperRegistry.Add(typeof(ICustomsItems), typeof(JsonCustomsItems<>));
@@ -83,7 +82,6 @@ namespace PitneyBowes.Developer.ShippingApi
             _wrapperRegistry.Add(typeof(ISpecialServices), typeof(JsonSpecialServices<>));
             _wrapperRegistry.Add(typeof(IShipmentOptions), typeof(JsonShipmentOptions<>));
             _wrapperRegistry.Add(typeof(IShipment), typeof(JsonShipment<>));
-            _wrapperRegistry.Add(typeof(IToken), typeof(JsonToken<>));
             _wrapperRegistry.Add(typeof(ITransaction), typeof(JsonTransaction<>));
             _wrapperRegistry.Add(typeof(ITrackingEvent), typeof(JsonTrackingEvent<>));
             _wrapperRegistry.Add(typeof(ITrackingStatus), typeof(JsonTrackingStatus<>));

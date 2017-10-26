@@ -17,6 +17,9 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR TH
 
 namespace PitneyBowes.Developer.ShippingApi.Model
 {
+    /// <summary>
+    /// Class to model parcel physical properties. 
+    /// </summary>
     public class Parcel : IParcel
     {
         /// <summary>

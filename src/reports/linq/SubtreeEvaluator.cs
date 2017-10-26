@@ -19,7 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 
-namespace PitneyBowes.Developer.ShippingApi
+namespace PitneyBowes.Developer.ShippingApi.Method
 {
     /// <summary> 
     /// Evaluates & replaces sub-trees when first candidate is reached (top-down) 

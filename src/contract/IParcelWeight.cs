@@ -17,6 +17,9 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR TH
 
 namespace PitneyBowes.Developer.ShippingApi
 {
+    /// <summary>
+    /// Parcel weight.
+    /// </summary>
     public interface IParcelWeight
     {
         /// <summary>

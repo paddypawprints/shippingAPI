@@ -17,6 +17,9 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR TH
 
 namespace PitneyBowes.Developer.ShippingApi
 {
+    /// <summary>
+    /// Child interface for customs information.
+    /// </summary>
     public interface ICustomsInfo
     {
         /// <summary>
@@ -99,7 +102,7 @@ namespace PitneyBowes.Developer.ShippingApi
         string CertificateNumber { get; set; }
     }
 
-    public static class ICustomsInfoExtensions
+    public static partial class InterfaceExtensions
     {
         public static bool IsValid( this ICustomsInfo customsInfo )
         {

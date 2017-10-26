@@ -16,10 +16,12 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR TH
 */
 
 using PitneyBowes.Developer.ShippingApi.Model;
-using PitneyBowes.Developer.ShippingApi.Fluent;
 
-namespace PitneyBowes.Developer.ShippingApi
+namespace PitneyBowes.Developer.ShippingApi.Fluent
 {
+    /// <summary>
+    /// USPS facility types for workshare/injection - DDU, SCF etc.
+    /// </summary>
     public enum USPSFacility
     {
         /// <summary>
@@ -43,13 +45,28 @@ namespace PitneyBowes.Developer.ShippingApi
         /// </summary>
         ADC
     }
+
+    /// <summary>
+    /// PMOD payment method.
+    /// </summary>
     public enum PMODPaymentMethod
     {
         ELECTRONIC,
         NONELECTRONIC
     }
+
+    /// <summary>
+    /// USPS Extensions. Extension methods to support USPS products and servives in the fluent interface.
+    /// </summary>
     public static class USPSExtensions
     {
+        /// <summary>
+        /// Set up the rates object for USPS priority mail service.
+        /// </summary>
+        /// <returns>this</returns>
+        /// <param name="f">this</param>
+        /// <typeparam name="T">Type of the IRates concrete class.</typeparam>
+        /// <typeparam name="P">Type of the IParameter concreate class.</typeparam>
         public static RatesArrayFluent<T> USPSPriority<T,P>(this RatesArrayFluent<T> f) 
             where T : class, IRates, new()
             where P : class, IParameter, new()
@@ -59,7 +76,12 @@ namespace PitneyBowes.Developer.ShippingApi
                 .Service(Services.PM)
                 .SpecialService<SpecialServices>(SpecialServiceCodes.DelCon, 0M, new P { Name = "INPUT_VALUE", Value = "0"  });
         }
-
+        /// <summary>
+        /// Returns the shipment.
+        /// </summary>
+        /// <returns>The shipment.</returns>
+        /// <param name="f">this</param>
+        /// <typeparam name="T">Type of the IShipment</typeparam>
         public static ShipmentFluent<T> ReturnShipment<T>(this ShipmentFluent<T> f) where T : class, IShipment, new()
         {
             T shipment = ((T)f);
@@ -72,7 +94,17 @@ namespace PitneyBowes.Developer.ShippingApi
             }
             return f.ShipmentType(ShipmentType.RETURN).ShipperRatePlan(null);
         }
-
+        /// <summary>
+        /// Set shipment options for PMOD.
+        /// </summary>
+        /// <returns>this</returns>
+        /// <param name="f">this</param>
+        /// <param name="originEntryFacility">Origin entry facility.</param>
+        /// <param name="destinationEntryFacility">Destination entry facility.</param>
+        /// <param name="enclosedMailClass">Enclosed mail class.</param>
+        /// <param name="enclosedParcelType">Enclosed parcel type.</param>
+        /// <param name="paymentMethod">Payment method.</param>
+        /// <typeparam name="T">Type of the shipment options concrete class.</typeparam>
         public static ShipmentOptionsArrayFluent<T> PMODOptions<T>(this ShipmentOptionsArrayFluent<T> f, USPSFacility originEntryFacility, USPSFacility destinationEntryFacility, Services enclosedMailClass, ParcelType enclosedParcelType, PMODPaymentMethod  paymentMethod ) where T : class, IShipmentOptions, new()
         {
             return f

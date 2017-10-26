@@ -95,4 +95,10 @@ namespace PitneyBowes.Developer.ShippingApi
         /// <value>The status.</value>
         AddressStatus Status { get; set; }
     }
+
+    public static partial class InterfaceExtensions
+    {
+        public static bool IsValid(this IAddress a) => true;
+    }
+
 }

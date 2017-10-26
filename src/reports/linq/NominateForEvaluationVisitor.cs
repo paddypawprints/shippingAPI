@@ -19,7 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 
-namespace PitneyBowes.Developer.ShippingApi
+namespace PitneyBowes.Developer.ShippingApi.Method
 {
     /// <summary> 
     /// Performs bottom-up analysis to determine which nodes can possibly 

@@ -14,7 +14,7 @@ OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHE
 TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 */
-
+#region using
 using System;
 using System.Text;
 using System.Linq;
@@ -29,21 +29,15 @@ using PitneyBowes.Developer.ShippingApi.Model;
 using PitneyBowes.Developer.ShippingApi.Method;
 using PitneyBowes.Developer.ShippingApi.Rules;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration; // Required for windows
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
+#endregion
 
 namespace example
 {
-    // Example logger - use your own
-    public static class ApplicationLogging
-    {
-        public static ILoggerFactory LoggerFactory { get; } = new LoggerFactory();
-        public static ILogger CreateLogger<T>() => LoggerFactory.CreateLogger<T>();
-    }
-
     class Program
     {
+        #region Example statics
         private static ILogger Logger { get; } = ApplicationLogging.CreateLogger<Program>();
 #if !OSX
         private static IConfiguration Configuration { get; set; }
@@ -51,12 +45,15 @@ namespace example
         private static Dictionary<string, string> Configuration { get; set; }
 #endif
         private static SecureString ApiKey;
-
+        #endregion
         static void Main(string[] args)
         {
+            #region Example program setup
             SetupConfigProvider();
             SetupApiKey();
+            #endregion
 
+            #region ConfigureFramework
             var sandbox = new Session() { EndPoint = "https://api-sandbox.pitneybowes.com", Requester = new ShippingApiHttpRequest() };
 
             // Initialize framework
@@ -80,7 +77,8 @@ namespace example
             //sandbox.Record = true;
 
             Globals.DefaultSession = sandbox;
-
+            #endregion
+            #region CreateShipment
             // Create shipment
             var shipment = ShipmentFluent<Shipment>.Create()
                 .ToAddress((Address)AddressFluent<Address>.Create()
@@ -124,7 +122,8 @@ namespace example
                 .TransactionId(Guid.NewGuid().ToString().Substring(15));
 
             var label = ShipmentsMethods.CreateShipment((Shipment)shipment).GetAwaiter().GetResult();
-
+            #endregion
+            #region UseShipment
             if (label.Success)
             {
                 Console.WriteLine(label.APIResponse.ParcelTrackingNumber);
@@ -162,7 +161,7 @@ namespace example
 
                             },
                             disposeStream: true,
-                            session:sandbox
+                            session: sandbox
                             ).GetAwaiter().GetResult();
                     }
                     else
@@ -176,6 +175,8 @@ namespace example
                     }
                 }
             }
+            #endregion
+            #region CreateManifest
 
             // Create the manifest
 
@@ -187,7 +188,8 @@ namespace example
                 .AddParameter<Parameter>(ManifestParameter.SHIPPER_ID, sandbox.GetConfigItem("ShipperID"))
                 .TransactionId(Guid.NewGuid().ToString().Substring(15));
             var manifestResponse = ManifestMethods.Create<Manifest>(manifest).GetAwaiter().GetResult();
-
+            #endregion
+            #region UseManifest
             if (manifestResponse.Success)
             {
                 foreach (var d in manifestResponse.APIResponse.Documents)
@@ -201,13 +203,14 @@ namespace example
                             Console.WriteLine("Document written to " + fileName);
                         }
                     }
-                    catch( Exception e)
+                    catch (Exception e)
                     {
                         Console.WriteLine(e.Message);
                     }
                 }
             }
-
+            #endregion
+            #region SchedulePickup
             // Schedule a pickup
 
             var pickup = PickupFluent<Pickup>.Create()
@@ -218,7 +221,8 @@ namespace example
                 .AddPickupSummary<PickupCount, ParcelWeight>(PickupService.PM, 1, 16M, UnitOfWeight.OZ)
                 .TransactionId(Guid.NewGuid().ToString().Substring(15));
             var pickupResponse = PickupMethods.Schedule<Pickup>(pickup).GetAwaiter().GetResult();
-
+            #endregion
+            #region UsePickup
             // Cancel pickup
 
             if (pickupResponse.Success)
@@ -239,7 +243,8 @@ namespace example
                 };
                 var cancelResponse = ShipmentsMethods.CancelShipment(cancelRequest).GetAwaiter().GetResult();
             }
-
+            #endregion
+            #region TransactionReports
             // Transaction report with IEnumerable
 
             var transactionsReportRequest = new ReportRequest()
@@ -260,6 +265,9 @@ namespace example
                         select new { transaction.TransactionId };
             foreach (var obj in query)
                 Console.WriteLine(obj);
+
+            #endregion
+            #region CarrierRules
 
             // Download the carrier rules
             var req = new RatingServicesRequest()
@@ -359,8 +367,9 @@ namespace example
                 }
 
             }
+            #endregion
         }
-
+        #region APIKeyHiding example only, implement your own
         private static void SetupApiKey()
         {
             ApiKey = new SecureString();
@@ -387,7 +396,8 @@ namespace example
             }
             return s;
         }
-
+        #endregion
+        #region Configuration example only, implement your own
         private static void SetupConfigProvider()
         {
 #if !OSX
@@ -422,10 +432,20 @@ namespace example
             }
 #endif
         }
+    #endregion
     }
-
+    #region Logger example only, implement your own
+    // Example logger - use your own
+    public static class ApplicationLogging
+    {
+        public static ILoggerFactory LoggerFactory { get; } = new LoggerFactory();
+        public static ILogger CreateLogger<T>() => LoggerFactory.CreateLogger<T>();
+    }
+    #endregion
+    #region Fluent extension to use carrier rules
     public static class ExtensionMethodExamples
     {
+        #region Add special service from carrier rules to RatesArrayFluent
         public static RatesArrayFluent<T> SpecialServiceFromRule<T, S>(this RatesArrayFluent<T> f, SpecialServicesRule rule)
             where T : class, IRates, new()
             where S : class, ISpecialServices, new()
@@ -450,6 +470,8 @@ namespace example
             f.SpecialService<S>(ss);
             return f;
         }
+        #endregion
+        #region Add rate from rule to RatesArrayFluent
         public static RatesArrayFluent<T> RateFromRule<T>(this RatesArrayFluent<T> f, CarrierRule carrierRule, ServiceRule serviceRule, ParcelTypeRule parcelTypeRule)
             where T : class, IRates, new()
         {
@@ -458,7 +480,7 @@ namespace example
                 .ParcelType(parcelTypeRule.ParcelType)
                 .Service(serviceRule.ServiceId);
         }
-        public static RatesArrayFluent<T> SuggestedTrackingServiceFromRule<T,S>(this RatesArrayFluent<T> f, ParcelTypeRule parcelTypeRule)
+        public static RatesArrayFluent<T> SuggestedTrackingServiceFromRule<T, S>(this RatesArrayFluent<T> f, ParcelTypeRule parcelTypeRule)
             where T : class, IRates, new()
             where S : class, ISpecialServices, new()
         {
@@ -478,4 +500,6 @@ namespace example
             return f;
         }
     }
+    #endregion
+    #endregion
 }

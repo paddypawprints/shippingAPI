@@ -25,7 +25,7 @@ using System.IO;
 namespace PitneyBowes.Developer.ShippingApi.Rules
 {
     [JsonObject(MemberSerialization.OptIn)]
-    public class CountriesRequest<T> : IShippingApiRequest where T : ICountry, new()
+    public class CountriesRequest<T> : IShippingApiRequest where T : Country, new()
     {
         public string RecordingSuffix => "";
         public string RecordingFullPath(string resource, ISession session)
@@ -68,7 +68,7 @@ namespace PitneyBowes.Developer.ShippingApi.Rules
     public static class CountriesMethods
     {
 
-        public async static Task<ShippingApiResponse<IEnumerable<T>>> Countries<T>(CountriesRequest<T> request, ISession session = null) where T : ICountry, new()
+        public async static Task<ShippingApiResponse<IEnumerable<T>>> Countries<T>(CountriesRequest<T> request, ISession session = null) where T : Country, new()
         {
             return await WebMethod.Get<IEnumerable<T>, CountriesRequest<T>>("/shippingservices/v1/countries", request, session);
         }

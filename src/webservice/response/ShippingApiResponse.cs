@@ -25,7 +25,25 @@ using Newtonsoft.Json;
 
 namespace PitneyBowes.Developer.ShippingApi
 {
-    public class ShippingApiResponse<Response>
+    public class ShippingApiResponse
+    {
+        private List<ErrorDetail> _errors;
+        public HttpStatusCode HttpStatus { get; set; }
+        public long Time { get; set; }
+        public List<ErrorDetail> Errors 
+        { 
+            get { 
+                if (_errors == null) _errors = new List<ErrorDetail>();
+                return _errors;
+            }
+            set
+            {
+                _errors = value;
+            }
+        }
+    }
+
+    public class ShippingApiResponse<Response> : ShippingApiResponse
     {
         public void ProcessResponseAttribute(string propName, IEnumerable<string> values)
         {
@@ -51,9 +69,7 @@ namespace PitneyBowes.Developer.ShippingApi
         {
             return r.APIResponse;
         }
-        public HttpStatusCode HttpStatus;
         public bool Success = false;
-        public List<ErrorDetail> Errors = new List<ErrorDetail>();
         public Response APIResponse = default(Response);
 
 

@@ -17,6 +17,9 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR TH
 
 namespace PitneyBowes.Developer.ShippingApi
 {
+    /// <summary>
+    /// Holds a page of a document returned by CreateShipment or Manifest.
+    /// </summary>
     public interface IPage
     {
         /// <summary>

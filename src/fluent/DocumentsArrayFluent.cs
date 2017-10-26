@@ -20,8 +20,15 @@ using System.Collections.Generic;
 
 namespace PitneyBowes.Developer.ShippingApi.Fluent
 {
+    /// <summary>
+    /// Fluent class to set up a document array for shipments.
+    /// </summary>
     public class DocumentsArrayFluent<T> where T : IDocument, new()
     {
+        /// <summary>
+        /// Factory method to create an instance - use instead of new to start the method chain.
+        /// </summary>
+        /// <returns>The create.</returns>
         public static DocumentsArrayFluent<T> Create()
         {
             return new DocumentsArrayFluent<T>();

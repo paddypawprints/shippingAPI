@@ -22,11 +22,6 @@ namespace PitneyBowes.Developer.ShippingApi.Rules
 {
     public class CountryRule
     {
-        public class Country : ICountry
-        {
-            public string CountryCode { get; set; }
-            public string CountryName { get; set; }
-        }
 
         private static object _lock = new object();
         public static Dictionary<string, string> Rules = new Dictionary<string, string>();

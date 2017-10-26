@@ -24,6 +24,7 @@ namespace PitneyBowes.Developer.ShippingApi.Fluent
     /// An address. If part of a response, this object also specifies address validation status, unless minimum validation is enabled.
     /// <a href="https://shipping.pitneybowes.com/reference/resource-objects.html#object-address"/>
     /// </summary>
+
     public class AddressFluent<T> where T : IAddress, new()
     {
         private T _address;
@@ -41,8 +42,14 @@ namespace PitneyBowes.Developer.ShippingApi.Fluent
             };
             return a;
         }
+        public static AddressFluent<T> Create(IAddress address)
+        {
+            var a = new AddressFluent<T>();
+            a._address = (T)address;
+            return a;
+        }
 
-        public AddressFluent()
+        protected AddressFluent()
         {
             _address = new T();
         }
@@ -211,23 +218,66 @@ namespace PitneyBowes.Developer.ShippingApi.Fluent
         /// .. |delivery-points| raw:: html
         /// <a href="https://en.wikipedia.org/wiki/Delivery_point" target="_blank">Wikipedia Delivery Point page</a>
         ///
-        /// #. If validation fails, you can use the :doc:`/api/post-address-suggest` API call
+        /// 5. If validation fails, you can use the :doc:`/api/post-address-suggest` API call
         /// to provide suggestions that could result in the address passing
         /// verification in a subsequent Address Validation API call.
         /// </summary>
         /// <returns>this</returns>
-        public AddressFluent<T> Verify()
+        public AddressFluent<T> Verify(ISession session = null)
         {
-            var addressResponse = AddressessMethods.VerifyAddress(_address).GetAwaiter().GetResult();
+            if (session == null)
+            {
+                session = Globals.DefaultSession;
+            }
+            var addressResponse = AddressessMethods.VerifyAddress(_address, session).GetAwaiter().GetResult();
             if (addressResponse.Success)
             {
                 _address = addressResponse.APIResponse;
             }
+            else
+            {
+                throw new ShippingAPIException(addressResponse);
+            }
             return this;
         }
-        public IEnumerable<AddressFluent<T>> VerifySuggest()
+        /// <summary>
+        /// Verifies the suggest address. This POST operation obtains suggested addresses in cases where the
+        /// Address Validation API call has returned an error.
+        /// 1. The suggested addresses are **not** validated addresses. You must reissue
+        /// the API call.
+        ///
+        /// 2. Some suggestions might not be valid delivery points. This is especially
+        /// true for range suggestions. For example, if the suggested valid range for a
+        /// street is 1-100, the Suggest Addresses API call will consider all numbers 
+        /// the range to be valid, even if the only valid delivery points are
+        /// numbers 12, 24, and 36.
+        ///
+        /// 3. The operation provides several types of suggestions:
+        /// - Range suggestions:
+        /// - Primary number range (e.g., street number, PO Box number)
+        /// - Secondary number range(e.g., suite number, apartment number
+        /// - Street Name
+        /// - City Name
+        /// - Company Name
+        /// - Puerto Rican Urbanization
+        ///
+        /// 4. The suggested addresses are **not** sorted by best match.
+        ///
+        /// 5. The API returns a maximum of 20 suggestions.
+        ///
+        /// 6. Some addresses might return no suggestions. If there are no
+        /// suggestions, the ``suggestions`` object is not returned.
+        /// </summary>
+        /// <returns>this</returns>
+        /// <param name="session">Session.</param>
+        public IEnumerable<AddressFluent<T>> VerifySuggest(ISession session = null)
         {
-            var addressResponse = AddressessMethods.VerifySuggestAddress<T>(_address).GetAwaiter().GetResult();
+            if (session == null)
+            {
+                session = Globals.DefaultSession;
+            }
+
+            var addressResponse = AddressessMethods.VerifySuggestAddress<T>(_address, session).GetAwaiter().GetResult();
             if (addressResponse.Success)
             {
                 _address = (T)addressResponse.APIResponse.Address;
@@ -236,9 +286,20 @@ namespace PitneyBowes.Developer.ShippingApi.Fluent
                     yield return new AddressFluent<T>((T)a);
                 }
             }
+            else
+            {
+                throw new ShippingAPIException(addressResponse);
+            }
+
             yield break;
         }
-
+        /// <summary>
+        /// Person the specified name, phone and email.
+        /// </summary>
+        /// <returns>this</returns>
+        /// <param name="name">Name.</param>
+        /// <param name="phone">Phone.</param>
+        /// <param name="email">Email.</param>
         public AddressFluent<T> Person( string name, string phone = null, string email = null)
         {
             return Name(name).Phone(phone).Email(email);

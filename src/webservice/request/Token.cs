@@ -65,18 +65,11 @@ namespace PitneyBowes.Developer.ShippingApi
         }
 
     }
-    public static class TokenExtensions
-    {
-        public static bool Expired(this Model.Token t)
-        {
-            return DateTimeOffset.Now >= t.IssuedAt.AddSeconds(t.ExpiresIn);
-        }
-    }
 
     public static class TokenMethods
     {
 #pragma warning disable IDE1006 // Naming Styles
-        public static async Task<ShippingApiResponse<T>> token<T>(ISession session = null) where T : IToken, new()
+        internal static async Task<ShippingApiResponse<Token>> token(ISession session = null) 
 
 #pragma warning restore IDE1006 // Naming Styles
         {
@@ -84,11 +77,7 @@ namespace PitneyBowes.Developer.ShippingApi
             {
                 if (session == null) session = Globals.DefaultSession;
                 request.BasicAuth(session.GetConfigItem("ApiKey"), session.GetAPISecret());
-                var jsonResponse = await session.Requester.HttpRequest<JsonToken<T>, TokenRequest>("/oauth/token", HttpVerb.POST, request, false, session);
-                if (jsonResponse.APIResponse != null)
-                    return new ShippingApiResponse<T>() { APIResponse = jsonResponse.APIResponse.Wrapped, Errors = jsonResponse.Errors, HttpStatus = jsonResponse.HttpStatus, Success = jsonResponse.Success };
-                else
-                    return new ShippingApiResponse<T>() { APIResponse = default(T), Errors = jsonResponse.Errors, HttpStatus = jsonResponse.HttpStatus, Success = jsonResponse.Success };
+                return await session.Requester.HttpRequest<Token, TokenRequest>("/oauth/token", HttpVerb.POST, request, false, session);
             }
         }
     }

@@ -49,7 +49,7 @@ namespace PitneyBowes.Developer.ShippingApi
         string AdditionalDetails { get; set; }
      }
 
-    public static class IDeliveryCommitmentExtensions
+    public static partial class InterfaceExtensions
     {
         public static bool IsValid(IDeliveryCommitment d) => true;
     }

@@ -1,4 +1,3 @@
-
 /*
 Copyright 2016 Pitney Bowes Inc.
 
@@ -20,7 +19,6 @@ namespace PitneyBowes.Developer.ShippingApi
 {
     /// <summary>
     /// Status of an address after a call to the Shipping API address validation method.
-    /// <a href="https://shipping.pitneybowes.com/reference/resource-objects.html#object-address">address documentation</a>
     /// </summary>
     public enum AddressStatus
     {
@@ -38,6 +36,9 @@ namespace PitneyBowes.Developer.ShippingApi
         NOT_CHANGED
     }
 
+    /// <summary>
+    /// Shipping carriers.
+    /// </summary>
     public enum Carrier
     {
         /// <summary>
@@ -50,11 +51,17 @@ namespace PitneyBowes.Developer.ShippingApi
         PBPRESORT
     }
 
+    /// <summary>
+    /// Party cancelling a shipment.
+    /// </summary>
     public enum CancelInitiator
     {
         SHIPPER
     }
 
+    /// <summary>
+    /// Credit card type.
+    /// </summary>
     public enum CreditCardType
     {
         Amex,
@@ -62,6 +69,10 @@ namespace PitneyBowes.Developer.ShippingApi
         Visa,
         Disc
     }
+
+    /// <summary>
+    /// Content type of a  document - URL or base64.
+    /// </summary>
     public enum ContentType
     {
         /// <summary>
@@ -73,11 +84,18 @@ namespace PitneyBowes.Developer.ShippingApi
         /// </summary>
         BASE64
     }
+
+    /// <summary>
+    /// Document type - shipping label or manifest.
+    /// </summary>
     public enum DocumentType
     {
         SHIPPING_LABEL,
         MANIFEST
     }
+    /// <summary>
+    /// Document file format - PDF, bitmap, Zebra etc.
+    /// </summary>
     public enum FileFormat
     {
         PDF,
@@ -88,18 +106,28 @@ namespace PitneyBowes.Developer.ShippingApi
         ZPL2
     }
 
+    /// <summary>
+    /// Manifest parameter.
+    /// </summary>
     public enum ManifestParameter
     {
         SHIPPER_ID,
         MANIFEST_TYPE
     }
 
+    /// <summary>
+    /// Merchant status.
+    /// </summary>
     public enum MerchantStatus
     {
         ACTIVE,
         INACTIVE,
         DELETED
     }
+
+    /// <summary>
+    /// Non delivery option for tracking.
+    /// </summary>
     public enum NonDeliveryOption
     {
         @return,
@@ -107,10 +135,17 @@ namespace PitneyBowes.Developer.ShippingApi
         redirect
     }
 
+    /// <summary>
+    /// Package identifier type.
+    /// </summary>
     public enum PackageIdentifierType
     {
         TrackingNumber
     }
+
+    /// <summary>
+    /// Package location for pickup.
+    /// </summary>
     public enum PackageLocation
     {
         FrontDoor,
@@ -124,12 +159,18 @@ namespace PitneyBowes.Developer.ShippingApi
         Other
     }
 
+    /// <summary>
+    /// Package type indicator - cubic etc.
+    /// </summary>
     public enum PackageTypeIndicator
     {
         Cubic,
         NonCubic
     }
 
+    /// <summary>
+    /// Payment type.
+    /// </summary>
     public enum PaymentType
     {
         POSTAGE_AND_SUBSCRIPTION,
@@ -137,7 +178,9 @@ namespace PitneyBowes.Developer.ShippingApi
         POSTAGE
     }
 
-
+    /// <summary>
+    /// Parcel type - letter, package, flat rate box etc.
+    /// </summary>
     public enum ParcelType
     {
         LETTER,
@@ -206,6 +249,10 @@ namespace PitneyBowes.Developer.ShippingApi
         /// </summary>
         MIX
     }
+
+    /// <summary>
+    /// Payment method.
+    /// </summary>
     public enum PaymentMethod
     {
         CC,
@@ -213,6 +260,9 @@ namespace PitneyBowes.Developer.ShippingApi
         PurchasePower
     }
 
+    /// <summary>
+    /// Services for parcels for pickup
+    /// </summary>
     public enum PickupService
     {
         /// <summary>
@@ -255,10 +305,17 @@ namespace PitneyBowes.Developer.ShippingApi
         EMBED_PRINT_DIALOG
     }
 
+    /// <summary>
+    /// Refund status.
+    /// </summary>
     public enum RefundStatus
     {
         INITIATED
     }
+
+    /// <summary>
+    /// Reason for export.
+    /// </summary>
     public enum ReasonForExport
     {
         GIFT,
@@ -269,17 +326,28 @@ namespace PitneyBowes.Developer.ShippingApi
         OTHER
     }
 
+    /// <summary>
+    /// Scan based return package status.
+    /// </summary>
     public enum SBRPrintStatus
     {
         SBRPrinted,
         SBRCharged,
         NULL
     }
+
+    /// <summary>
+    /// Document Size.
+    /// </summary>
     public enum Size
     {
         DOC_4X6,
         DOC_8X11
     }
+
+    /// <summary>
+    /// Carrier Services.
+    /// </summary>
     public enum Services
     {
         /// <summary>
@@ -344,6 +412,10 @@ namespace PitneyBowes.Developer.ShippingApi
         PMOD
 
     }
+
+    /// <summary>
+    /// Shipment options.
+    /// </summary>
     public enum ShipmentOption
     {
         /// <summary>
@@ -402,12 +474,18 @@ namespace PitneyBowes.Developer.ShippingApi
         ENCLOSED_PAYMENT_METHOD
     }
 
+    /// <summary>
+    /// Shipment type - outbound or return.
+    /// </summary>
     public enum ShipmentType
     {
         OUTBOUND,
         RETURN
     }
 
+    /// <summary>
+    /// Service trackability.
+    /// </summary>
     public enum Trackable
     {
         TRACKABLE,
@@ -415,6 +493,9 @@ namespace PitneyBowes.Developer.ShippingApi
         REQUIRES_TRACKABLE_SPECIAL_SERVICE
     }
 
+    /// <summary>
+    /// Carrier special servicves - signature etc.
+    /// </summary>
     public enum SpecialServiceCodes
     {
         /// <summary>
@@ -540,6 +621,9 @@ namespace PitneyBowes.Developer.ShippingApi
 
         PMOD_OPTIONS
     }
+    /// <summary>
+    /// Transaction type in the tracking report.
+    /// </summary>
     public enum TransactionType
     {
         POSTAGE_PRINT,
@@ -547,16 +631,26 @@ namespace PitneyBowes.Developer.ShippingApi
         POSTAQGE_REFUND
     }
 
+    /// <summary>
+    /// Unit of dimension.
+    /// </summary>
     public enum UnitOfDimension
     {
         CM,
         IN
     }
+    /// <summary>
+    /// Unit of weight.
+    /// </summary>
     public enum UnitOfWeight
     {
         GM,
         OZ
     }
+
+    /// <summary>
+    /// Tracking status code - in transit. delivered etc.
+    /// </summary>
     public enum TrackingStatusCode
     {
         InTransit,

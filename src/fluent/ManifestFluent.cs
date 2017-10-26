@@ -40,35 +40,71 @@ namespace PitneyBowes.Developer.ShippingApi.Fluent
             return (T)m._manifest;
         }
 
-        public ManifestFluent<T> Submit()
+        public IManifest Manifest 
         {
-            var response = ManifestMethods.Create(_manifest).GetAwaiter().GetResult();
+            get => _manifest;
+            set => _manifest = (T)value;
+        }
+
+        public ManifestFluent<T> Submit(ISession session = null)
+        {
+            if (session == null)
+            {
+                session = Globals.DefaultSession;
+            }
+
+            var response = ManifestMethods.Create(_manifest, session).GetAwaiter().GetResult();
             if (response.Success)
             {
                 _manifest = response.APIResponse;
             }
+            else
+            {
+                throw new ShippingAPIException(response);
+            }
+
             return this;
         }
 
-        public ManifestFluent<T> Reprint(string manifestId)
+        public ManifestFluent<T> Reprint(string manifestId, ISession session = null)
         {
+            if (session == null)
+            {
+                session = Globals.DefaultSession;
+            }
+
             var request = new ReprintManifestRequest() { ManifestId = manifestId };
-            var response = ManifestMethods.Reprint<T>(request).GetAwaiter().GetResult();
+            var response = ManifestMethods.Reprint<T>(request, session).GetAwaiter().GetResult();
             if (response.Success)
             {
                 _manifest = response.APIResponse;
             }
+            else
+            {
+                throw new ShippingAPIException(response);
+            }
+
             return this;
         }
 
-        public ManifestFluent<T> Retry(string originalId)
+        public ManifestFluent<T> Retry(string originalId, ISession session = null)
         {
+            if (session == null)
+            {
+                session = Globals.DefaultSession;
+            }
+
             var request = new RetryManifestRequest() { OriginalTransactionId = originalId };
             var response = ManifestMethods.Retry<T>(request).GetAwaiter().GetResult();
             if (response.Success)
             {
                 _manifest = response.APIResponse;
             }
+            else
+            {
+                throw new ShippingAPIException(response);
+            }
+
             return this;
         }
 

@@ -18,7 +18,7 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR TH
 using System;
 using System.Linq.Expressions;
 
-namespace PitneyBowes.Developer.ShippingApi
+namespace PitneyBowes.Developer.ShippingApi.Method
 {
     public class RequestFinderVisitor<RequestType, ReportType> : ExpressionVisitor where RequestType : new()
     {

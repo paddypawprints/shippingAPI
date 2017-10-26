@@ -16,24 +16,15 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR TH
 */
 
 
-using System;
 using System.Text;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Net;
+using System.Diagnostics;
+using Newtonsoft.Json;
 
 namespace PitneyBowes.Developer.ShippingApi
 {
-
-    internal class Token : IToken
-    {
-        virtual public string AccessToken { get; set; }
-        virtual public string TokenType { get; set; }
-        virtual public DateTimeOffset IssuedAt { get; set; }
-        virtual public long ExpiresIn { get; set; }
-        virtual public string ClientID { get; set; }
-        virtual public string Org { get; set; }
-    }
 
     internal class WebMethod
     {
@@ -49,24 +40,61 @@ namespace PitneyBowes.Developer.ShippingApi
         {
             if (session == null) session = Globals.DefaultSession;
             var response = new ShippingApiResponse<Response>();
-
-            for (int retries = session.Retries;  retries > 0; retries--)
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
+            try
             {
-                if (session.AuthToken == null || session.AuthToken.AccessToken == null ) //TODO: Check if token should have expired
+                int timeout = session.TimeOutMilliseconds;
+                for (int retries = session.Retries; retries > 0; retries--)
                 {
-                    var tokenResponse = TokenMethods.token<Token>().GetAwaiter().GetResult();
-                    if (!tokenResponse.Success)
+                    if (session.AuthToken == null || session.AuthToken.AccessToken == null ) //TODO: Check if token should have expired
                     {
-                        session.AuthToken = null;
-                        continue;
+                        var tokenResponse = TokenMethods.token().GetAwaiter().GetResult();
+                        if (!tokenResponse.Success)
+                        {
+                            session.AuthToken = null;
+                            if (retries == 1) // no more tries left
+                            {
+                                response.Errors = tokenResponse.Errors;
+                                response.HttpStatus = tokenResponse.HttpStatus;
+                                break;
+                            }
+                            if ( stopwatch.ElapsedMilliseconds > session.TimeOutMilliseconds)
+                            {
+                                response.HttpStatus = HttpStatusCode.RequestTimeout;
+                                response.Errors.Add(new ErrorDetail() { ErrorCode = "Client Timeout", Message= "Client Timeout"});
+                                break;
+                            }
+                            continue;
+                        }
+                        session.AuthToken = tokenResponse.APIResponse;
                     }
-                    session.AuthToken = tokenResponse.APIResponse;
-                }
 
-                request.Authorization = new StringBuilder(session.AuthToken.AccessToken);
-                response = await session.Requester.HttpRequest<Response, Request>(uri, verb, request, deleteBody, session);
-                if (response.Success) break;
-                if (!Retry(response.HttpStatus, response.Errors)) break;
+                    request.Authorization = new StringBuilder(session.AuthToken.AccessToken);
+                    response = await session.Requester.HttpRequest<Response, Request>(uri, verb, request, deleteBody, session);
+                    if (response.Success) break;
+                    if (!Retry(response.HttpStatus, response.Errors)) break;
+                    if (stopwatch.ElapsedMilliseconds > session.TimeOutMilliseconds)
+                    {
+                        response.HttpStatus = HttpStatusCode.RequestTimeout;
+                        response.Errors.Add(new ErrorDetail() { ErrorCode = "Client Timeout", Message = "Client Timeout" });
+                        break;
+                    }
+                }
+            }
+            catch(JsonSerializationException j)
+            {
+                response.HttpStatus = HttpStatusCode.InternalServerError;
+                response.Errors.Add(new ErrorDetail(){ ErrorCode = "Deserialization error", Message = j.Message});
+                if (session.ThrowExceptions)
+                {
+                    throw new ShippingAPIException(response, "DeserializationError", j);
+                }
+            }
+            response.Time = stopwatch.ElapsedMilliseconds;
+            if (session.ThrowExceptions && !response.Success)
+            {
+                throw new ShippingAPIException(response);
             }
             return response;
         }

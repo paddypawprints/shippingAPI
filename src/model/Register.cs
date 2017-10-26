@@ -24,7 +24,6 @@ namespace PitneyBowes.Developer.ShippingApi.Model
             registry.RegisterSerializationTypes<IAddress, Address>();
             registry.RegisterSerializationTypes<IAutoRefill, AutoRefill>();
             registry.RegisterSerializationTypes<ICcPaymentDetails, CcPaymentDetails>();
-            registry.RegisterSerializationTypes<ICountry, Country>();
             registry.RegisterSerializationTypes<ICustoms, Customs>();
             registry.RegisterSerializationTypes<ICustomsItems, CustomsItems>();
             registry.RegisterSerializationTypes<ICustomsInfo, CustomsInfo>();
@@ -45,7 +44,6 @@ namespace PitneyBowes.Developer.ShippingApi.Model
             registry.RegisterSerializationTypes<IShipment, Shipment>();
             registry.RegisterSerializationTypes<IShipmentOptions, ShipmentOptions>();
             registry.RegisterSerializationTypes<ISpecialServices, SpecialServices>();
-            registry.RegisterSerializationTypes<IToken, Token>();
             registry.RegisterSerializationTypes<ITrackingEvent, TrackingEvent>();
             registry.RegisterSerializationTypes<ITrackingStatus, TrackingStatus>();
             registry.RegisterSerializationTypes<ITransaction, Transaction>();

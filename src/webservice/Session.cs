@@ -38,6 +38,8 @@ namespace PitneyBowes.Developer.ShippingApi
             _configs.Add("SANDBOX_ENDPOINT", "https://api-sandbox.pitneybowes.com");
             _configs.Add("PRODUCTION_ENDPOINT", "https://api-sandbox.pitneybowes.com");
             UserAgent = "Pitney Bowes CSharp SDK 1.0";
+            TimeOutMilliseconds = 100000; //default .net value
+            ThrowExceptions = false;
             GetConfigItem = (s) => { return _configs[s]; };
             AddConfigItem  = (k, v) => { _configs.Add(k, v); };
             LogWarning = (s) => { };
@@ -50,9 +52,11 @@ namespace PitneyBowes.Developer.ShippingApi
         }
         public SerializationRegistry SerializationRegistry { get; }
         public IHttpRequest Requester { get; set; } // to allow mocking
-        public IToken AuthToken { get; set; }
+        public Token AuthToken { get; set; }
         public string UserAgent { get; set; }
+        public int TimeOutMilliseconds { get; set; }
         public int Retries { get; set; }
+        public bool ThrowExceptions { get; set; }
         public Func<string, string> GetConfigItem { get; set; }
         public Action<string, string> AddConfigItem { get; set; }
         public Action<string> LogWarning { get; set; }

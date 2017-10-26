@@ -1,4 +1,4 @@
-/*
+﻿/*
 Copyright 2016 Pitney Bowes Inc.
 
 Licensed under the MIT License(the "License"); you may not use this file except in compliance with the License.  
@@ -15,17 +15,30 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR TH
 
 */
 
-using System;
 
- namespace PitneyBowes.Developer.ShippingApi.Model
- {
-    public class Token : IToken
+using System;
+using Newtonsoft.Json;
+
+namespace PitneyBowes.Developer.ShippingApi
+{
+    public class Token
     {
-        virtual public string AccessToken {get;set;}
-        virtual public string TokenType {get;set;}
-        virtual public DateTimeOffset IssuedAt { get;set;}
-        virtual public long ExpiresIn {get;set;}
-        virtual public string ClientID { get;set;}
-        virtual public string Org { get;set;}
+        [JsonProperty(PropertyName = "access_token")]
+        public string AccessToken { get; set; }
+        [JsonProperty(PropertyName = "tokenType")]
+        public string TokenType { get; set; }
+        [JsonProperty(PropertyName = "issuedAt")]
+        [JsonConverter(typeof(UnixMillisecondsTimeConverter))]
+        public DateTimeOffset IssuedAt { get; set; }
+        [JsonProperty(PropertyName = "expiresIn")]
+        public long ExpiresIn { get; set; }
+        [JsonProperty(PropertyName = "clientID")]
+        public string ClientID { get; set; }
+        [JsonProperty(PropertyName = "org")]
+        public string Org { get; set; }
+        public bool IsExpired(DateTimeOffset time)
+        {
+            return IssuedAt.AddSeconds(ExpiresIn) < time;
+        }
     }
- }
+}

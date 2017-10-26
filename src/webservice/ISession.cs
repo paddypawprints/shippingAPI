@@ -23,9 +23,11 @@ namespace PitneyBowes.Developer.ShippingApi
     public interface ISession
     {
         Action<string, string> AddConfigItem { get; set; }
-        IToken AuthToken { get; set; }
+        Token AuthToken { get; set; }
         string EndPoint { get; set; }
         string UserAgent { get; set; }
+        int TimeOutMilliseconds { get; set; }
+        bool ThrowExceptions { get; set; }
         Func<StringBuilder> GetAPISecret { get; set; }
         Func<string, string> GetConfigItem { get; set; }
         Action<string> LogConfigError { get; set; }

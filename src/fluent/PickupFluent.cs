@@ -22,10 +22,6 @@ using PitneyBowes.Developer.ShippingApi.Method;
 
 namespace PitneyBowes.Developer.ShippingApi.Fluent
 {
-    /// <summary>
-    /// An address. If part of a response, this object also specifies address validation status, unless minimum validation is enabled.
-    /// <a href="https://shipping.pitneybowes.com/reference/resource-objects.html#object-address"/>
-    /// </summary>
     public class PickupFluent<T> where T : IPickup, new()
     {
         private T _pickup;
@@ -44,14 +40,21 @@ namespace PitneyBowes.Developer.ShippingApi.Fluent
             return a;
         }
 
+        public static PickupFluent<T> Create(IPickup pickup)
+        {
+            var a = new PickupFluent<T>();
+            a._pickup = (T)pickup;
+            return a;
+        }
+
         public PickupFluent()
         {
             _pickup = new T();
         }
 
-        public PickupFluent(IAddress a)
+        public PickupFluent(IPickup p)
         {
-            _pickup = (T)a;
+            _pickup = (T)p;
         }
 
         public PickupFluent<T> TransactionId(string id)
@@ -60,23 +63,41 @@ namespace PitneyBowes.Developer.ShippingApi.Fluent
             return this;
         }
 
-        public PickupFluent<T> Schedule(Session session = null)
+        public PickupFluent<T> Schedule(ISession session = null)
         {
+            if (session == null) session = Globals.DefaultSession;
             var response = PickupMethods.Schedule<T>(_pickup, session).GetAwaiter().GetResult();
-            _pickup = response.APIResponse;
+            if (response.Success)
+            {
+                _pickup = response.APIResponse;
+            }
+            else
+            {
+                throw new ShippingAPIException(response);
+            }
+
             return this;
         }
 
-        public string Cancel(Session session = null)
+        public PickupFluent<T>  Cancel(ISession session = null)
         {
+            if (session == null) session = Globals.DefaultSession;
             var cancel = new PickupCancelRequest()
             {
                 PickupId = _pickup.PickupId
             };
 
             var response = PickupMethods.CancelPickup(cancel, session).GetAwaiter().GetResult();
-            var status = response.APIResponse.Status;
-            return status;
+            if (response.Success)
+            {
+                cancel = response.APIResponse;
+                //_pickup.Status = cancel.Status; //TODO: add to pickup class
+            }
+            else
+            {
+                throw new ShippingAPIException(response);
+            }
+            return this;
         }
 
 

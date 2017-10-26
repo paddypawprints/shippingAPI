@@ -20,7 +20,7 @@ using System.Collections.Generic;
 namespace PitneyBowes.Developer.ShippingApi
 {
     /// <summary>
-    /// Customs clearance information that is used to fill out a commercial invoice
+    /// Root interface for customs clearance information that is used to fill out a commercial invoice
     /// </summary>
     public interface ICustoms
     {
@@ -35,7 +35,7 @@ namespace PitneyBowes.Developer.ShippingApi
         ICustomsItems AddCustomsItems(ICustomsItems c);
     }
 
-    public static class ICustomsExtensions
+    public static partial class InterfaceExtensions
     {
         public static bool IsValid(this ICustoms customs)
         {

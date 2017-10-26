@@ -1,0 +1,39 @@
+{
+  "metadata": [
+    {
+      "src": [
+        {
+          "files": [ "**/*.csproj" ],
+          "exclude": [ "**/bin/**", "**/obj/**" ],
+          "src": "."
+        }
+      ],
+      "dest": "../docs",
+      "properties": {
+        "TargetFramework": "netstardard1.3"
+      }
+    },
+    {
+      "src": [
+        {
+          "files": [ "**/*.cs" ],
+          "exclude": [ "**/bin/**", "**/obj/**" ],
+          "src": "."
+        }
+      ],
+      "dest": "../docs/yml",
+      "useCompatibilityFileName": true,
+      "properties": {
+        "TargetFramework": "netstardard1.3"
+      }
+    }
+  ],
+  "build": {
+    "content": [{"files": [ "**/*.yml" ],"src": "../docs/yml"}],
+    "resource": [{"files": [ "../docs/spec/images/**" ]}],
+    "overwrite": "../docs/apispec/*.md",
+    "externalReference": [],
+    "dest": "../docs/docfx",
+    "template": "default"
+  }
+}

@@ -15,9 +15,12 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR TH
 
 */
 
-namespace PitneyBowes.Developer.ShippingApi
+namespace PitneyBowes.Developer.ShippingApi.Rules
 {
-    public class Country : ICountry
+    /// <summary>
+    /// Country class - downloaded and cached.
+    /// </summary>
+    public class Country 
     {
         /// <summary>
         /// Gets or sets the country code.

@@ -20,7 +20,7 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Net.Http.Headers;
 
-namespace PitneyBowes.Developer.ShippingApi
+namespace PitneyBowes.Developer.ShippingApi.Method
 {
     public static class DocumentsMethods
     {

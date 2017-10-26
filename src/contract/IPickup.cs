@@ -75,7 +75,7 @@ namespace PitneyBowes.Developer.ShippingApi
         string PickupId { get; set; }
     }
 
-    public static class IPickupExtensions
+    public static partial class InterfaceExtensions
     {
         public static bool IsValid(this IPickup p)
         {
