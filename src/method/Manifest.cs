@@ -43,7 +43,6 @@ namespace PitneyBowes.Developer.ShippingApi.Method
         [ShippingApiHeaderAttribute("Bearer")]
         public override StringBuilder Authorization { get; set; }
 
-        [ShippingApiResource("manifest", AddId = true)]
         public string ManifestId { get; set; }
     }
     public static class ManifestMethods
@@ -55,11 +54,11 @@ namespace PitneyBowes.Developer.ShippingApi.Method
         }
         public async static Task<ShippingApiResponse<T>> Reprint<T>(ReprintManifestRequest request, ISession session = null) where T : IManifest, new()
         {
-            return await WebMethod.Post<T, ReprintManifestRequest> ("/shippingservices/v1", request, session);
+            return await WebMethod.Post<T, ReprintManifestRequest> ("/shippingservices/v1/manifests/{ManifestId} ", request, session);
         }
         public async static Task<ShippingApiResponse<T>> Retry<T>(RetryManifestRequest request, ISession session = null) where T : IManifest, new()
         {
-            return await WebMethod.Post<T, RetryManifestRequest>("/shippingservices/v1", request, session);
+            return await WebMethod.Post<T, RetryManifestRequest>("/shippingservices/v1/manifests", request, session);
         }
 
     }

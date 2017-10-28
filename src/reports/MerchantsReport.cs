@@ -30,7 +30,6 @@ namespace PitneyBowes.Developer.ShippingApi.Method
 
     public class MerchantsReportRequest : ShippingApiRequest, IReportRequest
     {
-        [ShippingApiResource("developers", true, PathSuffix = "/merchants")]
         public string DeveloperId { get; set; }
         [ShippingApiQuery("size", true)]
         public int? PageSize { get; set; }
@@ -99,7 +98,7 @@ namespace PitneyBowes.Developer.ShippingApi.Method
         {
             if (session == null) session = Globals.DefaultSession;
             request.Authorization = new StringBuilder(session.AuthToken.AccessToken);
-            return await WebMethod.Get<MerchantsPageResponse, MerchantsReportRequest>("/shippingservices/v2/ledger", request, session);
+            return await WebMethod.Get<MerchantsPageResponse, MerchantsReportRequest>("/v1/developers/{DeveloperId}/merchants", request, session);
         }
 
         public static IEnumerable<Merchant> Report(MerchantsReportRequest request, Func<Merchant, bool> filter = null, ISession session = null)

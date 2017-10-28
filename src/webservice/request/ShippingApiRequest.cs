@@ -39,7 +39,7 @@ namespace PitneyBowes.Developer.ShippingApi
         { 
             string dirname = session.RecordPath;
             StringBuilder uriBuilder = new StringBuilder(resource);
-            AddRequestResource(request, uriBuilder);
+            ShippingApiRequest.SubstitueResourceParameters(request, uriBuilder);
 
             string fullPath = (dirname + uriBuilder.ToString().ToLower() + @"\")
                 .Replace('?', Path.DirectorySeparatorChar)
@@ -103,25 +103,6 @@ namespace PitneyBowes.Developer.ShippingApi
                     }
                 }
             }
-        }
-        public static void AddRequestResource(object o, StringBuilder uri)
-        {
-            ProcessRequestAttributes<ShippingApiResourceAttribute>( o,
-               (a, s, v, p) => {
-                   if (v == null || v.Equals(String.Empty)) return;
-                   uri.Append('/');
-                   uri.Append(WebUtility.UrlEncode(s));
-                   if (a.AddId)
-                   {
-                       uri.Append('/');
-                       uri.Append(WebUtility.UrlEncode((string)v));
-                   }
-                   if (a.PathSuffix != null)
-                   {
-                       uri.Append(a.PathSuffix);
-                   }
-               }
-           );
         }
         public static void AddRequestQuery(object o, StringBuilder uri)
         {
@@ -195,10 +176,57 @@ namespace PitneyBowes.Developer.ShippingApi
         public virtual string GetUri(string baseUrl)
         {
             var uri = new StringBuilder(baseUrl);
-            AddRequestResource(this, uri);
+            SubstitueResourceParameters(this, uri);
             AddRequestQuery(this, uri);
             return uri.ToString();
         }
+
+        public static void SubstitueResourceParameters(object request, StringBuilder uri)
+        {
+            var stringUri = uri.ToString();
+            uri.Clear();
+            int index = 0;
+            int nextIndex = 0;
+            while( true )
+            {
+                nextIndex = stringUri.IndexOf('{', index);
+                if (nextIndex == -1) break;
+                if (nextIndex > 0)
+                {
+                    uri.Append(stringUri.Substring(index, nextIndex - index));
+                }
+                if (nextIndex == stringUri.Length - 1)
+                {
+                    throw new InvalidOperationException("Badly formed URI string - no closing }: " + stringUri);
+                }
+                index = nextIndex + 1;
+                nextIndex = stringUri.IndexOf('}', index);
+                if (nextIndex == -1)
+                {
+                    throw new InvalidOperationException("Badly formed URI string - no closing }: " + stringUri);
+                }
+                if (nextIndex - index == 1 )
+                {
+                    throw new InvalidOperationException("Badly formed URI string - empty {}: " + stringUri);
+                }
+                var propName = stringUri.Substring(index, nextIndex - index);
+                var property = request.GetType().GetProperty(propName);
+                if (property == null )
+                {
+                    throw new InvalidOperationException("Badly formed URI string - prop not found: " + stringUri);
+                }
+                uri.Append(property.GetValue(request).ToString());
+                if (nextIndex == stringUri.Length - 1) 
+                {
+                    index = nextIndex+1;
+                    break;
+                }
+                index = nextIndex + 1;
+
+            }
+            uri.Append(stringUri.Substring(index, stringUri.Length - index));
+        }
+
         public static IEnumerable<Tuple<ShippingApiHeaderAttribute, string, string>> GetHeaders( object o)
         {
             foreach (var propertyInfo in o.GetType().GetProperties())

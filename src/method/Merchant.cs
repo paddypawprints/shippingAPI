@@ -70,7 +70,6 @@ namespace PitneyBowes.Developer.ShippingApi.Method
         [ShippingApiHeader("Bearer")]
         public override StringBuilder Authorization { get; set; }
 
-        [ShippingApiResource("developers", AddId = true, PathSuffix = "/merchants/signup")]
         public string DeveloperId { get; set; }
 
         [JsonProperty("contact")]
@@ -97,7 +96,6 @@ namespace PitneyBowes.Developer.ShippingApi.Method
         [ShippingApiHeader("Bearer")]
         public override StringBuilder Authorization { get; set; }
 
-        [ShippingApiResource("developers", AddId = true, PathSuffix = "/merchants/credentials")]
         public string DeveloperId { get; set; }
 
         [JsonProperty("username")]
@@ -115,7 +113,6 @@ namespace PitneyBowes.Developer.ShippingApi.Method
         [ShippingApiHeader("Bearer")]
         public override StringBuilder Authorization { get; set; }
 
-        [ShippingApiResource("developers", AddId = true, PathSuffix = "/merchants/register")]
         public string DeveloperId { get; set; }
 
         [JsonProperty("username")]
@@ -153,9 +150,7 @@ namespace PitneyBowes.Developer.ShippingApi.Method
 
         [ShippingApiHeader("Bearer")]
         public override StringBuilder Authorization { get; set; }
-        [ShippingApiResource("developers", AddId = true)]
         public string DeveloperId { get; set; }
-        [ShippingApiResource("merchants", AddId = true, PathSuffix = "/autorefillrule")]
         public string ShipperId { get; set; }
         [JsonProperty("merchantID")]
         public string MerchantID { get; set; }
@@ -175,7 +170,6 @@ namespace PitneyBowes.Developer.ShippingApi.Method
         [ShippingApiHeader("Bearer")]
         public override StringBuilder Authorization { get; set; }
 
-        [ShippingApiResource("accounts", AddId = true, PathSuffix = "/balance")]
         public string AccountNumber { get; set; }
     }
 
@@ -197,10 +191,8 @@ namespace PitneyBowes.Developer.ShippingApi.Method
         [ShippingApiHeader("Bearer")]
         public override StringBuilder Authorization { get; set; }
 
-        [ShippingApiResource("developers", AddId = true)]
         public string DeveloperId { get; set; }
 
-        [ShippingApiResource("accounts", AddId = true, PathSuffix = "/deactivate")]
         public string AccountId { get; set; }
 
         [JsonProperty("reason")]
@@ -216,34 +208,34 @@ namespace PitneyBowes.Developer.ShippingApi.Method
         }
         public async static Task<ShippingApiResponse<IMerchant>> Signup<IMerchant>(MerchantSignupRequest request, ISession session = null)
         {
-            return await WebMethod.Post<IMerchant, MerchantSignupRequest>("/shippingservices/v1", request, session);
+            return await WebMethod.Post<IMerchant, MerchantSignupRequest>("/shippingservices/v1/developers/{DeveloperId}/merchants/signup", request, session);
         }
 
         public async static Task<ShippingApiResponse<IMerchant>> Credentials<IMerchant>(MerchantCredentialsRequest request, ISession session = null)
         {
-            return await WebMethod.Post<IMerchant, MerchantCredentialsRequest>("/shippingservices/v1", request, session);
+            return await WebMethod.Post<IMerchant, MerchantCredentialsRequest>("/shippingservices/v1/developers/{DeveloperId}/merchants/credentials", request, session);
         }
         public async static Task<ShippingApiResponse<IMerchant>> Register<IMerchant>(MerchantRegisterRequest request, ISession session = null)
         {
-            return await WebMethod.Post<IMerchant, MerchantRegisterRequest>("/shippingservices/v1/" , request, session);
+            return await WebMethod.Post<IMerchant, MerchantRegisterRequest>("/shippingservices/v1//developers/{DeveloperId}/merchants/registration" , request, session);
         }
 
         public async static Task<ShippingApiResponse<IAutoRefill>> AutoRefillRule<IAutoRefill>(MerchantAutoRefillRuleRequest request, ISession session = null)
         {
-            return await WebMethod.Get<IAutoRefill, MerchantAutoRefillRuleRequest>("/shippingservices/v1/", request, session);
+            return await WebMethod.Get<IAutoRefill, MerchantAutoRefillRuleRequest>("/shippingservices/v1/developers/{DeveloperId}/merchants/{AccountId}/autorefillrule", request, session);
         }
 
         public async static Task<ShippingApiResponse<IAutoRefill>> UpdateAutoRefill<IAutoRefill>(MerchantAutoRefillRuleRequest request, ISession session = null)
         {
-            return await WebMethod.Post<IAutoRefill, MerchantAutoRefillRuleRequest>("/shippingservices/v1/", request, session);
+            return await WebMethod.Post<IAutoRefill, MerchantAutoRefillRuleRequest>("/shippingservices/v1/developers/{DeveloperId}/merchants/{ShipperId}/autorefillrule", request, session);
         }
         public async static Task<ShippingApiResponse<AccountBalanceResponse>> UpdateAutoRefill<AccountBalanceResponse>(AccountBalanceRequest request, ISession session = null)
         {
-            return await WebMethod.Get<AccountBalanceResponse, AccountBalanceRequest>("/shippingservices/v1/ledger", request, session);
+            return await WebMethod.Get<AccountBalanceResponse, AccountBalanceRequest>("/shippingservices/v1/ledger/accounts/{AccountId}/balance ", request, session);
         }
         public async static Task<ShippingApiResponse<IMerchant>> MerchantDeactivateAccount<IMerchant>(MerchantDeactivateRequest request, ISession session = null)
         {
-            return await WebMethod.Get<IMerchant, MerchantDeactivateRequest>("/shippingservices/v1/ledger", request, session);
+            return await WebMethod.Get<IMerchant, MerchantDeactivateRequest>("/shippingservices/v2/developers/{DeveloperId}/accounts/{ShipperId}/deactivate ", request, session);
         }
     }
 }

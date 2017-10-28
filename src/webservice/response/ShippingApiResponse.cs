@@ -29,7 +29,7 @@ namespace PitneyBowes.Developer.ShippingApi
     {
         private List<ErrorDetail> _errors;
         public HttpStatusCode HttpStatus { get; set; }
-        public long Time { get; set; }
+        public TimeSpan RequestTime { get; set; }
         public List<ErrorDetail> Errors 
         { 
             get { 

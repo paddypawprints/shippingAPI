@@ -29,7 +29,7 @@ namespace PitneyBowes.Developer.ShippingApi
     {
         private static object _clientLock = new object();
         public static ISession DefaultSession { get; set; } 
-
+        public static int TimeOutMilliseconds = 100000; //default .net value
         private static Dictionary<string, HttpClient> _clientLookup = new Dictionary<string, HttpClient>();
         public static HttpClient Client(string baseUrl)
         {
@@ -40,6 +40,7 @@ namespace PitneyBowes.Developer.ShippingApi
                     if (!_clientLookup.TryGetValue(baseUrl, out client))
                     {
                         client = new HttpClient() { BaseAddress = new Uri(baseUrl) };
+                        client.Timeout = new TimeSpan(0, 0, 0, 0, TimeOutMilliseconds);
                         _clientLookup.Add(baseUrl, client);
                     }
                     return client;

@@ -38,7 +38,6 @@ namespace PitneyBowes.Developer.ShippingApi
             _configs.Add("SANDBOX_ENDPOINT", "https://api-sandbox.pitneybowes.com");
             _configs.Add("PRODUCTION_ENDPOINT", "https://api-sandbox.pitneybowes.com");
             UserAgent = "Pitney Bowes CSharp SDK 1.0";
-            TimeOutMilliseconds = 100000; //default .net value
             ThrowExceptions = false;
             GetConfigItem = (s) => { return _configs[s]; };
             AddConfigItem  = (k, v) => { _configs.Add(k, v); };
@@ -48,6 +47,7 @@ namespace PitneyBowes.Developer.ShippingApi
             LogDebug = (s) => { };
             GetAPISecret = () => { return new StringBuilder(); };
             SerializationRegistry = new SerializationRegistry();
+            Counters = new Dictionary<string, Counters>();
 
         }
         public SerializationRegistry SerializationRegistry { get; }
@@ -68,5 +68,20 @@ namespace PitneyBowes.Developer.ShippingApi
         public bool Record { get; set; }
         public string RecordPath { get; set; }
         public bool RecordOverwrite { get; set; }
+
+        public Dictionary<string, Counters> Counters { get; set; }
+
+        public void UpdateCounters(string uri, bool success, TimeSpan time)
+        {
+            if (!Counters.ContainsKey(uri)) Counters.Add(uri, new Counters());
+            if (!success) 
+            {
+                Counters[uri].ErrorCount++;
+            }
+            else
+            {
+                Counters[uri].AddCall(time);
+            }
+        }
     }
 }

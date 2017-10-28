@@ -49,7 +49,7 @@ namespace PitneyBowes.Developer.ShippingApi
 
     }
 
-    public class ShippingApiResourceAttribute : ShippingApiAttribute
+/*    public class ShippingApiResourceAttribute : ShippingApiAttribute
     {
         public bool AddId { get; set; }
         public string PathSuffix { get; set; }
@@ -58,6 +58,6 @@ namespace PitneyBowes.Developer.ShippingApi
             AddId = addId;
             PathSuffix = PathSuffix;
         }
-
     }
+    */
 }

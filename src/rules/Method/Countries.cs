@@ -42,7 +42,7 @@ namespace PitneyBowes.Developer.ShippingApi.Rules
         public string GetUri(string baseUrl)
         {
             StringBuilder uri = new StringBuilder(baseUrl);
-            ShippingApiRequest.AddRequestResource(this, uri);
+            ShippingApiRequest.SubstitueResourceParameters(this, uri);
             ShippingApiRequest.AddRequestQuery(this, uri);
             return uri.ToString();
         }

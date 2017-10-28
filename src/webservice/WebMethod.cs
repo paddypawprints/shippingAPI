@@ -44,7 +44,7 @@ namespace PitneyBowes.Developer.ShippingApi
             stopwatch.Start();
             try
             {
-                int timeout = session.TimeOutMilliseconds;
+                int timeout = Globals.TimeOutMilliseconds;
                 for (int retries = session.Retries; retries > 0; retries--)
                 {
                     if (session.AuthToken == null || session.AuthToken.AccessToken == null ) //TODO: Check if token should have expired
@@ -59,7 +59,7 @@ namespace PitneyBowes.Developer.ShippingApi
                                 response.HttpStatus = tokenResponse.HttpStatus;
                                 break;
                             }
-                            if ( stopwatch.ElapsedMilliseconds > session.TimeOutMilliseconds)
+                            if ( stopwatch.ElapsedMilliseconds > Globals.TimeOutMilliseconds)
                             {
                                 response.HttpStatus = HttpStatusCode.RequestTimeout;
                                 response.Errors.Add(new ErrorDetail() { ErrorCode = "Client Timeout", Message= "Client Timeout"});
@@ -74,7 +74,7 @@ namespace PitneyBowes.Developer.ShippingApi
                     response = await session.Requester.HttpRequest<Response, Request>(uri, verb, request, deleteBody, session);
                     if (response.Success) break;
                     if (!Retry(response.HttpStatus, response.Errors)) break;
-                    if (stopwatch.ElapsedMilliseconds > session.TimeOutMilliseconds)
+                    if (stopwatch.ElapsedMilliseconds > Globals.TimeOutMilliseconds)
                     {
                         response.HttpStatus = HttpStatusCode.RequestTimeout;
                         response.Errors.Add(new ErrorDetail() { ErrorCode = "Client Timeout", Message = "Client Timeout" });
@@ -91,7 +91,9 @@ namespace PitneyBowes.Developer.ShippingApi
                     throw new ShippingAPIException(response, "DeserializationError", j);
                 }
             }
-            response.Time = stopwatch.ElapsedMilliseconds;
+            stopwatch.Stop();
+            response.RequestTime = stopwatch.Elapsed;
+            session.UpdateCounters(uri, response.Success, response.RequestTime);
             if (session.ThrowExceptions && !response.Success)
             {
                 throw new ShippingAPIException(response);

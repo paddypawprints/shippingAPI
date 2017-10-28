@@ -16,31 +16,19 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR TH
 */
 
 using System;
-using System.Text;
 using System.Collections.Generic;
 
 namespace PitneyBowes.Developer.ShippingApi
 {
-    public interface ISession
+    public class Counters
     {
-        Action<string, string> AddConfigItem { get; set; }
-        Token AuthToken { get; set; }
-        string EndPoint { get; set; }
-        string UserAgent { get; set; }
-        bool ThrowExceptions { get; set; }
-        Func<StringBuilder> GetAPISecret { get; set; }
-        Func<string, string> GetConfigItem { get; set; }
-        Action<string> LogConfigError { get; set; }
-        Action<string> LogDebug { get; set; }
-        Action<string> LogError { get; set; }
-        Action<string> LogWarning { get; set; }
-        bool Record { get; set; }
-        bool RecordOverwrite { get; set; }
-        string RecordPath { get; set; }
-        IHttpRequest Requester { get; set; }
-        int Retries { get; set; }
-        SerializationRegistry SerializationRegistry { get; }
-        Dictionary<string, Counters> Counters { get; set; }
-        void UpdateCounters(string uri, bool success, TimeSpan time);
+        public int ErrorCount;
+        public Dictionary<int, int> CallHistogram = new Dictionary<int, int>();
+        public void AddCall(TimeSpan t)
+        {
+            int bucket = ((int)t.TotalMilliseconds) / 10; // 10 millisecond buckets
+            if (!CallHistogram.ContainsKey((bucket))) CallHistogram.Add(bucket, 0);
+            CallHistogram[bucket] = CallHistogram[bucket] + 1;
+        }
     }
 }

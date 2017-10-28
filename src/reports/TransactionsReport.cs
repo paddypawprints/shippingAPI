@@ -31,7 +31,6 @@ namespace PitneyBowes.Developer.ShippingApi.Method
     public class ReportRequest : ShippingApiRequest, IReportRequest
     {
         public override string RecordingSuffix => DeveloperId+"-Page"+Page;
-        [ShippingApiResource("developers", true, PathSuffix ="/transactions/reports")]
         public string DeveloperId { get; set; }
         [ShippingApiQuery("fromDate",Format = "{0:yyyy-MM-ddTHH:mm:ssZ}")]
         public DateTimeOffset FromDate { get; set; }
@@ -113,7 +112,7 @@ namespace PitneyBowes.Developer.ShippingApi.Method
         {
             if (session == null) session = Globals.DefaultSession;
             request.Authorization = new StringBuilder(session.AuthToken.AccessToken);
-            return await WebMethod.Get<TransactionPageResponse, ReportRequest>("/shippingservices/v2/ledger", request, session);
+            return await WebMethod.Get<TransactionPageResponse, ReportRequest>("/shippingservices/v2/ledger/developers/{DeveloperId}/transactions/reports", request, session);
         }
 
         public static IEnumerable<Transaction> Report(ReportRequest request, Func<Transaction, bool> filter = null, ISession session = null)

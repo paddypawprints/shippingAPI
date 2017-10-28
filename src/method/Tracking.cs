@@ -30,7 +30,6 @@ namespace PitneyBowes.Developer.ShippingApi.Method
         [ShippingApiHeader("Bearer")]
         public override StringBuilder Authorization { get; set; }
 
-        [ShippingApiResource("tracking", AddId = true)]
         public string TrackingNumber { get; set; }
 
         [ShippingApiQuery("packageIdentifierType")]
@@ -46,7 +45,7 @@ namespace PitneyBowes.Developer.ShippingApi.Method
     {
         public async static Task<ShippingApiResponse<T>> Tracking<T>(TrackingRequest request, ISession session = null) where T : ITrackingStatus, new()
         {
-            return await WebMethod.Get<T, TrackingRequest>("/shippingservices/v1/", request, session);
+            return await WebMethod.Get<T, TrackingRequest>("/shippingservices/v1/tracking/{TrackingNumber}", request, session);
         }
     }
 }

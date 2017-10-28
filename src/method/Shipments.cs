@@ -32,7 +32,6 @@ namespace PitneyBowes.Developer.ShippingApi.Method
         public override StringBuilder Authorization { get; set; }
         [ShippingApiHeader("X-PB-TransactionId")]
         public string TransactionId {get;set;}
-        [ShippingApiResource("shipments", AddId = true)]
         public string ShipmentToCancel {get;set;}
         [JsonProperty("carrier")]
         [JsonConverter(typeof(StringEnumConverter))]
@@ -62,7 +61,6 @@ namespace PitneyBowes.Developer.ShippingApi.Method
         public override string ContentType { get => "application/json"; }
         [ShippingApiHeader("Bearer")]
         public override StringBuilder Authorization { get; set; }
-        [ShippingApiResource("shipments", AddId = true)]
         public string Shipment {get;set;}
     }
 
@@ -75,11 +73,11 @@ namespace PitneyBowes.Developer.ShippingApi.Method
         }
         public async static Task<ShippingApiResponse<CancelShipmentResponse>> CancelShipment( CancelShipmentRequest request, ISession session = null)
         {
-            return await WebMethod.DeleteWithBody<CancelShipmentResponse, CancelShipmentRequest>( "/shippingservices/v1", request, session );
+            return await WebMethod.DeleteWithBody<CancelShipmentResponse, CancelShipmentRequest>( "/shippingservices/v1/shipments/{ShipmentToCancel}", request, session );
         }
         public async static Task<ShippingApiResponse<T>>  ReprintShipment<T>(ReprintShipmentRequest request, ISession session = null) where T : IShipment, new()
         {
-            return  await WebMethod.Get<T, ReprintShipmentRequest>( "/shippingservices/v1", request, session );
+            return  await WebMethod.Get<T, ReprintShipmentRequest>( "/shippingservices/v1/shipments/{Shipment}", request, session );
         }
     }
 }

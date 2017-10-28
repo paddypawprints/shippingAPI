@@ -43,7 +43,6 @@ namespace PitneyBowes.Developer.ShippingApi.Method
         /// Gets or sets the pickup identifier.
         /// </summary>
         /// <value>The pickup identifier.</value>
-        [ShippingApiResource("pickups", AddId = true, PathSuffix = "/cancel")]
         public string PickupId { get; set; }
 
         /// <summary>
@@ -102,7 +101,7 @@ namespace PitneyBowes.Developer.ShippingApi.Method
         public async static Task<ShippingApiResponse<PickupCancelRequest>> CancelPickup(PickupCancelRequest request, ISession session = null)
         {
             request.Status = "Success";
-            return await WebMethod.Post<PickupCancelRequest, PickupCancelRequest>("/shippingservices/v1/pickups", request, session);
+            return await WebMethod.Post<PickupCancelRequest, PickupCancelRequest>("/v1/pickups/{PickupId}/cancel", request, session);
         }
     }
 
